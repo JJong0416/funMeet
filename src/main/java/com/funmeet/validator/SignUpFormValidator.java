@@ -20,7 +20,7 @@ public class SignUpFormValidator implements Validator {
     }
 
     @Override
-    // TODO validation email, nickname
+    //validation check email, nickname
     public void validate(Object target, Errors errors) {
         SignUpForm signUpForm = (SignUpForm) target;
 

@@ -1,12 +1,10 @@
 package com.funmeet.controller;
 
-import com.funmeet.domain.Account;
+
 import com.funmeet.form.SignUpForm;
-import com.funmeet.repository.AccountRepository;
+import com.funmeet.service.AccountService;
 import com.funmeet.validator.SignUpFormValidator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -22,15 +20,15 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class AccountController {
 
-    private final AccountRepository accountRepository;
     private final SignUpFormValidator signUpFormValidator;
-    private final JavaMailSender javaMailSender;
+    private final AccountService accountService;
 
     // signUp Validation Check
-    @InitBinder("signUpForm")
+    @InitBinder("signUpForm") // 여기서 signUpForm은 SignUpForm 클래스에 매핑. camel case 표기 따라간다
     public void initBinder(WebDataBinder webDataBinder){
         webDataBinder.addValidators(signUpFormValidator);
     }
+
 
     @GetMapping({"","/"})
     public String Home(){
@@ -39,7 +37,7 @@ public class AccountController {
 
     @GetMapping("/sign-up")
     public String signUpForm(Model model){
-        model.addAttribute("signupForm",new SignUpForm());
+        model.addAttribute("signUpForm",new SignUpForm()); // 여기 signupForm이여서 오류였음. 변수 고치기 + 동작 오류 찾기
         return "account/sign-up";
     }
 
@@ -48,26 +46,7 @@ public class AccountController {
         if (errors.hasErrors()){
             return "account/sign-up";
         }
-
-        Account account = Account.builder()
-                .nickname(signUpForm.getNickname())
-                .email(signUpForm.getEmail())
-                .password(signUpForm.getPassword()) // password Encording 해야한다.
-                .meetCreatedByWeb(true)
-                .meetEnrollmentResultByWeb(true)
-                .meetUpdatedByWeb(true)
-                .build();
-
-        Account newAccount = accountRepository.save(account);
-
-        newAccount.generateEmailCheckToken();
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(newAccount.getEmail());
-        mailMessage.setSubject("스터디 올래, 회원가입 인증");
-        mailMessage.setText("/check-email-token?" + newAccount.getEmailCheckToken() +
-                "&email=" + newAccount.getEmail());
-
-        javaMailSender.send(mailMessage);
+        accountService.processNewAccount(signUpForm);
         return "redirect:/";
     }
 }
