@@ -1,7 +1,9 @@
 package com.funmeet.controller;
 
 
+import com.funmeet.domain.Account;
 import com.funmeet.form.SignUpForm;
+import com.funmeet.repository.AccountRepository;
 import com.funmeet.service.AccountService;
 import com.funmeet.validator.SignUpFormValidator;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ public class AccountController {
 
     private final SignUpFormValidator signUpFormValidator;
     private final AccountService accountService;
+    private final AccountRepository accountRepository;
 
     // signUp Validation Check
     @InitBinder("signUpForm") // 여기서 signUpForm은 SignUpForm 클래스에 매핑. camel case 표기 따라간다
@@ -29,6 +32,7 @@ public class AccountController {
         webDataBinder.addValidators(signUpFormValidator);
     }
 
+    /* GetMapping Method */
 
     @GetMapping({"","/"})
     public String Home(){
@@ -41,12 +45,38 @@ public class AccountController {
         return "account/sign-up";
     }
 
+    @GetMapping("/check-email-token")
+    public String checkEmailToken(String token, String email, Model model){
+
+        String view_url = "account/check_email";
+
+        Account account = accountRepository.findByEmail(email);
+        if (account == null){
+            model.addAttribute("error","wrong.email");
+            return view_url;
+        }
+
+        if(!account.getEmailCheckToken().equals(token)){
+            model.addAttribute("error","wrong.token");
+            return view_url;
+        };
+
+        account.completeSignUp();
+        model.addAttribute("nickname",account.getNickname());
+
+        return view_url;
+    }
+
+    /* Post Mapping Method */
+
     @PostMapping("/sign-up")
     public String signUpSubmit(@Valid @ModelAttribute SignUpForm signUpForm, Errors errors){
         if (errors.hasErrors()){
             return "account/sign-up";
         }
-        accountService.processNewAccount(signUpForm);
+        accountService.processSignUpAccount(signUpForm);
         return "redirect:/";
     }
+
+
 }

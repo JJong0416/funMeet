@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>뻔(Fun)모임</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        .container{
+            max-width: 100%;
+        }
+        .red { color: red;}
+        .blue { color: blue;}
+    </style>
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+        <a class="navbar-brand"  th:href="@{/}">
+            <img src="/images/logo_fun.png" width="30" height="30">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <form th:action="@{/search/hobby}" class="form-inline" method="get">
+                        <input class="form-control mr-sm-2" name="keyword" type="search" placeholder="취미 검색" aria-label="Search" />
+                    </form>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav justify-content-end">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/login}">로그인</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/sign-up}">가입</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="py-5 text-center" th:if="${error}">
+        <p class="lead"><h2>뻔(Fun)모임 이메일 확인</h2></p>
+        <div style="line-height:70%;"> <!-- 하위 줄높이를 50%만큼 적게 설정 -->
+            <br/>
+        </div>
+        <div class="alert-danger" role="alert">
+            <h4>이메일 확인 링크를 다시 확인해주십시요.</h4>
+        </div>
+    </div>
+
+    <div class="py-5 text-center" th:if="${error == null}">
+        <p class="lead"><h2>뻔(Fun)모임 이메일 확인</h2></p>
+        <div style="line-height:70%;"> <!-- 하위 줄높이를 50%만큼 적게 설정 -->
+            <br/>
+        </div>
+        <h3 class="display-4" >이메일을 확인되었습니다. <span th:text="${nickname}"><mark>박종찬</mark></span>님 가입을 축하드립니다.
+        </h3>
+        <div style="line-height:70%;"> <!-- 하위 줄높이를 50%만큼 적게 설정 -->
+            <br/>
+        </div>
+        <small class="text-info"><span class="blue">이메일 또는 닉네임을 통해 로그인이 가능합니다.</span></small>
+    </div>
+
+</body>
+</html>
