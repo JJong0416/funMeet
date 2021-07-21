@@ -1,5 +1,6 @@
 package com.funmeet.controller;
 
+import com.funmeet.domain.Account;
 import com.funmeet.repository.AccountRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,7 +12,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.then;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -65,6 +66,11 @@ class AccountControllerTest {
                 .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/"));
+
+        Account account = accountRepository.findByNickname("jjong0416");
+        assertNotNull(account);
+
+        assertNotEquals(account.getPassword(),"assddsssaa");
 
         assertTrue(accountRepository.existsByNickname("jjong0416"));
         assertTrue(accountRepository.existsByEmail("checkemal@naver.com"));
