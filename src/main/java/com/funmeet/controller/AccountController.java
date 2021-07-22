@@ -62,6 +62,7 @@ public class AccountController {
         };
 
         account.completeSignUp();
+        accountService.login(account);
         model.addAttribute("nickname",account.getNickname());
 
         return view_url;
@@ -74,7 +75,8 @@ public class AccountController {
         if (errors.hasErrors()){
             return "account/sign-up";
         }
-        accountService.processSignUpAccount(signUpForm);
+        Account account = accountService.processSignUpAccount(signUpForm);
+        accountService.login(account);
         return "redirect:/";
     }
 
