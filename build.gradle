@@ -1,6 +1,7 @@
 plugins {
     id 'org.springframework.boot' version '2.5.2'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id "com.github.node-gradle.node" version "3.1.0"
     id 'java'
 }
 
@@ -16,6 +17,7 @@ configurations {
 
 repositories {
     mavenCentral()
+    gradlePluginPortal()
 }
 
 dependencies {
@@ -26,6 +28,11 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
     implementation 'org.springframework.boot:spring-boot-starter-validation' // spring boot 3버젼부터 빠져서 추가 삽입.
+
+    /* NPM 세팅*/
+    implementation 'com.github.node-gradle:gradle-node-plugin:3.1.0'
+
+
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'com.h2database:h2'
@@ -34,8 +41,37 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+
 }
 
 test {
     useJUnitPlatform()
+}
+
+//node {
+//
+//    version = '14.17.3'  // 제가 사용중인 노드 버전을 적었습니다.
+//    download = true
+//    nodeModulesDir = file("${projectDir}/src/main/resources/static")
+//}
+//
+//task copyFrontLib(type: Copy) {
+//    from "${projectDir}/src/main/resources/static"
+//    into "${projectDir}/build/resources/main/static/."
+//}
+//
+//copyFrontLib.dependsOn npmInstall
+//compileJava.dependsOn copyFrontLib
+
+apply plugin: "com.github.node-gradle.node"
+tasks.register("npm-Install") {
+    group = "application"
+    description = "Installs dependencies from package.json"
+    tasks.appNpmInstall.exec();
+}
+
+task appNpmInstall(type: NpmTask) {
+    description = "Installs dependencies from package.json"
+    workingDir = file("/src/main/resources/static")
+    args = ['install']
 }
