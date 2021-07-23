@@ -32,6 +32,8 @@ dependencies {
     /* NPM 세팅*/
     implementation 'com.github.node-gradle:gradle-node-plugin:3.1.0'
 
+    /* 타임리프 dialect 적용*/
+    implementation group: 'nz.net.ultraq.thymeleaf', name: 'thymeleaf-layout-dialect', version: '2.4.1'
 
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -47,21 +49,6 @@ dependencies {
 test {
     useJUnitPlatform()
 }
-
-//node {
-//
-//    version = '14.17.3'  // 제가 사용중인 노드 버전을 적었습니다.
-//    download = true
-//    nodeModulesDir = file("${projectDir}/src/main/resources/static")
-//}
-//
-//task copyFrontLib(type: Copy) {
-//    from "${projectDir}/src/main/resources/static"
-//    into "${projectDir}/build/resources/main/static/."
-//}
-//
-//copyFrontLib.dependsOn npmInstall
-//compileJava.dependsOn copyFrontLib
 
 apply plugin: "com.github.node-gradle.node"
 tasks.register("npm-Install") {

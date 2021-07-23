@@ -1,45 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>뻔(Fun)모임</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <style>
-        .container{
-            max-width: 100%;
-        }
-        .red { color: red;}
-        .blue { color: blue;}
-    </style>
-</head>
-<body class="bg-light">
-    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-        <a class="navbar-brand"  th:href="@{/}">
-            <img src="/images/logo_fun.png" width="30" height="30">
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <form th:action="@{/search/hobby}" class="form-inline" method="get">
-                        <input class="form-control mr-sm-2" name="keyword" type="search" placeholder="취미 검색" aria-label="Search" />
-                    </form>
-                </li>
-            </ul>
-
-            <ul class="navbar-nav justify-content-end">
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/login}">로그인</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/sign-up}">가입</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
+<div layout:fragment="content" class="container">
 
     <div class="py-5 text-center" th:if="${error}">
         <p class="lead"><h2>뻔(Fun)모임 이메일 확인</h2></p>
@@ -64,5 +28,9 @@
         <small class="text-info"><span class="blue">이메일 또는 닉네임을 통해 로그인이 가능합니다.</span></small>
     </div>
 
-</body>
+</div>
 </html>
+
+
+
+
