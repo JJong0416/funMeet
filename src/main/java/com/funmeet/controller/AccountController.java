@@ -1,6 +1,7 @@
 package com.funmeet.controller;
 
 
+import com.funmeet.annotation.CurrentAccount;
 import com.funmeet.domain.Account;
 import com.funmeet.form.SignUpForm;
 import com.funmeet.repository.AccountRepository;
@@ -34,16 +35,37 @@ public class AccountController {
 
     /* GetMapping Method */
 
-    @GetMapping("/sign-up")
+
+    @GetMapping("/sign_up")
     public String signUpForm(Model model){
         model.addAttribute("signUpForm",new SignUpForm());
-        return "account/sign-up";
+        return "account/sign_up";
     }
 
-    @GetMapping("/check-email-token")
+    /* 이메일  시작 */
+
+    @GetMapping("/certification_email")
+    public String checkEmail(@CurrentAccount Account account, Model model) {
+        model.addAttribute("email", account.getEmail());
+        return "email/certification_email";
+    }
+
+    @GetMapping("/resend_email")
+    public String resendConfirmEmail(@CurrentAccount Account account, Model model) {
+        if (!account.canSendConfirmEmail()) {
+            model.addAttribute("error", "인증 이메일은 1시간에 한번만 전송할 수 있습니다.");
+            model.addAttribute("email", account.getEmail());
+            return "email/certification_email";
+        }
+
+        accountService.sendSignUpConfirmEmail(account);
+        return "redirect:/";
+    }
+
+    @GetMapping("/check_email_token") // 이메일 토큰 눌렀을 때 뜨는
     public String checkEmailToken(String token, String email, Model model){
 
-        String view_url = "account/check_email";
+        String view_url = "email/check_email";
 
         Account account = accountRepository.findByEmail(email);
         if (account == null){
@@ -54,7 +76,7 @@ public class AccountController {
         if(!account.getEmailCheckToken().equals(token)){
             model.addAttribute("error","wrong.token");
             return view_url;
-        };
+        }
 
         account.completeSignUp();
         accountService.login(account);
@@ -63,12 +85,14 @@ public class AccountController {
         return view_url;
     }
 
+    /* 이메일  마지막 */
+
     /* Post Mapping Method */
 
-    @PostMapping("/sign-up")
+    @PostMapping("/sign_up")
     public String signUpSubmit(@Valid @ModelAttribute SignUpForm signUpForm, Errors errors){
         if (errors.hasErrors()){
-            return "account/sign-up";
+            return "account/sign_up";
         }
         Account account = accountService.processSignUpAccount(signUpForm);
         accountService.login(account);

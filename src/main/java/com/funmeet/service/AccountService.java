@@ -45,11 +45,11 @@ public class AccountService {
         return accountRepository.save(account);
     }
 
-    private void sendSignUpConfirmEmail(Account newAccount) {
+    public void sendSignUpConfirmEmail(Account newAccount) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(newAccount.getEmail());
         mailMessage.setSubject("뻔(Fun)하면서 뻔하지 않은 모임. 뻔모임 회원가입 인증");
-        mailMessage.setText("/check-email-token?token=" + newAccount.getEmailCheckToken() +
+        mailMessage.setText("/check_email_token?token=" + newAccount.getEmailCheckToken() +
                 "&email=" + newAccount.getEmail());
 
         javaMailSender.send(mailMessage);
