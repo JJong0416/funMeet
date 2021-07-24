@@ -6,7 +6,7 @@
 <div layout:fragment="content" class="container">
     <div class="container">
         <div class="py-5 text-center">
-            <h2>계정 만들기</h2>
+            <h2>뻔모임 회원 가입</h2>
         </div>
 
         <div class="row justify-content-center">
@@ -40,9 +40,9 @@
                 <div class="form-group">
                     <label for="email">이메일</label>
                     <input id="email" type="email" th:field="*{email}" class="form-control"
-                           placeholder="your@email.com" aria-describedby="emailHelp" required>
+                           placeholder="ex) xxxx@gmail.com" aria-describedby="emailHelp" required>
                     <small id="emailHelp" class="red">
-                        가입을 위해 이메일 인증이 필요합니다. 이메일을 올바르게 작성해주시길 바랍니다.
+                        로그인 후, 서비스를 이용하시려면 이메일 인증이 필요하십니다.
                     </small>
                     <small class="invalid-feedback">이메일을 입력하세요.</small>
                     <small class="form-text text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</small>
@@ -52,14 +52,12 @@
                 <div class="form-group">
                     <button class="btn btn-primary btn-block" type="submit"
                             aria-describedby="submitHelp">가입하기</button>
-                    <small id="submitHelp" class="form-text text-muted">
-                        <a href="#">약관</a>에 동의하시면 가입하기 버튼을 클릭하세요.
-                    </small>
                 </div>
             </form>
         </div>
     </div>
 
+    <!-- 회원가입 처리 -->
     <script type="application/javascript">
         (function () {
             'use strict';

@@ -26,22 +26,17 @@ public class AccountController {
     private final AccountService accountService;
     private final AccountRepository accountRepository;
 
-    // signUp Validation Check
-    @InitBinder("signUpForm") // 여기서 signUpForm은 SignUpForm 클래스에 매핑. camel case 표기 따라간다
+
+    @InitBinder("signUpForm")
     public void initBinder(WebDataBinder webDataBinder){
         webDataBinder.addValidators(signUpFormValidator);
     }
 
     /* GetMapping Method */
 
-    @GetMapping({"","/"})
-    public String Home(){
-        return "index";
-    }
-
     @GetMapping("/sign-up")
     public String signUpForm(Model model){
-        model.addAttribute("signUpForm",new SignUpForm()); // 여기 signupForm이여서 오류였음. 변수 고치기 + 동작 오류 찾기
+        model.addAttribute("signUpForm",new SignUpForm());
         return "account/sign-up";
     }
 

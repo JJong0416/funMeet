@@ -27,5 +27,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .mvcMatchers("/node_modules/**","/img/**")
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
-
 }

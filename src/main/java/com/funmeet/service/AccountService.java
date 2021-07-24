@@ -1,5 +1,6 @@
 package com.funmeet.service;
 
+import com.funmeet.adaptor.AdaptAccount;
 import com.funmeet.domain.Account;
 import com.funmeet.form.SignUpForm;
 import com.funmeet.repository.AccountRepository;
@@ -56,7 +57,7 @@ public class AccountService {
 
     public void login(Account account) {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-                account.getNickname(),
+                new AdaptAccount(account),
                 account.getPassword(),
                 List.of(new SimpleGrantedAuthority("RULE_USER")));
         SecurityContextHolder.getContext().setAuthentication(token);
