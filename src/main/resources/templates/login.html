@@ -15,16 +15,8 @@
     <div class="row justify-content-center">
         <form class="formValidation col-sm-4" th:action="@{/login}" method="post">
             <div th:if="${param.error}">
-                <script>
-                    swal({
-                        title: "이메일 또는 패스워드가 틀렸습니다.",
-                        text: "해당 이메일 또는 패스워드를 확인해주십시오.",
-                        icon: "warning"
-                    })
-                </script>
+                <script th:replace="fragments/config :: loginError"></script>
             </div>
-
-
 
             <div class="form-group">
                 <label for="username">이메일 또는 닉네임</label>
@@ -56,25 +48,7 @@
         </form>
     </div>
 
+    <span layout:fragment="formValidation"></span>
 
-    <script type="application/javascript">
-        (function () {
-            'use strict';
-
-            window.addEventListener('load', function () {
-                let forms = document.getElementsByClassName('formValidation');
-
-                Array.prototype.filter.call(forms, function (form) {
-                    form.addEventListener('submit', function (event) {
-                        if (form.checkValidity() === false) {
-                            event.preventDefault();
-                            event.stopPropagation();
-                        }
-                        form.classList.add('was-validated')
-                    }, false)
-                })
-            }, false)
-        }())
-    </script>
 </div>
 </html>
