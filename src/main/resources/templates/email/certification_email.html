@@ -5,18 +5,18 @@
 
 <div layout:fragment="content" class="container">
   <div class="py-5 text-center" th:if="${error != null}">
-    <p class="lead">스터디올래 가입</p>
+    <p class="blockquote">뻔모임 가입</p>
     <div  class="alert alert-danger" role="alert" th:text="${error}"></div>
-    <p class="lead" th:text="${email}">your@email.com</p>
+    <p class="blockquote" th:text="${email}">xxx@gmail.com</p>
   </div>
 
   <div class="py-5 text-center" th:if="${error == null}">
-    <p class="lead">스터디올래 가입</p>
+    <p class="blockquote">뻔모임 가입 가입</p>
 
-    <h2>스터디올레 서비스를 사용하려면 인증 이메일을 확인하세요.</h2>
+    <h2>서비스를 사용하려면 인증 이메일을 확인하세요.</h2>
 
     <div>
-      <p class="lead" th:text="${email}">your@email.com</p>
+      <p class="blockquote" th:text="${email}"></p>
       <a class="btn btn-outline-info" th:href="@{/resend_email}">인증 이메일 다시 보내기</a>
     </div>
   </div>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}"
+
+>
+
+<div layout:fragment="content" class="container">
+
+    <div class="py-5 text-center">
+        <p class="blockquote">뻔모임</p>
+        <h2>로그인</h2>
+    </div>
+
+    <div class="row justify-content-center">
+        <form class="formValidation col-sm-4" th:action="@{/login}" method="post">
+            <div th:if="${param.error}">
+                <script>
+                    swal({
+                        title: "이메일 또는 패스워드가 틀렸습니다.",
+                        text: "해당 이메일 또는 패스워드를 확인해주십시오.",
+                        icon: "warning"
+                    })
+                </script>
+            </div>
+
+
+
+            <div class="form-group">
+                <label for="username">이메일 또는 닉네임</label>
+                <input id="username" type="text" name="username" class="form-control"
+                       aria-describedby="emailHelp" required>
+                <small id="emailHelp" class="form-text text-muted">
+                    가입할 때 사용한 이메일 또는 닉네임을 입력하세요.
+                </small>
+                <small class="invalid-feedback">이메일을 입력하세요.</small>
+            </div>
+
+            <div class="form-group">
+                <label for="password">패스워드</label>
+                <input id="password" type="password" name="password" class="form-control"
+                       aria-describedby="passwordHelp" required>
+                <small id="passwordHelp" class="form-text text-muted">
+                    패스워드가 기억나지 않는다면, <a th:href="@{find_password}">패스워드 찾기</a> 를 눌러주세요.
+                </small>
+                <small class="invalid-feedback">패스워드를 입력하세요.</small>
+            </div>
+
+            <div class="form-group">
+                <button class="btn btn-success btn-block" type="submit"
+                        aria-describedby="submitHelp">로그인</button>
+                <small id="signupHelp" class="form-text text-muted">
+                    서비스를 이용하시고 싶으신 분은 <a href="#" th:href="@{/signup}">계정을 먼저 만드세요.</a>
+                </small>
+            </div>
+        </form>
+    </div>
+
+
+    <script type="application/javascript">
+        (function () {
+            'use strict';
+
+            window.addEventListener('load', function () {
+                let forms = document.getElementsByClassName('formValidation');
+
+                Array.prototype.filter.call(forms, function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+            }, false)
+        }())
+    </script>
+</div>
+</html>

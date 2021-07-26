@@ -29,7 +29,7 @@
                     <label for="password">패스워드</label>
                     <input id="password" type="password" th:field="*{password}" class="form-control"
                            aria-describedby="passwordHelp" required minlength="6" maxlength="20">
-                    <small id="passwordHelp" class="form-text text-muted">
+                    <small id="help_password" class="form-text text-muted">
                         6자 이상 20자 이내로 입력하세요. 영문자, 숫자, 특수기호를 사용할 수 있으며 공백은 사용할 수 없습니다.
                     </small>
                     <small class="invalid-feedback">패스워드를 입력하세요.</small>
@@ -41,10 +41,10 @@
                     <label for="email">이메일</label>
                     <input id="email" type="email" th:field="*{email}" class="form-control"
                            placeholder="ex) xxxx@gmail.com" aria-describedby="emailHelp" required>
-                    <small id="emailHelp" class="red">
+                    <small id="help_email" class="red">
                         로그인 후, 서비스를 이용하시려면 이메일 인증이 필요하십니다.
                     </small>
-                    <small class="invalid-feedback">이메일을 입력하세요.</small>
+                    <small class="invalid-feedback">형식에 맞는 이메일을 입력하세요.</small>
                     <small class="form-text text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</small>
                 </div>
                 <br/>
