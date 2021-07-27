@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
->
+<haed th:replace="fragments/config :: config"></haed>
+<div th:replace="fragments/header :: main_nav"></div>
 
-<div layout:fragment="content" class="container">
-
+<div class="container">
     <div class="py-5 text-center">
         <p class="blockquote">뻔모임</p>
         <h2>로그인</h2>
@@ -49,4 +48,5 @@
     </div>
     <script th:replace="fragments/script :: formValidation"></script>
 </div>
+<div th:replace="fragments/footer :: footer"></div>
 </html>

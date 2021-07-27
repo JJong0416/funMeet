@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/layout}">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
-<div layout:fragment="content" class="container">
+<head th:replace="fragments/config :: config"></head>
+<div th:replace="fragments/header :: main_nav"></div>
+
+<div class="container">
+
   <div class="py-5 text-center" th:if="${error != null}">
     <p class="blockquote">뻔모임 가입</p>
     <div  class="alert alert-danger" role="alert" th:text="${error}"></div>
@@ -20,5 +23,7 @@
       <a class="btn btn-outline-info" th:href="@{/resend_email}">인증 이메일 다시 보내기</a>
     </div>
   </div>
+
 </div>
+<div th:replace="fragments/footer :: footer"></div>
 </html>

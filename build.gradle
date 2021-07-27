@@ -33,7 +33,7 @@ dependencies {
     implementation 'com.github.node-gradle:gradle-node-plugin:3.1.0'
 
     /* 타임리프 dialect 적용*/
-    implementation group: 'nz.net.ultraq.thymeleaf', name: 'thymeleaf-layout-dialect', version: '2.4.1'
+//    implementation group: 'nz.net.ultraq.thymeleaf', name: 'thymeleaf-layout-dialect', version: '2.4.1'
 
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'

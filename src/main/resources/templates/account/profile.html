@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/layout}"
->
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <head>
+    <span th:replace="fragments/config :: config"></span>
     <link th:href="@{/css/profile.css}" rel="stylesheet">
 </head>
+<div th:replace="fragments/header :: main_nav"></div>
 
-<div th:fragment="content" class="container">
+<div class="container">
     <div class="row">
         <div class="col-md-12">
             <div id="content" class="content content-full-width">
@@ -51,4 +51,5 @@
         </div>
     </div>
 </div>
+<div th:replace="fragments/footer :: footer"></div>
 </html>
