@@ -2,20 +2,21 @@ body{
     background:#eee;
 }
 
+
 .profile-header {
     position: relative;
     overflow: hidden
 }
 
 .profile-header .profile-header-cover {
-    background-image: url(https://bootdey.com/img/Content/bg1.jpg);
+    background-image: url(../images/logo_profile_header.png);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     position: absolute;
     left: 0;
     right: 0;
-    top: 0;
+    top: 10px;
     bottom: 0
 }
 

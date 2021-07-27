@@ -31,22 +31,63 @@
                             <!-- END profile-header-img -->
                             <!-- BEGIN profile-header-info -->
                             <div class="profile-header-info">
-                                <h4 class="m-t-10 m-b-5">Sean Ngu</h4>
-                                <p class="m-b-10">UXUI + Frontend Developer</p>
-                                <a href="#" class="btn btn-sm btn-info mb-2">Edit Profile</a>
+                                <h4 class="m-t-10 m-b-5" th:text="${account.nickname}">닉네임</h4>
+                                <p class="m-b-10" th:if="${!#strings.isEmpty(account.short_bio)}" th:text="${account.short_bio}"></p>
+                                <a th:if="${isOwner}" th:href="@{/settings/profile}" class="btn btn-sm btn-info mb-2">프로필 수정</a>
+                                <a th:if="${!isOwner}" th:href="@{/settings/profile}" class="btn btn-sm btn-info mb-2">친구 추가</a>
                             </div>
                         </div>
+                        <!-- 위에 다 마무리 -->
 
-                        <ul class="profile-header-tab nav nav-tabs">
-                            <li class="nav-item blockquote"><a class="nav-link active show" data-toggle="tab">소개</a></li>
-                            <li class="nav-item blockquote"><a class="nav-link" data-toggle="tab">취미</a></li>
-                            <li class="nav-item blockquote"><a class="nav-link" data-toggle="tab">취미 관리</a></li>
-                            <li class="nav-item blockquote"><a class="nav-link" data-toggle="tab">친구 관리</a></li>
-
+                        <ul class="profile-header-tab nav nav-tabs ">
+                            <li class="nav-item flex-column nav-pills"><a class="nav-link active show" data-toggle="tab">소개</a></li>
+                            <li class="nav-item flex-column nav-pills"><a class="nav-link" data-toggle="tab">취미</a></li>
+                            <li class="nav-item flex-column nav-pills"><a class="nav-link" data-toggle="tab">친구</a></li>
+                            <li th:if="${isOwner}" class="nav-item flex-column nav-pills"><a class="nav-link" data-toggle="tab">관리</a></li>
                         </ul>
-
                     </div>
                 </div>
+
+                <!-- Profile Body -->
+                <div class="row mt-7 justify-content-left col-">
+                    <p th:if="${!#strings.isEmpty(account.nickname)}">
+                            <span style="font-size: 20px;">
+                                <i class="fa fa-link col-1"></i>
+                            </span>
+                        <span th:text="${account.nickname}" class="col-11"></span>
+                    </p>
+                    <p th:if="${!#strings.isEmpty(account.nickname)}">
+                            <span style="font-size: 20px;">
+                                <i class="fa fa-briefcase col-1"></i>
+                            </span>
+                        <span th:text="${account.nickname}" class="col-9"></span>
+                    </p>
+                    <p th:if="${!#strings.isEmpty(account.location)}">
+                            <span style="font-size: 20px;">
+                                <i class="fa fa-location-arrow col-1"></i>
+                            </span>
+                        <span th:text="${account.location}" class="col-9"></span>
+                    </p>
+                    <p th:if="${isOwner}">
+                            <span style="font-size: 20px;">
+                                <i class="fa fa-envelope-o col-1"></i>
+                            </span>
+                        <span th:text="${account.email}" class="col-9"></span>
+                    </p>
+                    <p th:if="${isOwner || account.emailVerified}">
+                            <span style="font-size: 20px;">
+                                <i class="fa fa-calendar-o col-1"></i>
+                            </span>
+                        <span th:if="${isOwner && !account.emailVerified}" class="col-9">
+                                <a href="#" th:href="@{'/checkemail?email=' + ${account.email}}">가입을 완료하려면 이메일을 확인하세요.</a>
+                            </span>
+                        <span th:text="${#temporals.format(account.joinedAt, 'yyyy년 M월 가입')}" class="col-9"></span>
+                    </p>
+                    <div th:if="${isOwner}">
+                        <a class="btn btn-outline-primary" href="#" th:href="@{/settings/profile}">프로필 수정</a>
+                    </div>
+                </div>
+                <!-- Profile Body End -->
             </div>
         </div>
     </div>

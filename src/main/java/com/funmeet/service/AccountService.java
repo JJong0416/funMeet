@@ -40,6 +40,7 @@ public class AccountService implements UserDetailsService {
                 .nickname(signUpForm.getNickname())
                 .email(signUpForm.getEmail())
                 .password(passwordEncoder.encode(signUpForm.getPassword())) // password Encording 해야한다.
+                .short_bio("한 줄 소개를 추가하세요.")
                 .meetCreatedByWeb(true)
                 .meetEnrollmentResultByWeb(true)
                 .meetUpdatedByWeb(true)

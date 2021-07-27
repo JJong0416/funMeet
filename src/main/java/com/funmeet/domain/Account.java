@@ -25,6 +25,8 @@ public class Account {
 
     private String password;
 
+    private String short_bio;
+
     private boolean emailVerified;
 
     private String emailCheckToken;
