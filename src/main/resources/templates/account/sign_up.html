@@ -3,27 +3,26 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout}">
 
-<div layout:fragment="content" class="container">
+<div layout:fragment="content">
     <div class="container">
         <div class="py-5 text-center">
             <h2>뻔모임 회원 가입</h2>
         </div>
 
         <div class="row justify-content-center">
-            <form class="needs-validation col-sm-6" action="#"
+            <form class="formValidation col-sm-6"
                   th:action="@{/sign_up}" th:object="${signUpForm}" method="post" novalidate> <!-- form 생성 -->
 
                 <div class="form-group">
                     <label for="nickname">닉네임</label>
                     <input id="nickname" type="text" th:field="*{nickname}" class="form-control"
-                           placeholder="jjong0416" aria-describedby="nicknameHelp" required minlength="6" maxlength="20"> <!-- front validation check -->
-                    <small id="nicknameHelp" class="form-text text-muted">
+                           placeholder="jjong0416" aria-describedby="help_nickname" required minlength="6" maxlength="20"> <!-- front validation check -->
+                    <small id="help_nickname" class="form-text text-muted">
                         공백없이 문자와 숫자로만 6자 이상 20자 이내로 입력하세요.
                     </small>
                     <small class="invalid-feedback">닉네임을 입력하세요.</small>
                     <small class="form-text text-danger" th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}">Nickname Error</small>
                 </div>
-                <br/>
 
                 <div class="form-group">
                     <label for="password">패스워드</label>
@@ -35,7 +34,6 @@
                     <small class="invalid-feedback">패스워드를 입력하세요.</small>
                     <small class="form-text text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</small>
                 </div>
-                <br/>
 
                 <div class="form-group">
                     <label for="email">이메일</label>
@@ -47,7 +45,7 @@
                     <small class="invalid-feedback">형식에 맞는 이메일을 입력하세요.</small>
                     <small class="form-text text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</small>
                 </div>
-                <br/>
+
 
                 <div class="form-group">
                     <button class="btn btn-primary btn-block" type="submit"
@@ -56,26 +54,6 @@
             </form>
         </div>
     </div>
-
-    <!-- 회원가입 처리 -->
-    <script type="application/javascript">
-        (function () {
-            'use strict';
-
-            window.addEventListener('load', function () {
-                var forms = document.getElementsByClassName('needs-validation');
-
-                Array.prototype.filter.call(forms, function (form) {
-                    form.addEventListener('submit', function (event) {
-                        if (form.checkValidity() === false) {
-                            event.preventDefault();
-                            event.stopPropagation();
-                        }
-                        form.classList.add('was-validated')
-                    }, false)
-                })
-            }, false)
-        }())
-    </script>
+    <script th:replace="fragments/script :: formValidation"></script>
 </div>
 </html>

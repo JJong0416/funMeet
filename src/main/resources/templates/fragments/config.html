@@ -1,55 +1,22 @@
+
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
->
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head th:fragment="config">
-    <meta charset="UTF-8">
-    <title>뻔(Fun)모임</title>
-    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css" />
+  <meta charset="UTF-8">
+  <title>뻔(Fun)모임</title>
+  <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css" />
 
-    <style>
-        .container{
-            max-width: 100%;
-        }
-        .red { color: red;}
-        .blue { color: blue;}
-    </style>
+  <style>
+    .container{
+      max-width: 100%;
+    }
+  </style>
 
-    <link rel="stylesheet" href="/node_modules/font-awesome/css/font-awesome.min.css" />
-    <script src="/node_modules/jquery/dist/jquery.min.js"></script>
-    <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/node_modules/jdenticon/dist/jdenticon.min.js"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
-
-    <script th:fragment="formValidation" type="application/javascript">
-        (function () {
-            'use strict';
-
-            window.addEventListener('load', function () {
-                let forms = document.getElementsByClassName('formValidation');
-
-                Array.prototype.filter.call(forms, function (form) {
-                    form.addEventListener('submit', function (event) {
-                        if (form.checkValidity() === false) {
-                            event.preventDefault();
-                            event.stopPropagation();
-                        }
-                        form.classList.add('was-validated')
-                    }, false)
-                })
-            }, false)
-        }())
-    </script>
-
-    <script th:fragment="loginError">
-            swal({
-            title: "이메일 또는 패스워드가 틀렸습니다.",
-            text: "해당 이메일 또는 패스워드를 확인해주십시오.",
-            icon: "warning"
-        })
-    </script>
-
+  <link rel="stylesheet" href="/node_modules/font-awesome/css/font-awesome.min.css" />
+  <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+  <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/node_modules/jdenticon/dist/jdenticon.min.js"></script>
 </head>
 </html>

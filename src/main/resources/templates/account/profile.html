@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}"
+>
+
+<head>
+    <link th:href="@{/css/profile.css}" rel="stylesheet">
+</head>
+
+<div th:fragment="content" class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div id="content" class="content content-full-width">
+                <!-- begin profile -->
+                <div class="profile">
+                    <div class="profile-header">
+                        <!-- BEGIN profile-header-cover -->
+                        <div class="profile-header-cover"></div>
+                        <!-- END profile-header-cover -->
+                        <!-- BEGIN profile-header-content -->
+                        <div class="profile-header-content">
+                            <!-- BEGIN profile-header-img -->
+                            <div class="profile-header-img">
+                                <svg th:if="${#strings.isEmpty(account.profileImage)}" class="img-fluid float-left rounded img-thumbnail"
+                                     th:data-jdenticon-value="${account.nickname}" width="125" height="125"></svg>
+                                <img th:if="${!#strings.isEmpty(account.profileImage)}" class="img-fluid float-left rounded img-thumbnail"
+                                     th:src="${account.profileImage}"
+                                     width="125" height="125"/>
+                            </div>
+                            <!-- END profile-header-img -->
+                            <!-- BEGIN profile-header-info -->
+                            <div class="profile-header-info">
+                                <h4 class="m-t-10 m-b-5">Sean Ngu</h4>
+                                <p class="m-b-10">UXUI + Frontend Developer</p>
+                                <a href="#" class="btn btn-sm btn-info mb-2">Edit Profile</a>
+                            </div>
+                        </div>
+
+                        <ul class="profile-header-tab nav nav-tabs">
+                            <li class="nav-item blockquote"><a class="nav-link active show" data-toggle="tab">소개</a></li>
+                            <li class="nav-item blockquote"><a class="nav-link" data-toggle="tab">취미</a></li>
+                            <li class="nav-item blockquote"><a class="nav-link" data-toggle="tab">취미 관리</a></li>
+                            <li class="nav-item blockquote"><a class="nav-link" data-toggle="tab">친구 관리</a></li>
+
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>
