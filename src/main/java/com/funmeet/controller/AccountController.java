@@ -30,13 +30,23 @@ public class AccountController {
         webDataBinder.addValidators(signUpFormValidator);
     }
 
-    /* GetMapping Method */
+    /* sign_up */
 
 
     @GetMapping("/sign_up")
     public String signUpForm(Model model){
         model.addAttribute("signUpForm",new SignUpForm());
         return "account/sign_up";
+    }
+
+    @PostMapping("/sign_up")
+    public String signUpSubmit(@Valid @ModelAttribute SignUpForm signUpForm, Errors errors){
+        if (errors.hasErrors()){
+            return "account/sign_up";
+        }
+        Account account = accountService.processSignUpAccount(signUpForm);
+        accountService.login(account);
+        return "redirect:/";
     }
 
     /* 이메일  시작 */
@@ -96,17 +106,6 @@ public class AccountController {
         return "account/profile";
     }
 
-    /* Post Mapping Method */
-
-    @PostMapping("/sign_up")
-    public String signUpSubmit(@Valid @ModelAttribute SignUpForm signUpForm, Errors errors){
-        if (errors.hasErrors()){
-            return "account/sign_up";
-        }
-        Account account = accountService.processSignUpAccount(signUpForm);
-        accountService.login(account);
-        return "redirect:/";
-    }
 
 
 }

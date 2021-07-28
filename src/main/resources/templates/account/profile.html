@@ -11,57 +11,46 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-            <div id="content" class="content content-full-width">
-                <!-- begin profile -->
-                <div class="profile">
-                    <div class="profile-header">
-                        <!-- BEGIN profile-header-cover -->
-                        <div class="profile-header-cover"></div>
-                        <!-- END profile-header-cover -->
-                        <!-- BEGIN profile-header-content -->
-                        <div class="profile-header-content">
-                            <!-- BEGIN profile-header-img -->
-                            <div class="profile-header-img">
-                                <svg th:if="${#strings.isEmpty(account.profileImage)}" class="img-fluid float-left rounded img-thumbnail"
-                                     th:data-jdenticon-value="${account.nickname}" width="125" height="125"></svg>
-                                <img th:if="${!#strings.isEmpty(account.profileImage)}" class="img-fluid float-left rounded img-thumbnail"
-                                     th:src="${account.profileImage}"
-                                     width="125" height="125"/>
-                            </div>
-                            <!-- END profile-header-img -->
-                            <!-- BEGIN profile-header-info -->
-                            <div class="profile-header-info">
-                                <h4 class="m-t-10 m-b-5" th:text="${account.nickname}">닉네임</h4>
-                                <p class="m-b-10" th:if="${!#strings.isEmpty(account.short_bio)}" th:text="${account.short_bio}"></p>
-                                <a th:if="${isOwner}" th:href="@{/settings/profile}" class="btn btn-sm btn-info mb-2">프로필 수정</a>
-                                <a th:if="${!isOwner}" th:href="@{/settings/profile}" class="btn btn-sm btn-info mb-2">친구 추가</a>
-                            </div>
-                        </div>
-                        <!-- 위에 다 마무리 -->
+            <div class="fb-profile-block">
+                <div class="fb-profile-block-thumb cover-container"></div>
+                <div class="profile-img">
+                    <a href="#">
+                        <svg th:if="${#strings.isEmpty(account.profileImage)}" class="img-fluid float-left rounded img-thumbnail"
+                             th:data-jdenticon-value="${account.nickname}" width="160" height="160"></svg>
+                        <img th:if="${!#strings.isEmpty(account.profileImage)}" class="img-fluid float-left rounded img-thumbnail"
+                             th:src="${account.profileImage}"
+                             width="125" height="125"/>
+                    </a>
+                </div>
+                <div class="profile-name">
+                    <h2 th:text="${account.nickname}">이름</h2>
+                </div>
 
-                        <ul class="profile-header-tab nav nav-tabs ">
-                            <li class="nav-item flex-column nav-pills"><a class="nav-link active show" data-toggle="tab">소개</a></li>
-                            <li class="nav-item flex-column nav-pills"><a class="nav-link" data-toggle="tab">취미</a></li>
-                            <li class="nav-item flex-column nav-pills"><a class="nav-link" data-toggle="tab">친구</a></li>
-                            <li th:if="${isOwner}" class="nav-item flex-column nav-pills"><a class="nav-link" data-toggle="tab">관리</a></li>
+                <div>
+                    <div class="nav flex-column nav-pills block-menu fb-profile-block-menu">
+                        <ul class="profile-header-tab nav nav-tabs">
+                            <li class="nav-item flex-column nav-pills">
+                                <a class="nav-link active" id="intro-tab" data-toggle="pill" href="#v-pills-profile"
+                                   role="tab" aria-controls="profile" aria-selected="true">소개</a>
+                                <a class="nav-link" id="hobby-tab" data-toggle="pill" href="#v-pills-hobby"
+                                   role="tab" aria-controls="hobby" aria-selected="false">취미</a>
+                                <a class="nav-link" id="friend-tab" data-toggle="pill" href="#v-pills-freind"
+                                   role="tab" aria-controls="friends" aria-selected="false">친구</a>
+                                <a th:if="${isOwner}" class="nav-link" id="setting-tab" data-toggle="pill" href="#v-pills-setting"
+                                   role="tab" aria-controls="setting" aria-selected="false">관리</a>
+                            </li>
                         </ul>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+<!-- -->
+    <div class="halfContainer inf-content row mt-5 justify-content-center">
 
-                <!-- Profile Body -->
-                <div class="row mt-7 justify-content-left col-">
-                    <p th:if="${!#strings.isEmpty(account.nickname)}">
-                            <span style="font-size: 20px;">
-                                <i class="fa fa-link col-1"></i>
-                            </span>
-                        <span th:text="${account.nickname}" class="col-11"></span>
-                    </p>
-                    <p th:if="${!#strings.isEmpty(account.nickname)}">
-                            <span style="font-size: 20px;">
-                                <i class="fa fa-briefcase col-1"></i>
-                            </span>
-                        <span th:text="${account.nickname}" class="col-9"></span>
-                    </p>
+        <div class="mt-4 col-7">
+            <div class="tab-content" id="v-pills-tabContent">
+                <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-home-tab">
                     <p th:if="${!#strings.isEmpty(account.location)}">
                             <span style="font-size: 20px;">
                                 <i class="fa fa-location-arrow col-1"></i>
@@ -83,14 +72,15 @@
                             </span>
                         <span th:text="${#temporals.format(account.joinedAt, 'yyyy년 M월 가입')}" class="col-9"></span>
                     </p>
-                    <div th:if="${isOwner}">
-                        <a class="btn btn-outline-primary" href="#" th:href="@{/settings/profile}">프로필 수정</a>
-                    </div>
                 </div>
-                <!-- Profile Body End -->
+                <div class="tab-pane fade" id="v-pills-hobby" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+                    Study
+                </div>
+                <br/>
             </div>
         </div>
     </div>
+
 </div>
 <div th:replace="fragments/footer :: footer"></div>
 </html>
