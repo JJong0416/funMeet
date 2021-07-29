@@ -22,13 +22,13 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class AccountService implements UserDetailsService {
 
     private final PasswordEncoder passwordEncoder;
     private final JavaMailSender javaMailSender;
     private final AccountRepository accountRepository;
 
-    @Transactional
     public Account processSignUpAccount(SignUpForm signUpForm) {
         Account newAccount = saveSignUpAccount(signUpForm);
         newAccount.generateEmailCheckToken();
@@ -69,6 +69,7 @@ public class AccountService implements UserDetailsService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String EmailOrNickname) throws UsernameNotFoundException {
         Account account = accountRepository.findByEmail(EmailOrNickname);
         if (account == null){
@@ -81,7 +82,13 @@ public class AccountService implements UserDetailsService {
         return new AdaptAccount(account);
     }
 
-    public void updateProfile(Account account, Profile profile) {
+    public void updateProfile(Account account, Profile profile) { // 프로필 수정
+        account.setShort_bio(profile.getShort_bio());
+        accountRepository.save(account);
+    }
 
+    public void completeSignUp(Account account) {
+        account.completeSignUp();
+        login(account);
     }
 }

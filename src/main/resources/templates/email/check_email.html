@@ -3,10 +3,10 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <head th:replace="fragments/config:: config"></head>
-<div th:replace="fragments/header :: main_nav"></div>
 
 
 <div class="container">
+    <div th:replace="fragments/header :: main_nav"></div>
 
     <div class="py-5 text-center" th:if="${error}">
         <p class="blockquote"><h2>뻔(Fun)모임 이메일 확인</h2></p>
@@ -31,8 +31,8 @@
         <small class="text-info"><span class="blue">이메일 또는 닉네임을 통해 로그인이 가능합니다.</span></small>
     </div>
 
+    <div th:replace="fragments/footer :: footer"></div>
 </div>
-<div th:replace="fragments/footer :: footer"></div>
 </html>
 
 

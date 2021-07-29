@@ -29,4 +29,20 @@
     })
 </script>
 
+<script th:fragment="sucessUpdateProfile">
+    swal({
+        title: "수정",
+        text: "프로필 수정을 성공하셨습니다",
+        icon: "success"
+    })
+</script>
+
+<script th:fragment="failUpdateProfile">
+    swal({
+        title: "수정",
+        text: "프로필 수정을 실패하셨습니다",
+        icon: "error"
+    })
+</script>
+
 </html>

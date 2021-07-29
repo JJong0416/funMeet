@@ -33,14 +33,14 @@ public class SettingsController {
     }
 
     @PostMapping("/settings/profile")
-    public String updateProfile(@CurrentAccount Account account, @Valid @ModelAttribute Profile profile, Errors errors,
+    public String updateProfile(@CurrentAccount Account account, @Valid Profile profile, Errors errors,
                                 Model model, RedirectAttributes attributes) {
         if (errors.hasErrors()) {
             model.addAttribute(account);
             return "settings/profile";
         }
         accountService.updateProfile(account, profile);
-        attributes.addFlashAttribute("message","프로필을 수정했습니다.");
+        attributes.addFlashAttribute("message","성공");
         return "redirect:" + "/settings/profile";
     }
 

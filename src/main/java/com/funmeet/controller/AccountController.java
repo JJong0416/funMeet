@@ -72,23 +72,21 @@ public class AccountController {
     @GetMapping("/check_email_token") // 이메일 토큰 눌렀을 때 뜨는
     public String checkEmailToken(String token, String email, Model model){
 
+        Account account = accountRepository.findByEmail(email);
         String view_url = "email/check_email";
 
-        Account account = accountRepository.findByEmail(email);
         if (account == null){
             model.addAttribute("error","wrong.email");
             return view_url;
         }
 
-        if(!account.getEmailCheckToken().equals(token)){
+        if(!account.isValidToken(token)){
             model.addAttribute("error","wrong.token");
             return view_url;
         }
 
-        account.completeSignUp();
-        accountService.login(account);
+        accountService.completeSignUp(account);
         model.addAttribute("nickname",account.getNickname());
-
         return view_url;
     }
 
