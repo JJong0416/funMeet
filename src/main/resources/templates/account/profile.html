@@ -24,6 +24,12 @@
                 </div>
                 <div class="profile-name">
                     <h2 th:text="${account.nickname}">이름</h2>
+                    <div class="lead">
+                        <a class="short-bio" th:text="${account.short_bio}"></a>
+                        <span th:if="${isOwner}">
+                            <a class="btn btn-secondary"  th:href="@{/settings/profile}">관리</a>
+                        </span>
+                    </div>
                 </div>
 
                 <div>
@@ -36,8 +42,6 @@
                                    role="tab" aria-controls="hobby" aria-selected="false">취미</a>
                                 <a class="nav-link" id="friend-tab" data-toggle="pill" href="#v-pills-freind"
                                    role="tab" aria-controls="friends" aria-selected="false">친구</a>
-                                <a th:if="${isOwner}" class="nav-link" id="setting-tab" data-toggle="pill" href="#v-pills-setting"
-                                   role="tab" aria-controls="setting" aria-selected="false">관리</a>
                             </li>
                         </ul>
                     </div>

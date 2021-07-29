@@ -59,6 +59,16 @@
     left: 200px;
     position: absolute;
 }
+
+.short-bio{
+    color: #2A2A2A;
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 30px;
+    max-width: 275px;
+    position: relative;
+}
+
 .profile-name h2 {
     color: #fff;
     font-size: 24px;

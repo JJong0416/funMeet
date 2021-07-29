@@ -2,6 +2,7 @@ package com.funmeet.service;
 
 import com.funmeet.adaptor.AdaptAccount;
 import com.funmeet.domain.Account;
+import com.funmeet.form.Profile;
 import com.funmeet.form.SignUpForm;
 import com.funmeet.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
@@ -78,5 +79,9 @@ public class AccountService implements UserDetailsService {
             throw new UsernameNotFoundException(EmailOrNickname);
         }
         return new AdaptAccount(account);
+    }
+
+    public void updateProfile(Account account, Profile profile) {
+
     }
 }

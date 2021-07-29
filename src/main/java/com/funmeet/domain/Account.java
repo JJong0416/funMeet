@@ -27,6 +27,8 @@ public class Account {
 
     private String short_bio;
 
+    private String occupation;
+
     private boolean emailVerified;
 
     private String emailCheckToken;
@@ -39,7 +41,7 @@ public class Account {
 
     private LocalDateTime joinedAt;
 
-    //private List<Hobby> hobbies;
+    private String hobbies;
 
     private String location;
 

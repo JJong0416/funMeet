@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <span th:replace="fragments/config :: config"></span>
+    <link th:href="@{/css/profile.css}" rel="stylesheet">
+</head>
+<div th:replace="fragments/header :: main_nav"></div>
+
+<body>
+<div class="container">
+    <div class="row mt-5 justify-content-center">
+        <div class="col-2 d-none d-md-block ">
+            <div th:replace="fragments/profileFragments :: setting_bar"></div>
+        </div>
+
+        <div class="col-7">
+            <div th:if="${message}" class="alert alert-info alert-dismissible fade show mt-3" role="alert">
+                <span th:text="${message}">메시지</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="card"><!-- TODO -->
+                <div class="card-body tab-content">
+                    <div class="tab-pane active col-6" id="profile">
+                        <h4>프로필 수정</h4>
+                        <hr>
+                        <form th:action="@{/settings/profile}" th:object="${profile}" method="post" novalidate>
+                            <div class="form-group">
+                                <label for="fullName">닉네임</label>
+                                <input type="text" class="form-control" id="fullName" disabled aria-describedby="fullNameHelp" placeholder="Enter your fullname" th:value="${account.nickname}">
+                                <small id="fullNameHelp" class="form-text text-muted">&#160;닉네임 변경은 계정 설정에서 하실 수 있습니다.</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="bio">자기소개</label>
+                                <input type="text" class="form-control" id="bio" aria-describedby="fullNameHelp" placeholder="Enter your fullname" th:value="${account.short_bio}">
+                                <small>&#160;</small>
+
+                            </div>
+
+                            <div class="form-group">
+                                <button class="btn btn-success btn-block" type="submit"
+                                        aria-describedby="submitHelp">수정하기</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="tab-pane" id="account">
+
+                    </div>
+                    <div class="tab-pane" id="security">
+
+                    </div>
+                    <div class="tab-pane" id="notification">
+
+                    </div>
+                    <div class="tab-pane" id="location">
+
+                    </div>
+                    <div class="tab-pane" id="hobby">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+<div th:replace="fragments/footer :: footer"></div>
+</html>
