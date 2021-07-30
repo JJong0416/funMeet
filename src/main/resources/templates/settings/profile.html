@@ -35,12 +35,11 @@
                                 <input id="bio" type="text" th:field="*{short_bio}" class="form-control"
                                        placeholder="간략한 소개를 부탁합니다." aria-describedby="bioHelp" required>
                                 <small id="bioHelp" class="form-text text-muted">
-                                    길지 않게 25자 이내로 입력하세요.
+                                    최소 1자, 최대 25자까지 작성해주시길 바랍니다.
                                 </small>
                                 <small class="form-text text-danger" th:if="${#fields.hasErrors('short_bio')}" th:errors="*{short_bio}">
                                     조금 길어요.
                                 </small>
-
                             </div>
 
                             <div class="form-group">
