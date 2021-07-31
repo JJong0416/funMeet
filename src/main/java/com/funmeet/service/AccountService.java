@@ -84,6 +84,7 @@ public class AccountService implements UserDetailsService {
 
     public void updateProfile(Account account, Profile profile) { // 프로필 수정
         account.setShort_bio(profile.getShort_bio());
+        account.setProfileImage(profile.getProfileImage());
         accountRepository.save(account);
     }
 

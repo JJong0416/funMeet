@@ -34,6 +34,10 @@ public class SettingsController {
     @PostMapping("/settings/profile")
     public String updateProfile(@CurrentAccount Account account, @Valid Profile profile, Errors errors,
                                 Model model, RedirectAttributes attributes) {
+
+        System.out.println(profile.getProfileImage());
+        System.out.println(profile.getShort_bio());
+
         if (errors.hasErrors()) {
             model.addAttribute(account);
             return "settings/profile";

@@ -17,9 +17,12 @@ public class Profile {
     @Length(max=10)
     private String occupation;
 
+    private String profileImage;
+
     public Profile(Account account){
         this.nickname = account.getNickname();
         this.short_bio = account.getShort_bio();
         this.occupation = account.getOccupation();
+        this.profileImage = account.getProfileImage();
     }
 }
