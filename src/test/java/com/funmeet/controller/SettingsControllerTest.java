@@ -4,7 +4,6 @@ import com.funmeet.domain.Account;
 import com.funmeet.form.SignUpForm;
 import com.funmeet.repository.AccountRepository;
 import com.funmeet.service.AccountService;
-import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -12,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.TestExecutionEvent;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
@@ -32,6 +32,8 @@ class SettingsControllerTest {
     @Autowired AccountService accountService;
 
     @Autowired AccountRepository accountRepository;
+
+    @Autowired PasswordEncoder passwordEncoder;
 
     @BeforeEach
     void beforeEach(){
@@ -93,5 +95,32 @@ class SettingsControllerTest {
 
         Account jongchan = accountRepository.findByNickname("jongchan");
         assertEquals("간략한 자기 소개를 추가하세요.",jongchan.getShort_bio());
+    }
+
+
+    @WithUserDetails(value="jongchan",setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @DisplayName("계정 수정 폼")
+    @Test
+    void updatePassword() throws Exception{
+        mockMvc.perform(get("/settings/account"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("account"))
+                .andExpect(model().attributeExists("passwordForm"));
+    }
+
+    @WithUserDetails(value="jongchan",setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @DisplayName("패스워드 수정 - 입력값 정상")
+    @Test
+    void updatePassword_right() throws Exception {
+        mockMvc.perform(post("/settings/account")
+                .param("newPassword", "asasasas")
+                .param("newPasswordConfirm", "asasasas")
+                .with(csrf()))
+                .andExpect(redirectedUrl("/settings/account"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(flash().attributeExists("message"));
+
+        Account jongchan = accountRepository.findByNickname("jongchan");
+        assertTrue(passwordEncoder.matches("asasasas", jongchan.getPassword()));
     }
 }
