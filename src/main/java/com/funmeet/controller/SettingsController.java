@@ -45,8 +45,7 @@ public class SettingsController {
 
         if (errors.hasErrors()) {
             model.addAttribute(account);
-            attributes.addFlashAttribute("message", "실패");
-            return "redirect:" + "/settings/profile";
+            return "settings/profile";
         }
         accountService.updateProfile(account, profile);
         attributes.addFlashAttribute("message","성공");
@@ -65,8 +64,7 @@ public class SettingsController {
                                  Model model, RedirectAttributes attributes) {
         if (errors.hasErrors()) {
             model.addAttribute(account);
-            attributes.addFlashAttribute("message", "실패");
-            return "redirect:" + "/settings/account";
+            return "settings/account";
         }
 
         accountService.updatePassword(account, passwordForm.getNewPassword());
