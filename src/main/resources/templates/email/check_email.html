@@ -3,10 +3,10 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <head th:replace="fragments/config:: config"></head>
+<div th:replace="fragments/header :: main_nav"></div>
 
 
 <div class="container">
-    <div th:replace="fragments/header :: main_nav"></div>
 
     <div class="py-5 text-center" th:if="${error}">
         <p class="blockquote"><h2>뻔(Fun)모임 이메일 확인</h2></p>

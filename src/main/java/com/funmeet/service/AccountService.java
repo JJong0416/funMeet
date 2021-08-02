@@ -82,9 +82,14 @@ public class AccountService implements UserDetailsService {
         return new AdaptAccount(account);
     }
 
-    public void updateProfile(Account account, Profile profile) { // 프로필 수정
+    public void updateProfile(Account account, Profile profile) {
         account.setShort_bio(profile.getShort_bio());
         account.setProfileImage(profile.getProfileImage());
+        accountRepository.save(account);
+    }
+
+    public void updatePassword(Account account, String newPassword) {
+        account.setPassword(passwordEncoder.encode(newPassword));
         accountRepository.save(account);
     }
 

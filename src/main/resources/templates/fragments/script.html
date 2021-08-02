@@ -29,6 +29,22 @@
     })
 </script>
 
+<script th:fragment="sucessUpdatePassword">
+    swal({
+        title: "성공",
+        text: "비밀번호 재설정을 성공하셨습니다",
+        icon: "success"
+    })
+</script>
+
+<script th:fragment="failUpdatePassword">
+    swal({
+        title: "실패",
+        text: "비밀번호 재설정을 실패하셨습니다",
+        icon: "error"
+    })
+</script>
+
 <script th:fragment="sucessUpdateProfile">
     swal({
         title: "성공",
@@ -39,7 +55,7 @@
 
 <script th:fragment="failUpdateProfile">
     swal({
-        title: "수정",
+        title: "실패",
         text: "프로필 수정을 실패하셨습니다",
         icon: "error"
     })

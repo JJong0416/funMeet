@@ -14,12 +14,16 @@
 <div class="container">
     <div class="row mt-5 justify-content-center">
         <div class="col-2 d-none d-md-block ">
-            <div th:replace="fragments/profileFragments :: setting_bar"></div>
+            <div th:replace="fragments/profileFragments :: setting_bar(Menu='profile')"></div>
         </div>
 
         <div class="col-8">
             <div th:if="${message} == '성공'">
                 <div th:replace="fragments/script :: sucessUpdateProfile"></div>
+            </div>
+
+            <div th:if="${message} == '실패'">
+                <div th:replace="fragments/script :: failUpdateProfile"></div>
             </div>
 
             <div class="card">
@@ -57,56 +61,36 @@
                             </div>
                         </div>
 
-                        <div class="col">
-                            <form th:action="@{/settings/profile}" th:object="${profile}" method="post" novalidate>
-                                <div class="form-group">
-                                    <label for="fullName">닉네임</label>
-                                    <input type="text" class="form-control" id="fullName" disabled aria-describedby="fullNameHelp" placeholder="Enter your fullname" th:value="${account.nickname}">
-                                    <small id="fullNameHelp" class="form-text text-muted">&#160;닉네임 변경은 계정 설정에서 하실 수 있습니다.</small>
-                                </div>
+                        <h4 class="mt-4">한줄 수정</h4>
+                        <hr>
+                        <form th:action="@{/settings/profile}" th:object="${profile}" method="post" novalidate>
+                            <div class="form-group">
+                                <label for="fullName">닉네임</label>
+                                <input type="text" class="form-control" id="fullName" disabled aria-describedby="fullNameHelp" placeholder="Enter your fullname" th:value="${account.nickname}">
+                                <small id="fullNameHelp" class="form-text text-muted">&#160;닉네임 변경은 계정 설정에서 하실 수 있습니다.</small>
+                            </div>
 
-                                <div class="form-group">
-                                    <label for="bio">한 줄 소개</label>
-                                    <input id="bio" type="text" th:field="*{short_bio}" class="form-control"
-                                           placeholder="간략한 소개를 부탁합니다." aria-describedby="bioHelp" required>
-                                    <small id="bioHelp" class="form-text text-muted">
-                                        최소 1자, 최대 25자까지 작성해주시길 바랍니다.
-                                    </small>
-                                    <small class="form-text text-danger" th:if="${#fields.hasErrors('short_bio')}" th:errors="*{short_bio}">
-                                        조금 길어요.
-                                    </small>
-                                </div>
+                            <div class="form-group">
+                                <label for="bio">한 줄 소개</label>
+                                <input id="bio" type="text" th:field="*{short_bio}" class="form-control"
+                                       placeholder="간략한 소개를 부탁합니다." aria-describedby="bioHelp" required>
+                                <small id="bioHelp" class="form-text text-muted">
+                                    25자 이하의 짧은 글을 작성해주시길 바랍니다.
+                                </small>
+                                <small class="form-text text-danger" th:if="${#fields.hasErrors('short_bio')}" th:errors="*{short_bio}">
+                                    1~25자 사이의 글만 써주시길 바랍니다.
+                                </small>
+                            </div>
 
-                                <div class="form-group">
-                                    <input id="profileImage" type="hidden" th:field="*{profileImage}" class="form-control" />
-                                </div>
+                            <div class="form-group">
+                                <input id="profileImage" type="hidden" th:field="*{profileImage}" class="form-control" />
+                            </div>
 
-                                <div class="form-group">
-                                    <button class="btn btn-success btn-block" type="submit"
-                                            aria-describedby="submitHelp">수정하기</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-
-
-
-
-
-                    <div class="tab-pane" id="account">
-
-                    </div>
-                    <div class="tab-pane" id="security">
-
-                    </div>
-                    <div class="tab-pane" id="notification">
-
-                    </div>
-                    <div class="tab-pane" id="location">
-
-                    </div>
-                    <div class="tab-pane" id="hobby">
-
+                            <div class="form-group">
+                                <button class="btn btn-success btn-block" type="submit"
+                                        aria-describedby="submitHelp">수정하기</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -117,4 +101,3 @@
 </body>
 <div th:replace="fragments/footer :: footer"></div>
 </html>
-
