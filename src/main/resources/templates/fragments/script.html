@@ -61,6 +61,14 @@
     })
 </script>
 
+<script th:fragment="commonSuccess">
+    swal({
+        title: "성공",
+        text: "변경에 성공하셨습니다.",
+        icon: "success"
+    })
+</script>
+
 <script type="application/javascript" th:fragment="imageUpload">
 
     $(function() {

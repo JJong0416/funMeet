@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <span th:replace="fragments/config :: config"></span>
+  <link th:href="@{/css/profile.css}" rel="stylesheet">
+</head>
+
+<div th:replace="fragments/header :: main_nav"></div>
+<body>
+<div class="container">
+  <div class="row mt-5 justify-content-center">
+    <div class="col-2 d-none d-md-block ">
+      <div th:replace="fragments/profileFragments :: setting_bar(Menu='notification')"></div>
+    </div>
+
+    <div th:if="${message} == '성공'">
+      <div th:replace="fragments/script :: commonSuccess"></div>
+    </div>
+
+    <div class="card col-8">
+      <div class="card-body tab-content ">
+        <div class="tab-pane active" id="notification">
+          <h4>알림 설정</h4>
+          <hr>
+
+          <div class="row-3 mt-3 " th:fragment="profile-form">
+            <form class="col-12" action="#" th:action="@{/settings/notification}" th:object="${notification}" method="post" novalidate>
+
+              <div class="alert alert-light text-center" role="alert" style="font-size: 17px">
+                <strong><a th:href="@{/settings/location}">활동 지역</a>에
+                  <a href="#" th:href="@{/settings/keywords}"> 취미</a>가 만들어졌을 때</strong> 알림을 받을 방법을 설정하세요.
+              </div>
+              <div class="py-1 card halfContainer">
+                <div class="form-group text-center col mt-3">
+                  <div class="custom-control custom-switch custom-control-inline">
+                    <input type="checkbox" th:field="*{meetCreatedByEmail}" class="custom-control-input" id="meetCreatedByEmail">
+                    <label class="custom-control-label" for="meetCreatedByEmail">이메일로 받기</label>
+                  </div>
+                  <div class="custom-control custom-switch custom-control-inline">
+                    <input type="checkbox" th:field="*{meetCreatedByWeb}" class="custom-control-input" id="meetCreatedByWeb">
+                    <label class="custom-control-label" for="meetCreatedByWeb">웹으로 받기</label>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="mt-3 alert alert-light text-center" role="alert" style="font-size: 17px">
+                <strong>취미 가입</strong> 결과 알림을 받을 방법을 설정하세요.
+              </div>
+              <div class="py-1 card halfContainer">
+                <div class="form-group text-center col mt-3">
+                  <div class="custom-control custom-switch custom-control-inline">
+                    <input type="checkbox" th:field="*{meetEnrollmentResultByEmail}" class="custom-control-input" id="meetEnrollmentResultByEmail">
+                    <label class="custom-control-label" for="meetEnrollmentResultByEmail">이메일로 받기</label>
+                  </div>
+                  <div class="custom-control custom-switch custom-control-inline">
+                    <input type="checkbox" th:field="*{meetEnrollmentResultByWeb}" class="custom-control-input" id="meetEnrollmentResultByWeb">
+                    <label class="custom-control-label" for="meetEnrollmentResultByWeb">웹으로 받기</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-3 alert alert-light text-center" role="alert" style="font-size: 17px">
+                <strong>가입중인 취미</strong>에 대한 알림을 받을 방법을 설정하세요.
+              </div>
+
+              <div class="py-1 card halfContainer">
+                <div class="form-group text-center col mt-3">
+                  <div class="custom-control custom-switch custom-control-inline">
+                    <input type="checkbox" th:field="*{meetUpdateByEmail}" class="custom-control-input" id="meetUpdateByEmail">
+                    <label class="custom-control-label" for="meetUpdateByEmail">이메일로 받기</label>
+                  </div>
+                  <div class="custom-control custom-switch custom-control-inline">
+                    <input type="checkbox" th:field="*{meetUpdatedByWeb}" class="custom-control-input" id="meetUpdatedByWeb">
+                    <label class="custom-control-label" for="meetUpdatedByWeb">웹으로 받기</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group mt-3 d-flex justify-content-center">
+                <button class="btn btn-outline-primary" type="submit">저장하기</button>
+              </div>
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+</body>
+<div th:replace="fragments/footer :: footer"></div>
+</html>

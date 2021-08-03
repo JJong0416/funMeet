@@ -2,6 +2,7 @@ package com.funmeet.service;
 
 import com.funmeet.adaptor.AdaptAccount;
 import com.funmeet.domain.Account;
+import com.funmeet.form.NotificationForm;
 import com.funmeet.form.Profile;
 import com.funmeet.form.SignUpForm;
 import com.funmeet.repository.AccountRepository;
@@ -93,8 +94,22 @@ public class AccountService implements UserDetailsService {
         accountRepository.save(account);
     }
 
+    public void updateNotification(Account account, NotificationForm notificationForm){
+        account.setMeetCreatedByEmail(notificationForm.isMeetCreatedByEmail());
+        account.setMeetUpdatedByWeb(notificationForm.isMeetUpdatedByWeb());
+
+        account.setMeetEnrollmentResultByEmail(notificationForm.isMeetEnrollmentResultByEmail());
+        account.setMeetEnrollmentResultByWeb(notificationForm.isMeetEnrollmentResultByWeb());
+
+        account.setMeetUpdateByEmail(notificationForm.isMeetUpdateByEmail());
+        account.setMeetCreatedByWeb(notificationForm.isMeetCreatedByWeb());
+
+        accountRepository.save(account);
+    }
+
     public void completeSignUp(Account account) {
         account.completeSignUp();
         login(account);
     }
 }
+

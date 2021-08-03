@@ -3,6 +3,7 @@ package com.funmeet.controller;
 
 import com.funmeet.annotation.CurrentAccount;
 import com.funmeet.domain.Account;
+import com.funmeet.form.NotificationForm;
 import com.funmeet.form.PasswordForm;
 import com.funmeet.form.Profile;
 import com.funmeet.service.AccountService;
@@ -24,6 +25,7 @@ import javax.validation.Valid;
 public class SettingsController {
 
     private final AccountService accountService;
+
 
     @InitBinder("passwordForm")
     public void initBinder(WebDataBinder webDataBinder) {
@@ -71,4 +73,25 @@ public class SettingsController {
         attributes.addFlashAttribute("message", "성공");
         return "redirect:" + "/settings/account";
     }
+
+    @GetMapping("/settings/notification")
+    public String updateNotificationsForm(@CurrentAccount Account account, Model model) {
+        model.addAttribute(account);
+        model.addAttribute("notification",new NotificationForm(account));
+        return "settings/notification";
+    }
+
+    @PostMapping("/settings/notification")
+    public String updateNotifications(@CurrentAccount Account account, @Valid NotificationForm notification, Errors errors,
+                                      Model model, RedirectAttributes attributes) {
+        if (errors.hasErrors()) {
+            model.addAttribute(account);
+            return "settings/notification";
+        }
+
+        accountService.updateNotification(account, notification);
+        attributes.addFlashAttribute("message", "성공");
+        return "redirect:" + "/settings/notification";
+    }
+
 }
