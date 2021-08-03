@@ -123,4 +123,15 @@ class SettingsControllerTest {
         Account jongchan = accountRepository.findByNickname("jongchan");
         assertTrue(passwordEncoder.matches("asasasas", jongchan.getPassword()));
     }
+
+
+    @WithUserDetails(value="jongchan",setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @DisplayName("알림 설정 폼")
+    @Test
+    void updateNotification() throws Exception{
+        mockMvc.perform(get("/settings/notification"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("account"))
+                .andExpect(model().attributeExists("notification"));
+    }
 }
