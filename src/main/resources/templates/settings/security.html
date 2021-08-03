@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <span th:replace="fragments/config :: config"></span>
+  <link th:href="@{/css/profile.css}" rel="stylesheet">
+</head>
+
+<div th:replace="fragments/header :: main_nav"></div>
+<body>
+<div class="container">
+  <div class="row mt-5 justify-content-center">
+    <div class="col-2 d-none d-md-block ">
+      <div th:replace="fragments/profileFragments :: setting_bar(Menu='security')"></div>
+    </div>
+
+    <div class="col-8">
+      <div th:if="${message} == '성공'">
+        <div th:replace="fragments/script :: sucessUpdatePassword"></div>
+      </div>
+
+      <div th:if="${message} == '실패'">
+        <div th:replace="fragments/script :: failUpdatePassword"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-body tab-content">
+          <div class="tab-pane active" id="changePassword">
+            <h4>패스워드 수정</h4>
+            <hr>
+            <div class="col">
+              <div class="card text-left halfContainer">
+                <form class="formValidation col-12" action="#"
+                      th:action="@{/settings/security}" th:object="${passwordForm}" method="post" novalidate>
+                  <div class="form-group mt-2">
+                    <label for="newPassword">새 패스워드</label>
+                    <input id="newPassword" type="password" th:field="*{newPassword}" class="form-control"
+                           aria-describedby="newPasswordHelp" required min="8" max="50">
+                    <small class="form-text text-muted">
+                      새 패스워드를 입력하세요.
+                    </small>
+                    <small class="invalid-feedback">패스워드를 입력하세요.</small>
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors('newPassword')}" th:errors="*{newPassword}">새 패스워드 오류</small>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="newPasswordConfirm">새 패스워드 확인</label>
+                    <input id="newPasswordConfirm" type="password" th:field="*{newPasswordConfirm}" class="form-control"
+                           aria-describedby="newPasswordConfirmHelp" required min="8" max="50">
+                    <small class="form-text text-muted">
+                      새 패스워드를 다시 한번 입력하세요.
+                    </small>
+                    <small class="invalid-feedback">새 패스워드를 다시 입력하세요.</small>
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors('newPasswordConfirm')}" th:errors="*{newPasswordConfirm}">새 패스워드 확인 오류</small>
+                  </div>
+
+                  <div class="form-group">
+                    <button class="btn btn-outline-primary" type="submit" aria-describedby="submitHelp" name="pw" th:value="pw">패스워드 변경하기</button>
+
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script th:replace="fragments/script :: formValidation"></script>
+</body>
+<div th:replace="fragments/footer :: footer"></div>
+</html>

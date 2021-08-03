@@ -18,43 +18,25 @@
                 <div th:replace="fragments/script :: sucessUpdatePassword"></div>
             </div>
 
-            <div th:if="${message} == '실패'">
-                <div th:replace="fragments/script :: failUpdatePassword"></div>
-            </div>
 
             <div class="card">
                 <div class="card-body tab-content">
-                    <div class="tab-pane active" id="profile">
-                        <h4>패스워드 수정</h4>
+                    <div class="tab-pane active" id="changeNickname">
+                        <h4>닉네임 수정</h4>
                         <hr>
                         <div class="col">
                             <div class="card text-left halfContainer">
-                                <form class="needs-validation col-12" action="#"
-                                      th:action="@{/settings/account}" th:object="${passwordForm}" method="post" novalidate>
-                                    <div class="form-group mt-2">
-                                        <label for="newPassword">새 패스워드</label>
-                                        <input id="newPassword" type="password" th:field="*{newPassword}" class="form-control"
-                                               aria-describedby="newPasswordHelp" required min="8" max="50">
-                                        <small class="form-text text-muted">
-                                            새 패스워드를 입력하세요.
+                                <form class="form   Validation col-12" th:object="${nicknameForm}" th:action="@{/settings/account}" method="post" novalidate>
+                                    <div class="form-group mt-3">
+                                        <input id="nickname" type="text" th:field="*{nickname}" class="form-control" aria-describedby="nicknameHelp"  required>
+                                        <small id="nicknameHelp" class="form-text text-muted">
+                                            공백없이 문자와 숫자로만 6자 이상 20자 이내로 입력하세요. 가입후에 변경할 수 있습니다.
                                         </small>
-                                        <small class="invalid-feedback">패스워드를 입력하세요.</small>
-                                        <small class="form-text text-danger" th:if="${#fields.hasErrors('newPassword')}" th:errors="*{newPassword}">새 패스워드 오류</small>
+                                        <small class="invalid-feedback">닉네임을 입력하세요.</small>
+                                        <small class="form-text text-danger" th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}">nickname Error</small>
                                     </div>
-
                                     <div class="form-group">
-                                        <label for="newPasswordConfirm">새 패스워드 확인</label>
-                                        <input id="newPasswordConfirm" type="password" th:field="*{newPasswordConfirm}" class="form-control"
-                                               aria-describedby="newPasswordConfirmHelp" required min="8" max="50">
-                                        <small class="form-text text-muted">
-                                            새 패스워드를 다시 한번 입력하세요.
-                                        </small>
-                                        <small class="invalid-feedback">새 패스워드를 다시 입력하세요.</small>
-                                        <small class="form-text text-danger" th:if="${#fields.hasErrors('newPasswordConfirm')}" th:errors="*{newPasswordConfirm}">새 패스워드 확인 오류</small>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <button class="btn btn-outline-primary" type="submit" aria-describedby="submitHelp">패스워드 변경하기</button>
+                                        <button class="btn btn-outline-primary" type="submit" aria-describedby="submitHelp" name="id" th:value="id">변경하기</button>
                                     </div>
                                 </form>
                             </div>
@@ -66,6 +48,7 @@
     </div>
 </div>
 
+<script th:replace="fragments/script :: formValidation"></script>
 </body>
 <div th:replace="fragments/footer :: footer"></div>
 </html>

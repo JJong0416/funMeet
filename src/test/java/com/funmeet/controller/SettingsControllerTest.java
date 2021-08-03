@@ -99,10 +99,10 @@ class SettingsControllerTest {
 
 
     @WithUserDetails(value="jongchan",setupBefore = TestExecutionEvent.TEST_EXECUTION)
-    @DisplayName("계정 수정 폼")
+    @DisplayName("보안 폼")
     @Test
     void updatePassword() throws Exception{
-        mockMvc.perform(get("/settings/account"))
+        mockMvc.perform(get("/settings/security"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("account"))
                 .andExpect(model().attributeExists("passwordForm"));
@@ -112,11 +112,11 @@ class SettingsControllerTest {
     @DisplayName("패스워드 수정 - 입력값 정상")
     @Test
     void updatePassword_right() throws Exception {
-        mockMvc.perform(post("/settings/account")
+        mockMvc.perform(post("/settings/security")
                 .param("newPassword", "asasasas")
                 .param("newPasswordConfirm", "asasasas")
                 .with(csrf()))
-                .andExpect(redirectedUrl("/settings/account"))
+                .andExpect(redirectedUrl("/settings/security"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(flash().attributeExists("message"));
 

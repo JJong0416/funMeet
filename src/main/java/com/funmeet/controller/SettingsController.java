@@ -3,10 +3,12 @@ package com.funmeet.controller;
 
 import com.funmeet.annotation.CurrentAccount;
 import com.funmeet.domain.Account;
+import com.funmeet.form.NicknameForm;
 import com.funmeet.form.NotificationForm;
 import com.funmeet.form.PasswordForm;
 import com.funmeet.form.Profile;
 import com.funmeet.service.AccountService;
+import com.funmeet.validator.NicknameValidator;
 import com.funmeet.validator.PasswordFormValidation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -25,12 +27,20 @@ import javax.validation.Valid;
 public class SettingsController {
 
     private final AccountService accountService;
+    private final NicknameValidator nicknameValidator;
 
 
     @InitBinder("passwordForm")
-    public void initBinder(WebDataBinder webDataBinder) {
+    public void passwordFormInitBinder(WebDataBinder webDataBinder) {
         webDataBinder.addValidators(new PasswordFormValidation());
     }
+
+    @InitBinder("nicknameForm")
+    public void nicknameFormInitBinder(WebDataBinder webDataBinder) {
+        webDataBinder.addValidators(nicknameValidator);
+    }
+
+
 
 
     @GetMapping("/settings/profile")
@@ -54,26 +64,6 @@ public class SettingsController {
         return "redirect:" + "/settings/profile";
     }
 
-    @GetMapping("/settings/account")
-    public String updatePasswordForm(@CurrentAccount Account account, Model model) {
-        model.addAttribute(account);
-        model.addAttribute(new PasswordForm());
-        return "settings/account";
-    }
-
-    @PostMapping("/settings/account")
-    public String updatePassword(@CurrentAccount Account account, @Valid PasswordForm passwordForm, Errors errors,
-                                 Model model, RedirectAttributes attributes) {
-        if (errors.hasErrors()) {
-            model.addAttribute(account);
-            return "settings/account";
-        }
-
-        accountService.updatePassword(account, passwordForm.getNewPassword());
-        attributes.addFlashAttribute("message", "성공");
-        return "redirect:" + "/settings/account";
-    }
-
     @GetMapping("/settings/notification")
     public String updateNotificationsForm(@CurrentAccount Account account, Model model) {
         model.addAttribute(account);
@@ -94,4 +84,45 @@ public class SettingsController {
         return "redirect:" + "/settings/notification";
     }
 
+    @GetMapping("/settings/security")
+    public String updateSecurityForm(@CurrentAccount Account account, Model model) {
+        model.addAttribute(account);
+        model.addAttribute(new PasswordForm());
+        return "settings/security";
+    }
+
+    @PostMapping("/settings/security")
+    public String updateSecurity(@CurrentAccount Account account, @Valid PasswordForm passwordForm,
+                                    Errors errors, Model model, RedirectAttributes attributes) {
+
+
+        if (errors.hasErrors()) {
+            model.addAttribute(account);
+            return "settings/security";
+        }
+
+        accountService.updatePassword(account, passwordForm.getNewPassword());
+        attributes.addFlashAttribute("message", "성공");
+        return "redirect:" + "/settings/security";
+    }
+
+    @GetMapping("/settings/account")
+    public String updateAccountForm(@CurrentAccount Account account, Model model) {
+        model.addAttribute(account);
+        model.addAttribute(new NicknameForm());
+        return "settings/account";
+    }
+
+    @PostMapping("/settings/account")
+    public String updateAccount(@CurrentAccount Account account, @Valid NicknameForm nicknameForm, Errors errors,
+                                Model model, RedirectAttributes attributes) {
+        if (errors.hasErrors()) {
+            model.addAttribute(account);
+            return "settings/account";
+        }
+
+        accountService.updateNickname(account, nicknameForm.getNickname());
+        attributes.addFlashAttribute("message", "성공");
+        return "redirect:" + "/settings/account";
+    }
 }
