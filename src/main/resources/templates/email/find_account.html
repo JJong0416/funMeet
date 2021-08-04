@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/config :: config"></head>
+<body class="bg-light">
+<div th:replace="fragments/header :: main_nav"></div>
+
+<div class="container">
+    <div class="py-5 text-center">
+        <p class="lead">스터디올래</p>
+        <h2>패스워드 찾기</h2>
+    </div>
+    <div class="row justify-content-center">
+        <div th:if="${error} == '유효'">
+            <div th:replace="fragments/script :: NotValidationEmail"></div>
+        </div>
+
+        <div th:if="${error} == '시간'">
+            <div th:replace="fragments/script :: TimeLimitEmailLogin"></div>
+        </div>
+
+        <div th:if="${message} == '성공'" >
+            <div th:replace="fragments/script :: successEmailLogin"></div>
+        </div>
+
+        <form class="formValidation col-sm-6" action="#" th:action="@{/find_account}" method="post" novalidate>
+            <div class="form-group">
+                <label for="email">가입 할 때 등록한 이메일</label>
+                <input id="email" type="email" name="email" class="form-control"
+                       placeholder="your@email.com" aria-describedby="emailHelp" required>
+                <small id="emailHelp" class="form-text text-muted">
+                    회원가입 시, 이용하셨던 이메일을 입력하세요.
+                </small>
+            </div>
+
+            <div class="form-group">
+                <button class="btn btn-primary btn-block" type="submit">
+                    패스워드 링크 보내기
+                </button>
+                <small id="submitHelp" class="form-text text-muted">
+                    처음 오신 회원분은 <a href="#" th:href="@{/sign_up}">계정을 먼저 만드세요.</a>
+                </small>
+            </div>
+        </form>
+    </div>
+
+</div>
+<script th:replace="fragments/script:: formValidation"></script>
+</body>
+<div th:replace="fragments/footer :: footer"></div>
+</html>

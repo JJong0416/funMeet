@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 
@@ -90,6 +91,45 @@ public class AccountController {
         return view_url;
     }
 
+
+
+    @GetMapping("/find_account")
+    public String emailLoginForm() {
+        return "email/find_account";
+    }
+
+    @PostMapping("/find_account")
+    public String sendEmailLoginLink(String email, Model model, RedirectAttributes attributes) {
+        Account account = accountRepository.findByEmail(email);
+        if (account == null) {
+            model.addAttribute("error", "유효");
+            return "email/find_account";
+        }
+
+        if (!account.canSendConfirmEmail()) {
+            model.addAttribute("error", "시간");
+            return "email/find_account";
+        }
+
+        accountService.sendLoginLink(account);
+        attributes.addFlashAttribute("message", "성공");
+        return "redirect:/find_account";
+    }
+
+    @GetMapping("/auth_email")
+    public String passByEmail(String token, String email, Model model) {
+        Account account = accountRepository.findByEmail(email);
+        String view = "email/auth_email";
+        if (account == null || !account.isValidToken(token)) {
+            model.addAttribute("error", "로그인할 수 없습니다.");
+            return view;
+        }
+
+        accountService.login(account);
+        return view;
+    }
+
+
     /* 이메일  마지막 */
 
     @GetMapping("/profile/{nickname}")
@@ -103,7 +143,5 @@ public class AccountController {
         model.addAttribute("isOwner",viewAccount.equals(account));
         return "account/profile";
     }
-
-
 
 }

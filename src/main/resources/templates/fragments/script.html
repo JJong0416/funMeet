@@ -69,6 +69,30 @@
     })
 </script>
 
+<script th:fragment="successEmailLogin">
+    swal({
+        title: "성공",
+        text: "코드가 성공적으로 보내졌습니다.",
+        icon: "success"
+    })
+</script>
+
+<script th:fragment="TimeLimitEmailLogin">
+    swal({
+        title: "실패",
+        text: "해당 이메일 비밀번호는 30분후 \n 이용이 가능합니다.",
+        icon: "error"
+    })
+</script>
+
+<script th:fragment="NotValidationEmail">
+    swal({
+        title: "실패",
+        text: "해당 이메일은 존재하지 않습니다.",
+        icon: "error"
+    })
+</script>
+
 <script type="application/javascript" th:fragment="imageUpload">
 
     $(function() {
