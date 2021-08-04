@@ -28,6 +28,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
     implementation 'org.springframework.boot:spring-boot-starter-validation' // spring boot 3버젼부터 빠져서 추가 삽입.
+    implementation 'org.modelmapper:modelmapper:2.3.6'
 
     /* NPM 세팅*/
     implementation 'com.github.node-gradle:gradle-node-plugin:3.1.0'

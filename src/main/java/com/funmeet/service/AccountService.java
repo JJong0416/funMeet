@@ -7,6 +7,7 @@ import com.funmeet.form.Profile;
 import com.funmeet.form.SignUpForm;
 import com.funmeet.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,6 +30,8 @@ public class AccountService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final JavaMailSender javaMailSender;
     private final AccountRepository accountRepository;
+    private final ModelMapper modelMapper;
+
 
     public Account processSignUpAccount(SignUpForm signUpForm) {
         Account newAccount = saveSignUpAccount(signUpForm);
@@ -95,15 +98,8 @@ public class AccountService implements UserDetailsService {
     }
 
     public void updateNotification(Account account, NotificationForm notificationForm){
-        account.setMeetCreatedByEmail(notificationForm.isMeetCreatedByEmail());
-        account.setMeetUpdatedByWeb(notificationForm.isMeetUpdatedByWeb());
 
-        account.setMeetEnrollmentResultByEmail(notificationForm.isMeetEnrollmentResultByEmail());
-        account.setMeetEnrollmentResultByWeb(notificationForm.isMeetEnrollmentResultByWeb());
-
-        account.setMeetUpdateByEmail(notificationForm.isMeetUpdateByEmail());
-        account.setMeetCreatedByWeb(notificationForm.isMeetCreatedByWeb());
-
+        modelMapper.map(notificationForm,account);
         accountRepository.save(account);
     }
 

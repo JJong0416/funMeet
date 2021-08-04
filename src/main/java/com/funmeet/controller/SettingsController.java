@@ -11,6 +11,7 @@ import com.funmeet.service.AccountService;
 import com.funmeet.validator.NicknameValidator;
 import com.funmeet.validator.PasswordFormValidation;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -28,6 +29,7 @@ public class SettingsController {
 
     private final AccountService accountService;
     private final NicknameValidator nicknameValidator;
+    private final ModelMapper modelMapper;
 
 
     @InitBinder("passwordForm")
@@ -67,7 +69,7 @@ public class SettingsController {
     @GetMapping("/settings/notification")
     public String updateNotificationsForm(@CurrentAccount Account account, Model model) {
         model.addAttribute(account);
-        model.addAttribute("notification",new NotificationForm(account));
+        model.addAttribute("notification",modelMapper.map(account,NotificationForm.class));
         return "settings/notification";
     }
 
