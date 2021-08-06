@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -40,7 +41,8 @@ public class Account {
 
     private LocalDateTime joinedAt;
 
-    private String hobbies;
+    @ManyToMany
+    private List<Hobby> hobbyList;
 
     private String location;
 
@@ -49,15 +51,15 @@ public class Account {
 
     private boolean meetCreatedByEmail;
 
-    private boolean meetCreatedByWeb = true;
+    private boolean meetCreatedByWeb;
 
     private boolean meetEnrollmentResultByEmail;
 
-    private boolean meetEnrollmentResultByWeb = true;
+    private boolean meetEnrollmentResultByWeb;
 
     private boolean meetUpdateByEmail;
 
-    private boolean meetUpdatedByWeb = true;
+    private boolean meetUpdatedByWeb;
 
     public void generateEmailCheckToken() {
         this.emailCheckToken = UUID.randomUUID().toString();

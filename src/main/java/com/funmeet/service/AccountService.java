@@ -2,6 +2,7 @@ package com.funmeet.service;
 
 import com.funmeet.adaptor.AdaptAccount;
 import com.funmeet.domain.Account;
+import com.funmeet.domain.Hobby;
 import com.funmeet.form.NotificationForm;
 import com.funmeet.form.Profile;
 import com.funmeet.form.SignUpForm;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -108,7 +110,6 @@ public class AccountService implements UserDetailsService {
     }
 
     public void updateNotification(Account account, NotificationForm notificationForm){
-
         modelMapper.map(notificationForm,account);
         accountRepository.save(account);
     }

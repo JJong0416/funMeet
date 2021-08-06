@@ -61,7 +61,7 @@ public class AccountController {
     @GetMapping("/resend_email")
     public String resendConfirmEmail(@CurrentAccount Account account, Model model) {
         if (!account.canSendConfirmEmail()) {
-            model.addAttribute("error", "인증 이메일은 1시간에 한번만 전송할 수 있습니다.");
+            model.addAttribute("error", "인증 이메일은 30분에 한번만 전송할 수 있습니다.");
             model.addAttribute("email", account.getEmail());
             return "email/certification_email";
         }

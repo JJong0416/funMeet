@@ -44,7 +44,7 @@ public class SettingsController {
 
 
 
-
+    /* 프로필 */
     @GetMapping("/settings/profile")
     public String updateProfileForm(@CurrentAccount Account account, Model model){
         model.addAttribute(account);
@@ -65,6 +65,18 @@ public class SettingsController {
         attributes.addFlashAttribute("message","성공");
         return "redirect:" + "/settings/profile";
     }
+    /* 프로필  끝*/
+    @GetMapping("/settings/hobby")
+    public String updateTags(@CurrentAccount Account account, Model model) {
+        model.addAttribute(account);
+        return "settings/hobby";
+    }
+
+    /* 취미 */
+
+
+
+    /* 취미 끝*/
 
     @GetMapping("/settings/notification")
     public String updateNotificationsForm(@CurrentAccount Account account, Model model) {

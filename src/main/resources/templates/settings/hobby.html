@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <span th:replace="fragments/config :: config"></span>
+    <link th:href="@{/css/profile.css}" rel="stylesheet">
+    <script src="/node_modules/@yaireo/tagify/dist/tagify.min.js"></script>
+</head>
+
+<div th:replace="fragments/header :: main_nav"></div>
+<body>
+<div class="container">
+    <div class="row mt-5 justify-content-center">
+        <div class="col-2 d-none d-md-block ">
+            <div th:replace="fragments/profileFragments :: setting_bar(Menu='hobby')"></div>
+        </div>
+
+        <div class="col-8">
+            <div th:if="${message} == '성공'">
+                <div th:replace="fragments/script :: sucessUpdatePassword"></div>
+            </div>
+
+            <div th:if="${message} == '실패'">
+                <div th:replace="fragments/script :: failUpdatePassword"></div>
+            </div>
+
+            <h4>취미</h4>
+            <hr>
+            <div class="col">
+                <div class="card text-left halfContainer">
+                    <div class="alert alert-info" role="alert">
+                        관심있어 하는 취미를 선택해주세요. 해당 취미에 대한 메세지 혹은 취미 선정에 도움을 드립니다.
+                    </div>
+                    <input id="hobby_input" type="text" name="tags" class="tagify-outside" aria-describedby="tagHelp"/>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<script type="application/javascript" th:inline="javascript">
+    $(function() {
+        var csrfToken = /*[[${_csrf.token}]]*/ null;
+        var csrfHeader = /*[[${_csrf.headerName}]]*/ null;
+        $(document).ajaxSend(function (e, xhr, options) {
+            xhr.setRequestHeader(csrfHeader, csrfToken);
+        });
+    });
+</script>
+<script type="application/javascript">
+    $(function () {
+        function tagRequest(url, hobbyTitle) {
+            $.ajax({
+                dataType: "json",
+                autocomplete: {
+                    enabled: true,
+                    rightKey: true,
+                },
+                contentType: "application/json; charset=utf-8",
+                method: "POST",
+                url: "/settings/hobby" + url,
+                data: JSON.stringify({'hobbyTitle': hobbyTitle})
+            }).done(function (data, status) {
+                console.log("${data} and status is ${status}");
+            });
+        }
+
+        function onAdd(e) {
+            tagRequest("/add", e.detail.data.value);
+        }
+
+        function onRemove(e) {
+            tagRequest("/remove", e.detail.data.value);
+        }
+
+        var tagInput = document.querySelector("#hobby_input");
+
+        var tagify = new Tagify(tagInput, {
+            pattern: /^.{0,20}$/,
+            dropdown : {
+                enabled: 1,
+            }
+        });
+
+        tagify.on("add", onAdd);
+        tagify.on("remove", onRemove);
+
+        tagify.DOM.input.classList.add('form-control');
+        tagify.DOM.scope.parentNode.insertBefore(tagify.DOM.input, tagify.DOM.scope);
+    });
+</script>
+
+<script th:replace="fragments/script :: formValidation"></script>
+</body>
+<div th:replace="fragments/footer :: footer"></div>
+</html>
