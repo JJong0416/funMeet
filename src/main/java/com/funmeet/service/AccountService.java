@@ -120,9 +120,26 @@ public class AccountService implements UserDetailsService {
         login(account);
     }
 
+    public List<Hobby> getHobby(Account account){
+        Optional<Account> getId = accountRepository.findById(account.getId());
+        return getId.orElseThrow().getHobby();
+    }
+
+    public void addHobby(Account account, Hobby hobby){
+        Optional<Account> user = accountRepository.findById(account.getId());
+        user.ifPresent(a -> a.getHobby().add(hobby));
+    }
+
+    public void removeHobby(Account account, Hobby hobby) {
+        Optional<Account> removeId = accountRepository.findById(account.getId());
+        removeId.ifPresent(a -> a.getHobby().remove(hobby));
+    }
+
+
     public void completeSignUp(Account account) {
         account.completeSignUp();
         login(account);
     }
+
 }
 

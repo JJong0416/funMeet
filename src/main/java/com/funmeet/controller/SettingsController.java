@@ -3,25 +3,26 @@ package com.funmeet.controller;
 
 import com.funmeet.annotation.CurrentAccount;
 import com.funmeet.domain.Account;
-import com.funmeet.form.NicknameForm;
-import com.funmeet.form.NotificationForm;
-import com.funmeet.form.PasswordForm;
-import com.funmeet.form.Profile;
+import com.funmeet.domain.Hobby;
+import com.funmeet.form.*;
+import com.funmeet.repository.HobbyRepository;
 import com.funmeet.service.AccountService;
 import com.funmeet.validator.NicknameValidator;
 import com.funmeet.validator.PasswordFormValidation;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -30,6 +31,7 @@ public class SettingsController {
     private final AccountService accountService;
     private final NicknameValidator nicknameValidator;
     private final ModelMapper modelMapper;
+    private final HobbyRepository hobbyRepository;
 
 
     @InitBinder("passwordForm")
@@ -66,18 +68,53 @@ public class SettingsController {
         return "redirect:" + "/settings/profile";
     }
     /* 프로필  끝*/
+    /* 취미 */
+
     @GetMapping("/settings/hobby")
     public String updateTags(@CurrentAccount Account account, Model model) {
         model.addAttribute(account);
+        List<Hobby> hobby = accountService.getHobby(account);
+        model.addAttribute("hobby",hobby.stream().map(Hobby::getTitle).collect(Collectors.toList()));
         return "settings/hobby";
     }
 
-    /* 취미 */
 
+    @PostMapping("/settings/hobby/add")
+    @ResponseBody
+    public ResponseEntity addTag(@CurrentAccount Account account, @RequestBody HobbyForm hobbyForm){
 
+        String title = hobbyForm.getHobbyTitle();
+        Hobby hobby = hobbyRepository.findByTitle(title).orElseGet(() -> hobbyRepository.save(Hobby.builder()
+                .title(hobbyForm.getHobbyTitle())
+                .build()));
+
+        accountService.addHobby(account, hobby);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/settings/hobby/remove")
+    @ResponseBody
+    public ResponseEntity removeTag(@CurrentAccount Account account, @RequestBody HobbyForm hobbyForm) {
+        String title = hobbyForm.getHobbyTitle();
+
+//        Optional<Hobby> hobby = hobbyRepository.findByTitle(title);
+//
+//        if (hobby.isEmpty()){
+//            return ResponseEntity.badRequest().build();
+//        }
+
+        Hobby hobby = hobbyRepository.findByTitle(title).orElseThrow();
+
+        if (hobby == null){
+            return ResponseEntity.badRequest().build();
+        }
+
+        accountService.removeHobby(account,hobby);
+        return ResponseEntity.ok().build();
+    }
 
     /* 취미 끝*/
-
+    /* 알림 */
     @GetMapping("/settings/notification")
     public String updateNotificationsForm(@CurrentAccount Account account, Model model) {
         model.addAttribute(account);
@@ -98,6 +135,8 @@ public class SettingsController {
         return "redirect:" + "/settings/notification";
     }
 
+    /* 알림 끝*/
+    /* 보안 */
     @GetMapping("/settings/security")
     public String updateSecurityForm(@CurrentAccount Account account, Model model) {
         model.addAttribute(account);
@@ -120,6 +159,9 @@ public class SettingsController {
         return "redirect:" + "/settings/security";
     }
 
+    /* 보안 끝*/
+    /* 계정 */
+
     @GetMapping("/settings/account")
     public String updateAccountForm(@CurrentAccount Account account, Model model) {
         model.addAttribute(account);
@@ -139,4 +181,5 @@ public class SettingsController {
         attributes.addFlashAttribute("message", "성공");
         return "redirect:" + "/settings/account";
     }
+    /* 계정 끝*/
 }

@@ -42,7 +42,7 @@ public class Account {
     private LocalDateTime joinedAt;
 
     @ManyToMany
-    private List<Hobby> hobbyList;
+    private List<Hobby> hobby;
 
     private String location;
 
