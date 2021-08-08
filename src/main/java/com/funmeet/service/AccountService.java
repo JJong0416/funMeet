@@ -35,24 +35,18 @@ public class AccountService implements UserDetailsService {
     private final ModelMapper modelMapper;
 
 
+
     public Account processSignUpAccount(SignUpForm signUpForm) {
         Account newAccount = saveSignUpAccount(signUpForm);
-        newAccount.generateEmailCheckToken();
         sendSignUpConfirmEmail(newAccount);
         return newAccount;
     }
 
     private Account saveSignUpAccount(SignUpForm signUpForm) {
-        Account account = Account.builder()
-                .nickname(signUpForm.getNickname())
-                .email(signUpForm.getEmail())
-                .password(passwordEncoder.encode(signUpForm.getPassword())) // password Encording 해야한다.
-                .short_bio("간략한 자기 소개를 추가하세요.")
-                .meetCreatedByWeb(true)
-                .meetEnrollmentResultByWeb(true)
-                .meetUpdatedByWeb(true)
-                .build();
-
+        signUpForm.setPassword(passwordEncoder.encode(signUpForm.getPassword()));
+        Account account = modelMapper.map(signUpForm,Account.class);
+        account.generateEmailCheckToken();;
+        account.setShort_bio("간략한 자기 소개를 추가하세요.");
         return accountRepository.save(account);
     }
 
@@ -64,6 +58,11 @@ public class AccountService implements UserDetailsService {
                 "&email=" + newAccount.getEmail());
 
         javaMailSender.send(mailMessage);
+    }
+
+    public void completeSignUp(Account account) {
+        account.completeSignUp();
+        login(account);
     }
 
     public void sendLoginLink(Account account) {
@@ -134,12 +133,5 @@ public class AccountService implements UserDetailsService {
         Optional<Account> removeId = accountRepository.findById(account.getId());
         removeId.ifPresent(a -> a.getHobby().remove(hobby));
     }
-
-
-    public void completeSignUp(Account account) {
-        account.completeSignUp();
-        login(account);
-    }
-
 }
 

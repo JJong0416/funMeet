@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-@Entity @Data @EqualsAndHashCode(of = "id")
+@Entity @Getter @Setter @EqualsAndHashCode(of = "id")
 @Builder @NoArgsConstructor @AllArgsConstructor
 public class Hobby {
 

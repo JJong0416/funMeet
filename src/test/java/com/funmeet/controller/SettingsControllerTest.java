@@ -1,8 +1,12 @@
 package com.funmeet.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.funmeet.domain.Account;
+import com.funmeet.domain.Hobby;
+import com.funmeet.form.HobbyForm;
 import com.funmeet.form.SignUpForm;
 import com.funmeet.repository.AccountRepository;
+import com.funmeet.repository.HobbyRepository;
 import com.funmeet.service.AccountService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,10 +15,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.TestExecutionEvent;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -25,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+
 class SettingsControllerTest {
 
     @Autowired MockMvc mockMvc;
@@ -34,6 +41,10 @@ class SettingsControllerTest {
     @Autowired AccountRepository accountRepository;
 
     @Autowired PasswordEncoder passwordEncoder;
+
+    @Autowired HobbyRepository hobbyRepository;
+
+    @Autowired ObjectMapper objectMapper;
 
     @BeforeEach
     void beforeEach(){
@@ -173,5 +184,59 @@ class SettingsControllerTest {
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeExists("account"))
                 .andExpect(model().attributeExists("nicknameForm"));
+    }
+
+    @WithUserDetails(value="jongchan",setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @DisplayName("계정 취미 폼")
+    @Test
+    void updateTagsForm() throws Exception {
+        mockMvc.perform(get("/settings/hobby"))
+                .andExpect(view().name("settings/hobby"))
+                .andExpect(model().attributeExists("account"))
+                .andExpect(model().attributeExists("whitelist"))
+                .andExpect(model().attributeExists("hobby"));
+    }
+
+    @WithUserDetails(value="jongchan",setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @DisplayName("계정 취미 추가")
+    @Transactional
+    @Test
+    void addHobby() throws Exception {
+        HobbyForm hobbyForm = new HobbyForm();
+        hobbyForm.setHobbyTitle("취미1");
+
+        mockMvc.perform(post("/settings/hobby/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(hobbyForm))
+                .with(csrf()))
+                .andExpect(status().isOk());
+
+        Hobby hobby = hobbyRepository.findByTitle("취미1").orElseThrow();
+        assertNotNull(hobby);
+        Account jongchan = accountRepository.findByNickname("jongchan");
+        assertTrue(jongchan.getHobby().contains(hobby));
+    }
+
+    @WithUserDetails(value="jongchan",setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @DisplayName("계정 취미 삭제")
+    @Transactional
+    @Test
+    void removeTag() throws Exception {
+        Account jongchan = accountRepository.findByNickname("jongchan");
+        Hobby hobby = hobbyRepository.save(Hobby.builder().title("취미1").build());
+        accountService.addHobby(jongchan, hobby);
+
+        assertTrue(jongchan.getHobby().contains(hobby));
+
+        HobbyForm hobbyForm = new HobbyForm();
+        hobbyForm.setHobbyTitle("취미1");
+
+        mockMvc.perform(post("/settings/hobby/remove")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(hobbyForm))
+                .with(csrf()))
+                .andExpect(status().isOk());
+
+        assertFalse(jongchan.getHobby().contains(hobby));
     }
 }

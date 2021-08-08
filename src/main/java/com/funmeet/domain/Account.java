@@ -4,14 +4,14 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Data
-@EqualsAndHashCode(of = "id")
-@Builder
-@AllArgsConstructor @NoArgsConstructor
+@Getter @Setter @EqualsAndHashCode(of = "id") // id만 사용하는 이유는 연관관계 복잡해질때, 순환참조 막기 위해서
+@Builder @AllArgsConstructor @NoArgsConstructor
+
 public class Account {
 
     @Id @GeneratedValue
@@ -42,7 +42,7 @@ public class Account {
     private LocalDateTime joinedAt;
 
     @ManyToMany
-    private List<Hobby> hobby;
+    private List<Hobby> hobby = new ArrayList<>();
 
     private String location;
 

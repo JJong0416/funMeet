@@ -3,6 +3,7 @@
 <head>
     <span th:replace="fragments/config :: config"></span>
     <link th:href="@{/css/profile.css}" rel="stylesheet">
+    <link rel="stylesheet" href="/node_modules/@yaireo/tagify/dist/tagify.css">
 </head>
 
 <div th:replace="fragments/header :: main_nav"></div>
@@ -29,6 +30,7 @@
                     <div class="alert alert-info" role="alert">
                         관심있어 하는 취미를 선택해주세요. 해당 취미에 대한 메세지 혹은 취미 선정에 도움을 드립니다.
                     </div>
+                    <div id="whitelist" th:text="${whitelist}" hidden></div>
                     <input id="hobby" type="text" th:value="${#strings.listJoin(hobby,',')}" class="input-body"/>
                 </div>
             </div>

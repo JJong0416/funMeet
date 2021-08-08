@@ -1,6 +1,8 @@
 package com.funmeet.controller;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.funmeet.annotation.CurrentAccount;
 import com.funmeet.domain.Account;
 import com.funmeet.domain.Hobby;
@@ -32,6 +34,7 @@ public class SettingsController {
     private final NicknameValidator nicknameValidator;
     private final ModelMapper modelMapper;
     private final HobbyRepository hobbyRepository;
+    private final ObjectMapper objectMapper;
 
 
     @InitBinder("passwordForm")
@@ -71,10 +74,14 @@ public class SettingsController {
     /* 취미 */
 
     @GetMapping("/settings/hobby")
-    public String updateTags(@CurrentAccount Account account, Model model) {
+    public String updateTags(@CurrentAccount Account account, Model model) throws JsonProcessingException {
         model.addAttribute(account);
         List<Hobby> hobby = accountService.getHobby(account);
         model.addAttribute("hobby",hobby.stream().map(Hobby::getTitle).collect(Collectors.toList()));
+
+        List<String> allHobby = hobbyRepository.findAll().stream().map(Hobby::getTitle).collect(Collectors.toList());
+        model.addAttribute("whitelist",objectMapper.writeValueAsString(allHobby));
+
         return "settings/hobby";
     }
 
@@ -97,14 +104,7 @@ public class SettingsController {
     public ResponseEntity removeTag(@CurrentAccount Account account, @RequestBody HobbyForm hobbyForm) {
         String title = hobbyForm.getHobbyTitle();
 
-//        Optional<Hobby> hobby = hobbyRepository.findByTitle(title);
-//
-//        if (hobby.isEmpty()){
-//            return ResponseEntity.badRequest().build();
-//        }
-
         Hobby hobby = hobbyRepository.findByTitle(title).orElseThrow();
-
         if (hobby == null){
             return ResponseEntity.badRequest().build();
         }
