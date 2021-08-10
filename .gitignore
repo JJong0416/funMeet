@@ -39,5 +39,8 @@ out/
 #### NPM ###
 src/main/resources/static/node_modules
 
+### SMTP Email Setting ###
+src/main/resources/application-db.properties
+
 ###.csv###
 src/main/resources/list_district_kr.csv
