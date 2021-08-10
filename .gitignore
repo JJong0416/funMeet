@@ -40,4 +40,4 @@ out/
 src/main/resources/static/node_modules
 
 ###.csv###
-*.csv
+src/main/resources/list_district_kr.csv

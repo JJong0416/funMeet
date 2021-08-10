@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.funmeet.domain.Account;
 import com.funmeet.domain.City;
 import com.funmeet.domain.Hobby;
+import com.funmeet.form.CityForm;
 import com.funmeet.form.HobbyForm;
 import com.funmeet.form.SignUpForm;
 import com.funmeet.repository.AccountRepository;
@@ -198,7 +199,7 @@ class SettingsControllerTest {
     @WithUserDetails(value="jongchan",setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @DisplayName("계정 취미 폼")
     @Test
-    void updateTagsForm() throws Exception {
+    void updateHobbyForm() throws Exception {
         mockMvc.perform(get("/settings/hobby"))
                 .andExpect(view().name("settings/hobby"))
                 .andExpect(model().attributeExists("account"))
@@ -230,7 +231,7 @@ class SettingsControllerTest {
     @DisplayName("계정 취미 삭제")
     @Transactional
     @Test
-    void removeTag() throws Exception {
+    void removeHobby() throws Exception {
         Account jongchan = accountRepository.findByNickname("jongchan");
         Hobby hobby = hobbyRepository.save(Hobby.builder().title("취미1").build());
         accountService.addHobby(jongchan, hobby);
@@ -247,5 +248,56 @@ class SettingsControllerTest {
                 .andExpect(status().isOk());
 
         assertFalse(jongchan.getHobby().contains(hobby));
+    }
+
+    @WithUserDetails(value="jongchan",setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @DisplayName("설정 - 지역 정보 수정 폼")
+    @Test
+    void updateLocationForm() throws Exception {
+        mockMvc.perform(get("/settings/location"))
+                .andExpect(view().name("settings/location"))
+                .andExpect(model().attributeExists("account"))
+                .andExpect(model().attributeExists("whitelist"))
+                .andExpect(model().attributeExists("city"));
+    }
+
+    @Transactional
+    @WithUserDetails(value="jongchan",setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @DisplayName("설정 - 지역 정보 추가")
+    @Test
+    void addLocation() throws Exception {
+        CityForm cityForm = new CityForm();
+        cityForm.setCityName(testCity.toString());
+
+        mockMvc.perform(post("/settings/location/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(cityForm))
+                .with(csrf()))
+                .andExpect(status().isOk());
+
+        Account jongchan = accountRepository.findByNickname("jongchan");
+        City city = cityRepository.findByKrCity(testCity.getKrCity());
+        assertTrue(jongchan.getCity().contains(city));
+    }
+
+    @Transactional
+    @WithUserDetails(value="jongchan",setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @DisplayName("설정 - 지역 정보 추가")
+    @Test
+    void removeLocation() throws Exception {
+        Account jongchan = accountRepository.findByNickname("jongchan");
+        City city = cityRepository.findByKrCity(testCity.getKrCity());
+        accountService.addCity(jongchan, city);
+
+        CityForm cityForm = new CityForm();
+        cityForm.setCityName(testCity.toString());
+
+        mockMvc.perform(post("/settings/location/remove")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(cityForm))
+                .with(csrf()))
+                .andExpect(status().isOk());
+
+        assertFalse(jongchan.getCity().contains(city));
     }
 }
