@@ -2,6 +2,7 @@ package com.funmeet.service;
 
 import com.funmeet.adaptor.AdaptAccount;
 import com.funmeet.domain.Account;
+import com.funmeet.domain.City;
 import com.funmeet.domain.Hobby;
 import com.funmeet.form.NotificationForm;
 import com.funmeet.form.Profile;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -33,8 +35,6 @@ public class AccountService implements UserDetailsService {
     private final JavaMailSender javaMailSender;
     private final AccountRepository accountRepository;
     private final ModelMapper modelMapper;
-
-
 
     public Account processSignUpAccount(SignUpForm signUpForm) {
         Account newAccount = saveSignUpAccount(signUpForm);
@@ -132,6 +132,23 @@ public class AccountService implements UserDetailsService {
     public void removeHobby(Account account, Hobby hobby) {
         Optional<Account> removeId = accountRepository.findById(account.getId());
         removeId.ifPresent(a -> a.getHobby().remove(hobby));
+    }
+
+    public List<City> getCity(Account account) {
+        Optional<Account> getId = accountRepository.findById(account.getId());
+        return getId.orElseThrow().getCity();
+    }
+
+    public void addCity(Account account, City city) {
+        System.out.println("2222");
+        Optional<Account> getId = accountRepository.findById(account.getId());
+        getId.ifPresent(a -> a.getCity().add(city));
+    }
+
+    public void removeCity(Account account, City city) {
+        System.out.println("3333");
+        Optional<Account> byId = accountRepository.findById(account.getId());
+        byId.ifPresent(a -> a.getCity().remove(city));
     }
 }
 

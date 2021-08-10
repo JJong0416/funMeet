@@ -5,8 +5,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.funmeet.annotation.CurrentAccount;
 import com.funmeet.domain.Account;
+import com.funmeet.domain.City;
 import com.funmeet.domain.Hobby;
 import com.funmeet.form.*;
+import com.funmeet.repository.CityRepository;
 import com.funmeet.repository.HobbyRepository;
 import com.funmeet.service.AccountService;
 import com.funmeet.validator.NicknameValidator;
@@ -20,10 +22,8 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Controller
@@ -31,10 +31,13 @@ import java.util.stream.Collectors;
 public class SettingsController {
 
     private final AccountService accountService;
-    private final NicknameValidator nicknameValidator;
-    private final ModelMapper modelMapper;
+    private final CityRepository cityRepository;
     private final HobbyRepository hobbyRepository;
+    private final ModelMapper modelMapper;
     private final ObjectMapper objectMapper;
+
+    /* Validator */
+    private final NicknameValidator nicknameValidator;
 
 
     @InitBinder("passwordForm")
@@ -74,12 +77,13 @@ public class SettingsController {
     /* 취미 */
 
     @GetMapping("/settings/hobby")
-    public String updateTags(@CurrentAccount Account account, Model model) throws JsonProcessingException {
+    public String updateHobby(@CurrentAccount Account account, Model model) throws JsonProcessingException {
         model.addAttribute(account);
         List<Hobby> hobby = accountService.getHobby(account);
         model.addAttribute("hobby",hobby.stream().map(Hobby::getTitle).collect(Collectors.toList()));
 
         List<String> allHobby = hobbyRepository.findAll().stream().map(Hobby::getTitle).collect(Collectors.toList());
+        System.out.println(allHobby);
         model.addAttribute("whitelist",objectMapper.writeValueAsString(allHobby));
 
         return "settings/hobby";
@@ -88,7 +92,7 @@ public class SettingsController {
 
     @PostMapping("/settings/hobby/add")
     @ResponseBody
-    public ResponseEntity addTag(@CurrentAccount Account account, @RequestBody HobbyForm hobbyForm){
+    public ResponseEntity addHobby(@CurrentAccount Account account, @RequestBody HobbyForm hobbyForm){
 
         String title = hobbyForm.getHobbyTitle();
         Hobby hobby = hobbyRepository.findByTitle(title).orElseGet(() -> hobbyRepository.save(Hobby.builder()
@@ -101,7 +105,7 @@ public class SettingsController {
 
     @PostMapping("/settings/hobby/remove")
     @ResponseBody
-    public ResponseEntity removeTag(@CurrentAccount Account account, @RequestBody HobbyForm hobbyForm) {
+    public ResponseEntity removeHobby(@CurrentAccount Account account, @RequestBody HobbyForm hobbyForm) {
         String title = hobbyForm.getHobbyTitle();
 
         Hobby hobby = hobbyRepository.findByTitle(title).orElseThrow();
@@ -114,6 +118,46 @@ public class SettingsController {
     }
 
     /* 취미 끝*/
+    /* 지역 */
+
+    @GetMapping("/settings/location")
+    public String updateHobbyForm(@CurrentAccount Account account, Model model) throws JsonProcessingException {
+        model.addAttribute(account);
+
+        List<City> city = accountService.getCity(account);
+        model.addAttribute("city", city.stream().map(City::toString).collect(Collectors.toList()));
+
+        List<String> allCity = cityRepository.findAll().stream().map(City::toString).collect(Collectors.toList());
+        model.addAttribute("whitelist", objectMapper.writeValueAsString(allCity));
+
+        return "settings/location";
+    }
+
+    @PostMapping("/settings/location/add")
+    public ResponseEntity addCity(@CurrentAccount Account account, @RequestBody CityForm cityForm){
+        City city = cityRepository.findByKrCity(cityForm.getKrCity());
+        System.out.println(city);
+        if (city == null){
+            return ResponseEntity.badRequest().build();
+        }
+
+        accountService.addCity(account,city);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/settings/location/remove")
+    public ResponseEntity removeCity(@CurrentAccount Account account, @RequestBody CityForm cityForm){
+        System.out.println(cityForm.getEnCity());
+        City city = cityRepository.findByKrCity(cityForm.getKrCity());
+        System.out.println(city);
+        if (city == null){
+            return ResponseEntity.badRequest().build();
+        }
+        accountService.removeCity(account,city);
+        return ResponseEntity.ok().build();
+    }
+
+    /* 지역 끝*/
     /* 알림 */
     @GetMapping("/settings/notification")
     public String updateNotificationsForm(@CurrentAccount Account account, Model model) {

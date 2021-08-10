@@ -39,3 +39,5 @@ out/
 #### NPM ###
 src/main/resources/static/node_modules
 
+###.csv###
+*.csv

@@ -44,6 +44,9 @@ public class Account {
     @ManyToMany
     private List<Hobby> hobby = new ArrayList<>();
 
+    @ManyToMany
+    private List<City> city = new ArrayList<>();
+
     private String location;
 
     @Lob @Basic(fetch = FetchType.EAGER)
@@ -51,15 +54,15 @@ public class Account {
 
     private boolean meetCreatedByEmail;
 
-    private boolean meetCreatedByWeb;
+    private boolean meetCreatedByWeb = true;
 
     private boolean meetEnrollmentResultByEmail;
 
-    private boolean meetEnrollmentResultByWeb;
+    private boolean meetEnrollmentResultByWeb = true;
 
     private boolean meetUpdateByEmail;
 
-    private boolean meetUpdatedByWeb;
+    private boolean meetUpdatedByWeb = true;
 
     public void generateEmailCheckToken() {
         this.emailCheckToken = UUID.randomUUID().toString();

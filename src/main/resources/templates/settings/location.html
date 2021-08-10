@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <span th:replace="fragments/config :: config"></span>
+    <link th:href="@{/css/profile.css}" rel="stylesheet">
+    <link rel="stylesheet" href="/node_modules/@yaireo/tagify/dist/tagify.css">
+</head>
+
+<div th:replace="fragments/header :: main_nav"></div>
+<body>
+<div class="container">
+    <div class="row mt-5 justify-content-center">
+        <div class="col-2 d-none d-md-block ">
+            <div th:replace="fragments/profileFragments :: setting_bar(Menu='location')"></div>
+        </div>
+        <div class="col-8">
+            <h4>활동 지역 선택</h4>
+            <hr>
+            <div class="col">
+                <div class="card text-left halfContainer">
+                    <div class="alert alert-info" role="alert">
+                        거주하시는 지역, 혹은 활동하시는 지역을 입력해주세요. 알람을 설정하시면 <br/>
+                        시스템에 등록된 취미를 메일과 알림을 통해 전달 받으실 수 있습니다.
+                    </div>
+                    <div id="whitelist" th:text="${whitelist}" hidden></div>
+                    <input id="tags" type="text" name="tags" th:value="${#strings.listJoin(city, ',')}"
+                           class="input-body" aria-describedby="tagHelp"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/node_modules/@yaireo/tagify/dist/tagify.min.js"></script>
+
+<script th:replace="fragments/script :: csrfScript"></script>
+<script th:replace="fragments/script :: tagifyLocationScript"></script>
+<script th:replace="fragments/script :: formValidation"></script>
+</body>
+<div th:replace="fragments/footer :: footer"></div>
+</html>

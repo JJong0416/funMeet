@@ -22,9 +22,9 @@ public class NicknameValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         NicknameForm nicknameForm = (NicknameForm) target;
-        Account byNickname = accountRepository.findByNickname(nicknameForm.getNickname());
-        if (byNickname != null) {
-            errors.rejectValue("nickname", "wrong.value", "입력하신 닉네임을 사용할 수 없습니다.");
+        Account getNickname = accountRepository.findByNickname(nicknameForm.getNickname());
+        if (getNickname != null) {
+            errors.rejectValue("nickname", "wrong-value", "입력하신 닉네임을 사용할 수 없습니다.");
         }
     }
 }

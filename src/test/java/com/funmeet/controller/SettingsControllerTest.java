@@ -2,10 +2,12 @@ package com.funmeet.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.funmeet.domain.Account;
+import com.funmeet.domain.City;
 import com.funmeet.domain.Hobby;
 import com.funmeet.form.HobbyForm;
 import com.funmeet.form.SignUpForm;
 import com.funmeet.repository.AccountRepository;
+import com.funmeet.repository.CityRepository;
 import com.funmeet.repository.HobbyRepository;
 import com.funmeet.service.AccountService;
 import org.junit.jupiter.api.AfterEach;
@@ -46,8 +48,14 @@ class SettingsControllerTest {
 
     @Autowired ObjectMapper objectMapper;
 
+    @Autowired CityRepository cityRepository;
+
+    private City testCity = City.builder().enCity("test").krCity("테스트시").build();
+
     @BeforeEach
     void beforeEach(){
+        cityRepository.save(testCity);
+
         SignUpForm signUpForm = new SignUpForm();
         signUpForm.setNickname("jongchan");
         signUpForm.setPassword("12345678");
@@ -58,6 +66,7 @@ class SettingsControllerTest {
     @AfterEach
     void afterEach(){
         accountRepository.deleteAll();;
+        cityRepository.deleteAll();
     }
 
     @WithUserDetails(value="jongchan",setupBefore = TestExecutionEvent.TEST_EXECUTION)
