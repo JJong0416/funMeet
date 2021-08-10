@@ -4,9 +4,11 @@ import com.funmeet.adaptor.AdaptAccount;
 import com.funmeet.domain.Account;
 import com.funmeet.domain.City;
 import com.funmeet.domain.Hobby;
+import com.funmeet.form.EmailMessageForm;
 import com.funmeet.form.NotificationForm;
 import com.funmeet.form.Profile;
 import com.funmeet.form.SignUpForm;
+import com.funmeet.mail.EmailService;
 import com.funmeet.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -31,10 +33,10 @@ import java.util.Set;
 @Transactional
 public class AccountService implements UserDetailsService {
 
-    private final PasswordEncoder passwordEncoder;
-    private final JavaMailSender javaMailSender;
     private final AccountRepository accountRepository;
+    private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
+    private final EmailService emailService;
 
     public Account processSignUpAccount(SignUpForm signUpForm) {
         Account newAccount = saveSignUpAccount(signUpForm);
@@ -50,14 +52,15 @@ public class AccountService implements UserDetailsService {
         return accountRepository.save(account);
     }
 
-    public void sendSignUpConfirmEmail(Account newAccount) {
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(newAccount.getEmail());
-        mailMessage.setSubject("뻔(Fun)하면서 뻔하지 않은 모임. 뻔모임 회원가입 인증");
-        mailMessage.setText("/check_email_token?token=" + newAccount.getEmailCheckToken() +
-                "&email=" + newAccount.getEmail());
+    public void sendSignUpConfirmEmail(Account addAccount) {
+        EmailMessageForm emailMessageForm = EmailMessageForm.builder()
+                .to(addAccount.getEmail())
+                .subject("뻔(Fun)하면서 뻔하지 않은 모임. 뻔모임 회원가입 인증")
+                .text("/check_email_token?token=" + addAccount.getEmailCheckToken() +
+                        "&email=" + addAccount.getEmail())
+                .build();
 
-        javaMailSender.send(mailMessage);
+        emailService.send(emailMessageForm);
     }
 
     public void completeSignUp(Account account) {
@@ -66,13 +69,15 @@ public class AccountService implements UserDetailsService {
     }
 
     public void sendLoginLink(Account account) {
-        account.generateEmailCheckToken();
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(account.getEmail());
-        mailMessage.setSubject("뻔모임, 로그인 링크");
-        mailMessage.setText("/auth_email?token=" + account.getEmailCheckToken() +
-                "&email=" + account.getEmail());
-        javaMailSender.send(mailMessage);
+
+        EmailMessageForm emailMessageForm = EmailMessageForm.builder()
+                .to(account.getEmail())
+                .subject("뻔(Fun)하면서 뻔하지 않은 모임. 뻔모임 로그인 링크")
+                .text("/auth_email?token=" + account.getEmailCheckToken() +
+                        "&email=" + account.getEmail())
+                .build();
+        emailService.send(emailMessageForm);
+
     }
 
     public void login(Account account) {

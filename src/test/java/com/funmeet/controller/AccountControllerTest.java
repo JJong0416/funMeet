@@ -1,6 +1,8 @@
 package com.funmeet.controller;
 
 import com.funmeet.domain.Account;
+import com.funmeet.form.EmailMessageForm;
+import com.funmeet.mail.EmailService;
 import com.funmeet.repository.AccountRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,7 +33,7 @@ class AccountControllerTest {
     @Autowired private MockMvc mockMvc;
     @Autowired private AccountRepository accountRepository;
     @MockBean
-    JavaMailSender javaMailSender;
+    EmailService emailService;
 
     @DisplayName("회원 가입 화면 보이는지")
     @Test
@@ -80,7 +82,7 @@ class AccountControllerTest {
 
         assertTrue(accountRepository.existsByNickname("jjong0416"));
         assertTrue(accountRepository.existsByEmail("checkemal@naver.com"));
-        then(javaMailSender).should().send(any(SimpleMailMessage.class)); // 메일을 보냈는지 체크해주는 것
+        then(emailService).should().send(any(EmailMessageForm.class)); // 메일을 보냈는지 체크해주는 것
     }
 
     @DisplayName("인증 메일 확인 - 입력값 오류")

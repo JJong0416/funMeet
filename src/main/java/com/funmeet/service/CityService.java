@@ -28,7 +28,6 @@ public class CityService {
             List<City> cityList = Files.readAllLines(resource.getFile().toPath(), StandardCharsets.UTF_8).stream()
                     .map(line -> {
                         String[] split = line.split(",");
-                        System.out.println(split[0]+ "" + split[1]);
                         return City.builder().enCity(split[0]).krCity(split[1]).build();
                     }).collect(Collectors.toList());
             cityRepository.saveAll(cityList);
