@@ -15,7 +15,7 @@ import javax.mail.internet.MimeMessage;
 @RequiredArgsConstructor
 @Component
 @Slf4j
-public class funMeetEmailService implements EmailService{
+public class FunMeetEmailService implements EmailService{
 
     private final JavaMailSender javaMailSender;
 
@@ -28,9 +28,9 @@ public class funMeetEmailService implements EmailService{
             mimeMessageHelper = new MimeMessageHelper(mimeMessage,false,"UTF-8");
             mimeMessageHelper.setTo(emailMessageForm.getTo());
             mimeMessageHelper.setSubject(emailMessageForm.getSubject());
-            mimeMessageHelper.setText(emailMessageForm.getText());
-
+            mimeMessageHelper.setText(emailMessageForm.getText(),true);
             javaMailSender.send(mimeMessage);
+
             log.info("success send to email : {}",emailMessageForm.getTo());
         } catch (MessagingException e) {
             log.info("fail send to email : {}", emailMessageForm.getTo());

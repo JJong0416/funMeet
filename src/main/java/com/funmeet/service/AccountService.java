@@ -1,6 +1,7 @@
 package com.funmeet.service;
 
 import com.funmeet.adaptor.AdaptAccount;
+import com.funmeet.config.AppProperties;
 import com.funmeet.domain.Account;
 import com.funmeet.domain.City;
 import com.funmeet.domain.Hobby;
@@ -23,6 +24,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +40,8 @@ public class AccountService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
     private final EmailService emailService;
+    private final TemplateEngine templateEngine;
+    private final AppProperties appProperties;
 
     public Account processSignUpAccount(SignUpForm signUpForm) {
         Account newAccount = saveSignUpAccount(signUpForm);
@@ -51,13 +56,22 @@ public class AccountService implements UserDetailsService {
         account.setShort_bio("간략한 자기 소개를 추가하세요.");
         return accountRepository.save(account);
     }
-
+    // 써야 하는 것은 link, nickname, host
     public void sendSignUpConfirmEmail(Account addAccount) {
+        Context context = new Context();
+        context.setVariable("link","/check_email_token?token=" + addAccount.getEmailCheckToken() +
+                "&email=" + addAccount.getEmail());
+        context.setVariable("nickname",addAccount.getNickname());
+        context.setVariable("message","뻔모임 서비스를 이용하시려면 링크를 클릭하세요.");
+        context.setVariable("linkName","이메일 인증하기");
+        context.setVariable("host",appProperties.getHost());
+
+        String message = templateEngine.process("email/html_email_link",context);
+
         EmailMessageForm emailMessageForm = EmailMessageForm.builder()
                 .to(addAccount.getEmail())
                 .subject("뻔(Fun)하면서 뻔하지 않은 모임. 뻔모임 회원가입 인증")
-                .text("/check_email_token?token=" + addAccount.getEmailCheckToken() +
-                        "&email=" + addAccount.getEmail())
+                .text(message)
                 .build();
 
         emailService.send(emailMessageForm);
@@ -69,12 +83,20 @@ public class AccountService implements UserDetailsService {
     }
 
     public void sendLoginLink(Account account) {
+        Context context = new Context();
+        context.setVariable("link","/auth_email?token=" + account.getEmailCheckToken() +
+                "&email=" + account.getEmail());
+        context.setVariable("nickname",account.getNickname());
+        context.setVariable("message","뻔모임 서비스를 이용하시려면 링크를 클릭하세요.");
+        context.setVariable("linkName","로그인하기");
+        context.setVariable("host",appProperties.getHost());
+
+        String message = templateEngine.process("email/html_email_link",context);
 
         EmailMessageForm emailMessageForm = EmailMessageForm.builder()
                 .to(account.getEmail())
                 .subject("뻔(Fun)하면서 뻔하지 않은 모임. 뻔모임 로그인 링크")
-                .text("/auth_email?token=" + account.getEmailCheckToken() +
-                        "&email=" + account.getEmail())
+                .text(message)
                 .build();
         emailService.send(emailMessageForm);
 
@@ -145,13 +167,11 @@ public class AccountService implements UserDetailsService {
     }
 
     public void addCity(Account account, City city) {
-        System.out.println("2222");
         Optional<Account> getId = accountRepository.findById(account.getId());
         getId.ifPresent(a -> a.getCity().add(city));
     }
 
     public void removeCity(Account account, City city) {
-        System.out.println("3333");
         Optional<Account> byId = accountRepository.findById(account.getId());
         byId.ifPresent(a -> a.getCity().remove(city));
     }
