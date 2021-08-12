@@ -84,7 +84,6 @@ public class SettingsController {
         model.addAttribute("hobby",hobby.stream().map(Hobby::getTitle).collect(Collectors.toList()));
 
         List<String> allHobby = hobbyRepository.findAll().stream().map(Hobby::getTitle).collect(Collectors.toList());
-        System.out.println(allHobby);
         model.addAttribute("whitelist",objectMapper.writeValueAsString(allHobby));
 
         return "settings/hobby";
@@ -137,7 +136,6 @@ public class SettingsController {
     @PostMapping("/settings/location/add")
     public ResponseEntity addCity(@CurrentAccount Account account, @RequestBody CityForm cityForm){
         City city = cityRepository.findByKrCity(cityForm.getKrCity());
-        System.out.println(city);
         if (city == null){
             return ResponseEntity.badRequest().build();
         }
@@ -148,9 +146,7 @@ public class SettingsController {
 
     @PostMapping("/settings/location/remove")
     public ResponseEntity removeCity(@CurrentAccount Account account, @RequestBody CityForm cityForm){
-        System.out.println(cityForm.getEnCity());
         City city = cityRepository.findByKrCity(cityForm.getKrCity());
-        System.out.println(city);
         if (city == null){
             return ResponseEntity.badRequest().build();
         }

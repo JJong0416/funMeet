@@ -42,5 +42,8 @@ src/main/resources/static/node_modules
 ### SMTP Email Setting ###
 src/main/resources/application-db.properties
 
+###package-json Setting ###
+src/main/resources/static/package-lock.json
+
 ###.csv###
 src/main/resources/list_district_kr.csv

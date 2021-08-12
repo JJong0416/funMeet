@@ -130,7 +130,6 @@ public class AccountController {
     }
 
 
-    /* 이메일  마지막 */
 
     @GetMapping("/profile/{nickname}")
     public String viewProfile(@PathVariable String nickname, Model model, @CurrentAccount Account account){

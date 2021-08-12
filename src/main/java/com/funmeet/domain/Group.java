@@ -23,7 +23,7 @@ public class Group {
     private List<Account> managers;
 
     @ManyToMany // 여러 사람들이 여러개 취미에 들 수 있음
-    private  List<Account> member;
+    private List<Account> member;
 
     private String shortDescription;
 
@@ -53,4 +53,7 @@ public class Group {
 
     private boolean useBanner;
 
+    public void addManager(Account account) {
+        this.managers.add(account);
+    }
 }
