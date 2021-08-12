@@ -49,7 +49,7 @@ public class Account {
 
     private String location;
 
-    @Lob @Basic(fetch = FetchType.EAGER)
+    @Lob
     private String profileImage;
 
     private boolean meetCreatedByEmail;

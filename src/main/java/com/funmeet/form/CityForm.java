@@ -9,8 +9,6 @@ public class CityForm {
     private String cityName;
 
     public String getEnCity() {
-        System.out.println(cityName); // 이 녀석이 null 그러면 cityForm이 제대로 안들어왔다는 것.
-                                      // 그 말은 즉, CityForm -> City로 못간것.
         return cityName.substring(0, cityName.indexOf("("));
     }
 

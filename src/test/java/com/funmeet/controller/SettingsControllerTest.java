@@ -45,7 +45,8 @@ class SettingsControllerTest {
 
     @Autowired PasswordEncoder passwordEncoder;
 
-    @Autowired HobbyRepository hobbyRepository;
+    @Autowired
+    HobbyRepository hobbyRepository;
 
     @Autowired ObjectMapper objectMapper;
 
