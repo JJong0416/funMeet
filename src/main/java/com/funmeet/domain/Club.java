@@ -7,15 +7,19 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Getter @Setter
-@Builder @EqualsAndHashCode(of = "id")
-@AllArgsConstructor @NoArgsConstructor
-public class Group {
+@Getter
+@Setter
+@Builder
+@EqualsAndHashCode(of = "id")
+@AllArgsConstructor
+@NoArgsConstructor
+public class Club {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     private Long id;
 
-    private String groupPath;
+    private String clubPath;
 
     private String title;
 

@@ -1,43 +1,77 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/config :: config"></head>
-<body>
-    <div th:replace="fragments/header :: main_nav"></div>
-    <div class="halfContainer">
-        <div class="py-5 text-center">
-            <h1>취미모임 개설</h1>
-            <hr>
-        </div>
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head th:replace="fragments/config :: config"></head>-->
+<!--<body>-->
+<!--    <div th:replace="fragments/header :: main_nav"></div>-->
+<!--    <div class="halfContainer">-->
+<!--        <div class="py-5 text-center">-->
+<!--            <h1>취미모임 개설</h1>-->
+<!--            <hr>-->
+<!--        </div>-->
 
-        <div class="row justify-content-center">
-            <form class="formValidation col-sm-10" th:action="@{/create_group}" th:object="${groupForm}" method="post">
-                <div class="form-group">
-                    <label for="groupPath" class="h5">취미모임 URL</label>
-                    <input id = groupPath th:field="*{groupPath}" type="text" class="form-control"
-                            placeholder="예시) Hiking-hobby" required min="2" max="15">
-                    <small>공백없이 대시(-)와 언더바(_)만 2자 이상 15자 이내로 입력하세요. 모임 주소로 사용할 예정입니다. 예) /group/<b>group-path</b> </small>
-                    <small class="invalid-feedback">경로를 입력하세요</small>
-                    <small class="form-text text-danger" th:if="${#fields.hasErrors('groupPath')}" th:errors="*{groupPath}">경로 오류입니다.</small>
-                </div>
+<!--        <div class="row justify-content-center">-->
+<!--            <form class="formValidation col-sm-10" th:action="@{/create_group}" th:object="${groupForm}" method="post" novalidate>-->
+<!--&lt;!&ndash;                <div class="form-group">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <label for="title" class="text-info"><strong>취미모임 이름</strong></label>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <input id="title" type="text" th:field="*{title}" class="form-control"&ndash;&gt;-->
+<!--&lt;!&ndash;                           placeholder="취미 이름" required max="20">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <small class="form-text text-muted">&ndash;&gt;-->
+<!--&lt;!&ndash;                        모임 이름을 20자 이내로 입력하세요.&ndash;&gt;-->
+<!--&lt;!&ndash;                    </small>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <small class="invalid-feedback">취미 제목을 입력하세요</small>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <small class="form-text text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">제목 오류입니다.</small>&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
 
-                <div class="form-group">
-                </div>
-            </form>
-        </div>
-    </div>
+<!--                <div class="form-group">-->
+<!--                    <label for="groupPath" class="text-info"><strong>취미모임 URL</strong></label>-->
+<!--                    <input id = groupPath th:field="*{path}" type="text" class="form-control"-->
+<!--                            placeholder="예시) Hiking-hobby" required min="2" max="15">-->
+<!--                    <small>공백없이 대시(-)와 언더바(_)만 2자 이상 15자 이내로 입력하세요. 모임 주소로 사용할 예정입니다. 예) /group/<b>group-path</b> </small>-->
+<!--                    <small class="invalid-feedback">경로를 입력하세요</small>-->
+<!--                    <small class="form-text text-danger" th:if="${#fields.hasErrors('path')}" th:errors="*{path}">경로 오류입니다.</small>-->
+<!--                </div>-->
 
-    <script th:replace="fragments/script:: formValidation"></script>
-    <script src="/node_modules/summernote/dist/summernote-bs4.js"></script>
-    <script type="application/javascript">
-        $(function () {
-            $('#fullDescription').summernote({
-                fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Noto Sans KR', 'Merriweather'],
-                placeholder: '스터디의 목표, 일정, 진행 방식, 사용할 교재 또는 인터넷 강좌 그리고 모집중인 스터디원 등 스터디에 대해 자세히 적어 주세요.',
-                tabsize: 2,
-                height: 300
-            });
-        });
-    </script>
-</body>
-<div th:replace="fragments/footer :: footer"></div>
-</html>
+<!--&lt;!&ndash;                <div class="form-group">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <label for="shortDescription" class="text-info"><strong>짧은 소개</strong></label>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <textarea id="shortDescription" type="textarea" th:field="*{shortDescription}" class="form-control"&ndash;&gt;-->
+<!--&lt;!&ndash;                              placeholder="취미에 대한 짧게 소개해 주세요." required maxlength="100"></textarea>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <small id="shortDescriptionHelp" class="form-text text-muted">&ndash;&gt;-->
+<!--&lt;!&ndash;                        100자 이내로 짧은 소개를 작성해주세요.&ndash;&gt;-->
+<!--&lt;!&ndash;                    </small>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <small class="invalid-feedback">짧은 소개를 입력하세요.</small>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <small class="form-text text-danger" th:if="${#fields.hasErrors('shortDescription')}" th:errors="*{shortDescription}">짧은 소개 오류</small>&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                <div class="form-group">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <label for="fullDescription" class="text-info"><strong>상세 소개</strong></label>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <textarea id="fullDescription" type="textarea" th:field="*{fullDescription}" class="form-control"&ndash;&gt;-->
+<!--&lt;!&ndash;                              placeholder="모임에 대해 자세히 설명해 주세요."></textarea>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <small id="fullDescriptionHelp" class="form-text text-muted">&ndash;&gt;-->
+<!--&lt;!&ndash;                        취미를 통한 모임 주기, 참여비 등 취미모임에 있어서 주요한 사항을 작성해주시길 바랍니다.&ndash;&gt;-->
+<!--&lt;!&ndash;                    </small>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <small class="invalid-feedback">상세 소개를 입력하세요.</small>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <small class="form-text text-danger" th:if="${#fields.hasErrors('fullDescription')}" th:errors="*{fullDescription}">상세 소개 오류</small>&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                <div class="form-group">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <button class="btn btn-primary btn-primary" type="submit"&ndash;&gt;-->
+<!--&lt;!&ndash;                            aria-describedby="submitHelp">모임 만들기</button>&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--            </form>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    <script th:replace="fragments/script:: formValidation"></script>-->
+<!--    <script src="/node_modules/summernote/dist/summernote-bs4.js"></script>-->
+<!--    <script type="application/javascript">-->
+<!--        $(function () {-->
+<!--            $('#fullDescription').summernote({-->
+<!--                fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Gothic A1', 'Merriweather'],-->
+<!--                placeholder: '이 모임의 목적과 알리고 싶은 일정, 규칙 그리고 모임비 등 모집할 모임원들을 위한 정보를 자세히 적어 주세요 ',-->
+<!--                tabsize: 2,-->
+<!--                height: 250-->
+<!--            });-->
+<!--        });-->
+<!--    </script>-->
+<!--    <div th:replace="fragments/footer :: footer"></div>-->
+<!--</body>-->
+<!--</html>-->
