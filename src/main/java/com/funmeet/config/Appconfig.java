@@ -21,7 +21,6 @@ public class Appconfig {
         modelMapper.getConfiguration()
                 .setDestinationNameTokenizer(NameTokenizers.UNDERSCORE)
                 .setSourceNameTokenizer(NameTokenizers.UNDERSCORE);
-
         return modelMapper;
     }
 }

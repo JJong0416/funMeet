@@ -15,9 +15,9 @@ public class ClubService {
 
     private final ClubRepository clubRepository;
 
-    public Club createGroup(Club group, Account account){
-        Club newGroup = clubRepository.save(group);
-        newGroup.addManager(account);
-        return newGroup;
+    public Club createNewClub(Club club, Account account){
+        Club createClub = clubRepository.save(club);
+        createClub.addManager(account);
+        return createClub;
     }
 }

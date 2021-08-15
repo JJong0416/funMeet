@@ -32,7 +32,7 @@ public class ClubController {
     private final ModelMapper modelMapper;
 
     @InitBinder("clubForm")
-    public void groupFormInitBinder(WebDataBinder webDataBinder) {
+    public void clubFormInitBinder(WebDataBinder webDataBinder) {
         webDataBinder.addValidators(clubFormValidator);
     }
 
@@ -44,13 +44,13 @@ public class ClubController {
     }
 
     @PostMapping("/create_club")
-    public String createClub(@CurrentAccount Account account, @Valid ClubForm groupForm, Errors errors){
+    public String createClubForm(@CurrentAccount Account account, @Valid ClubForm clubForm, Errors errors){
         if (errors.hasErrors()){
             return "club/form";
         }
 
-        Club createClub = clubService.createGroup(modelMapper.map(groupForm,Club.class),account);
-        return "redirect:/club/" + URLEncoder.encode(createClub.getClubPath(), StandardCharsets.UTF_8);
+        Club newClub = clubService.createNewClub(modelMapper.map(clubForm, Club.class),account);
+        return "redirect:/club/" + URLEncoder.encode(newClub.getClubPath(),StandardCharsets.UTF_8);
     }
 
     @GetMapping("/club/{path}")

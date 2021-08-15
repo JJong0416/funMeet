@@ -21,10 +21,9 @@ public class ClubFormValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
-        ClubForm groupForm = (ClubForm)target;
-
-        if (clubRepository.existsByClubPath(groupForm.getClubPath())){
-            errors.rejectValue("path", "wrong.path", "해당 경로는 사용할 수 없습니다.");
+        ClubForm clubForm = (ClubForm)target;
+        if (clubRepository.existsByClubPath(clubForm.getClubPath())) {
+            errors.rejectValue("path", "wrong.path", "해당 모임의 경로값을 사용할 수 없습니다.");
         }
     }
 }

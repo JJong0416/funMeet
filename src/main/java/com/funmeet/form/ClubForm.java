@@ -18,6 +18,7 @@ public class ClubForm {
     @Length(max = 20)
     private String title;
 
+
     @NotBlank
     @Length(max = 100)
     private String shortDescription;
