@@ -1,16 +1,29 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/config :: config"></head>
-<body>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <span th:replace="fragments/config :: config"></span>
+</head>
+<body class="bg-light">
+<div th:replace="fragments/header :: main_nav"></div>
+<div th:replace="fragments/club :: clubBanner"></div>
 
 <div class="container">
-    <div class="py-5 text-center">
-        <h1>취미모임 개설</h1>
-        <hr>
+
+    <div th:replace="fragments/club :: club_stat"></div>
+    <div th:replace="fragments/club :: club_menu (info)"></div>
+
+    <div class="row px-3 justify-content-center">
+        <div class="col-10 pt-3" th:utext="${club.fullDescription}"></div>
     </div>
 </div>
 
 <script th:replace="fragments/script:: formValidation"></script>
 <div th:replace="fragments/footer :: footer"></div>
+<script type="application/javascript">
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+</script>
 </body>
 </html>

@@ -1,10 +1,96 @@
 <!DOCTYPE html>
-<html lang="en">
-<head></head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-<div th:fragment="check_banner" th:if="${club.useBanner}" class="row" id="logo">
+<div th:fragment="clubBanner" th:if="${club.useBanner}" class="row" id="logo">
   <img th:src="${club.banner}"/>
 </div>
 
+<div th:fragment="club_menu (Menu)" class="row  px-3 justify-content-center">
+  <nav class="col-10 nav nav-tabs">
+    <a class="nav-item nav-link" th:classappend="${Menu == 'info'}? active" th:href="@{'/club/' + ${club.clubPath}}">
+      <i class="fa fa-info-circle"></i> 소개
+    </a>
+    <a class="nav-item nav-link" th:classappend="${Menu == 'members'}? active" th:href="@{'/club/' + ${club.clubPath} + '/members'}">
+      <i class="fa fa-user"></i> 구성원
+    </a>
+    <a class="nav-item nav-link" th:classappend="${Menu == 'events'}? active" href="#" th:href="@{'/club/' + ${club.clubPath} + '/events'}">
+      <i class="fa fa-calendar"></i> 모임
+    </a>
+    <a sec:authorize="isAuthenticated()" th:if="${club.isManager(#authentication.principal)}"
+       class="nav-item nav-link" th:classappend="${Menu == 'settings'}? active" href="#" th:href="@{'/club/' + ${club.clubPath} + '/settings/description'}">
+      <i class="fa fa-cog"></i> 설정
+    </a>
+  </nav>
+</div>
+
+<div th:fragment="club_stat">
+  <div class="row pt-4 text-left justify-content-center bg-light">
+    <div class="col-6">
+      <a class="text-decoration-none" th:href="@{'/club/' + ${club.clubPath}}">
+        <span class="h1" th:text="${club.title}">모임 이름</span>
+      </a>
+    </div>
+
+    <div class="col-4 text-right justify-content-end">
+      <span th:if="${!club.published}" class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="모임방 준비중">
+        <button class="btn btn-primary btn-sm" style="pointer-events: none;" type="button" disabled>DRAFT</button>
+      </span>
+
+      <span th:if="${club.closed}" class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="모임 종료">
+        <button class="btn btn-primary btn-sm" style="pointer-events: none;" type="button" disabled>CLOSED</button>
+      </span>
+
+      <span th:if="${!club.recruiting}" class="d-inline-block ml-1" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="모임원 차단">
+        <button class="btn btn-primary btn-sm" style="pointer-events: none;" type="button" disabled>OFF</button>
+      </span>
+
+      <span sec:authorize="isAuthenticated()" th:if="${club.isJoinable(#authentication.principal)}" class="btn-group" role="group" aria-label="Basic example">
+        <a class="btn btn-primary" th:href="@{'/club/' + ${club.clubPath} + '/join'}">
+          모임 가입</a>
+
+        <a class="btn btn-outline-primary" th:href="@{'/club/' + ${club.clubPath} + '/members'}"
+           th:text="${club.members.size()}"></a>
+      </span>
+
+      <span sec:authorize="isAuthenticated()" th:if="${!club.closed && club.isMember(#authentication.principal)}" class="btn-group" role="group">
+        <a class="btn btn-outline-warning" th:href="@{'/club/' + ${club.clubPath} + '/leave'}">
+          스터디 탈퇴 </a>
+        <a class="btn btn-outline-primary" th:href="@{'/club/' + ${club.clubPath} + '/members'}" th:text="${club.members.size()}">
+        </a>
+      </span>
+
+      <span sec:authorize="isAuthenticated()" th:if="${club.published && !club.closed && club.isManager(#authentication.principal)}">
+        <a class="btn btn-outline-primary" th:href="@{'/club/' + ${club.clubPath} + '/new-event'}">
+          <i class="fa fa-plus"></i> 모임 만들기
+        </a>
+      </span>
+    </div>
+  </div>
+
+  <div class="row justify-content-center bg-light">
+    <div class="col-10">
+      <p class="lead" th:text="${club.shortDescription}"></p>
+    </div>
+  </div>
+
+  <div class="row justify-content-center bg-light">
+    <div class="col-10">
+      <p>
+        <span th:each="hobby: ${club.hobby}" class="font-weight-light text-monospace badge badge-pill badge-info mr-3">
+          <a th:href="@{'/search/hobby/' + ${hobby.title}}" class="text-decoration-none text-white">
+            <i class="fa fa-tag"></i> <span th:text="${hobby.title}">Tag</span>
+          </a>
+        </span>
+
+        <span th:each="city: ${club.city}" class="font-weight-light text-monospace badge badge-primary mr-3">
+          <a th:href="@{'/search/city/' + ${city.id}}" class="text-decoration-none text-white">
+            <i class="fa fa-globe"></i> <span th:text="${city.krCity}">City</span>
+          </a>
+        </span>
+      </p>
+    </div>
+  </div>
+</div>
 
 </html>

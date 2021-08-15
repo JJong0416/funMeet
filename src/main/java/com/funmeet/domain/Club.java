@@ -1,5 +1,6 @@
 package com.funmeet.domain;
 
+import com.funmeet.adaptor.AdaptAccount;
 import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -58,18 +59,16 @@ public class Club {
         this.managers.add(account);
     }
 
-//    public boolean isJoinable(AdaptAccount userAccount) {
-//        Account account = userAccount.getAccount();
-//        return this.isPublished() && this.isRecruiting()
-//                && !this.members.contains(account) && !this.managers.contains(account);
-//
-//    }
-//
-//    public boolean isMember(AdaptAccount userAccount) {
-//        return this.members.contains(userAccount.getAccount());
-//    }
-//
-//    public boolean isManager(AdaptAccount userAccount) {
-//        return this.managers.contains(userAccount.getAccount());
-//    }
+    public boolean isJoinable(AdaptAccount adaptAccount) {
+        Account account = adaptAccount.getAccount();
+        return this.isPublished() && this.isRecruiting() && !this.members.contains(account) && !this.managers.contains(account);
+    }
+
+    public boolean isMember(AdaptAccount userAccount) {
+        return this.members.contains(userAccount.getAccount());
+    }
+
+    public boolean isManager(AdaptAccount userAccount) {
+        return this.managers.contains(userAccount.getAccount());
+    }
 }
