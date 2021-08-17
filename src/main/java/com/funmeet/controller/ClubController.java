@@ -44,8 +44,9 @@ public class ClubController {
     }
 
     @PostMapping("/create_club")
-    public String createClubForm(@CurrentAccount Account account, @Valid ClubForm clubForm, Errors errors){
+    public String createClubForm(@CurrentAccount Account account, @Valid ClubForm clubForm, Errors errors,Model model){
         if (errors.hasErrors()){
+            model.addAttribute(account);
             return "club/form";
         }
 
@@ -59,4 +60,12 @@ public class ClubController {
         model.addAttribute(clubRepository.findByClubPath(path));
         return "club/page";
     }
+
+    @GetMapping("/club/{path}/members")
+    public String viewStudyMembers(@CurrentAccount Account account, @PathVariable String path, Model model) {
+        model.addAttribute(account);
+        model.addAttribute("clubPath",clubRepository.findByClubPath(path));
+        return "club/members";
+    }
+
 }
