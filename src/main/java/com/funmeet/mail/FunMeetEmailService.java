@@ -23,7 +23,7 @@ public class FunMeetEmailService implements EmailService{
     public void send(EmailMessageForm emailMessageForm) {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 
-        MimeMessageHelper mimeMessageHelper = null;
+        MimeMessageHelper mimeMessageHelper;
         try {
             mimeMessageHelper = new MimeMessageHelper(mimeMessage,false,"UTF-8");
             mimeMessageHelper.setTo(emailMessageForm.getTo());
@@ -34,6 +34,7 @@ public class FunMeetEmailService implements EmailService{
             log.info("success send to email : {}",emailMessageForm.getTo());
         } catch (MessagingException e) {
             log.info("fail send to email : {}", emailMessageForm.getTo());
+            throw new RuntimeException(e);
         }
     }
 }

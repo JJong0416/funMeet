@@ -1,10 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <span th:replace="fragments/config :: config"></span>
 </head>
-<body>
 
+<body class="bg-light">
+    <div th:replace="fragments/header :: main_nav"></div>
+    <div th:replace="fragments/club :: clubBanner"></div>
+
+    <div class="container">
+        <div th:replace="fragments/club :: club_stat"></div>
+        <div th:replace="fragments/club :: club_menu (members)"></div>
+
+        <div th:replace="fragments/club :: member-list(members=${club.managers},isManager=${true})"></div>
+        <div th:replace="fragments/club :: member-list(members=${club.members},isManager=${false})"></div>
+    </div>
+<script th:replace="fragments/script:: formValidation"></script>
+<div th:replace="fragments/footer :: footer"></div>
 </body>
 </html>

@@ -2,10 +2,7 @@ package com.funmeet.domain;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity @Getter @Setter @EqualsAndHashCode(of = "id")
 @Builder @NoArgsConstructor @AllArgsConstructor
@@ -17,4 +14,7 @@ public class Hobby {
 
     @Column(unique = true, nullable = false)
     private String title;
+
+//    @ManyToMany
+//    private List<Reply> replyList; // TODO 회원대화방
 }

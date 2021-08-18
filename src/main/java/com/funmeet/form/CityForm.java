@@ -1,7 +1,8 @@
 package com.funmeet.form;
 
-import com.funmeet.domain.City;
+
 import lombok.Data;
+import com.funmeet.domain.City;
 
 @Data
 public class CityForm {

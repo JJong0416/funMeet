@@ -11,7 +11,6 @@ import java.util.UUID;
 @Entity
 @Getter @Setter @EqualsAndHashCode(of = "id") // id만 사용하는 이유는 연관관계 복잡해질때, 순환참조 막기 위해서
 @Builder @AllArgsConstructor @NoArgsConstructor
-
 public class Account {
 
     @Id @GeneratedValue
@@ -72,6 +71,10 @@ public class Account {
     public void completeSignUp() {
         this.emailVerified = true;
         this.joinedAt = LocalDateTime.now();
+    }
+
+    public boolean isManagerOf(Club club) {
+        return club.getManagers().contains(this);
     }
 
     public boolean isValidToken(String token) {

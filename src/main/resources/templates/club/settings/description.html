@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <span th:replace="fragments/config :: config"></span>
+</head>
+
+<body class="bg-light">
+<div th:replace="fragments/header :: main_nav"></div>
+<div th:replace="fragments/club :: clubBanner"></div>
+
+<div class="container">
+  <div th:replace="fragments/club :: club_stat"></div>
+  <div th:replace="fragments/club :: club_menu (settings)"></div>
+
+  <div class="row mt-3 justify-content-center">
+    <div th:if="${message} == '성공'">
+      <div th:replace="fragments/script :: commonSuccess"></div>
+    </div>
+
+    <div class="col-2">
+      <div th:replace="fragments/club :: club-settings-menu(currentMenu='description')"></div>
+    </div>
+    <div class="col-8">
+      <form class="formValidation" th:action="@{'/club/' + ${club.getClubPath()} + '/settings/description'}"
+            th:object="${clubDescriptionForm}" method="post" novalidate>
+        <div class="form-group">
+          <label for="shortDescription">짧은 소개</label>
+          <textarea id="shortDescription" type="textarea" th:field="*{shortDescription}" class="form-control"
+                    placeholder="취미를 짧게 소개해 주세요." aria-describedby="shortDescriptionHelp" required maxlength="100">
+                        </textarea>
+          <small id="shortDescriptionHelp" class="form-text text-muted">
+            100자 이내로 취미에 대한 짧은 소개해 주세요.
+          </small>
+          <small class="invalid-feedback">짧은 소개를 입력하세요.</small>
+          <small class="form-text text-danger" th:if="${#fields.hasErrors('shortDescription')}" th:errors="*{shortDescription}">ShortDescription Error</small>
+        </div>
+
+        <div class="form-group">
+          <label for="fullDescription">상세 소개</label>
+          <textarea id="fullDescription" type="textarea" th:field="*{fullDescription}" class="form-control"
+                    placeholder="취미를 자세히 설명해 주세요." aria-describedby="fullDescriptionHelp" required></textarea>
+          <small id="fullDescriptionHelp" class="form-text text-muted">
+            취미를 통한 모임 주기, 참여비 등 취미모임에 있어서 주요한 사항을 작성해주시길 바랍니다.
+          </small>
+          <small class="invalid-feedback">상세 소개를 입력하세요.</small>
+          <small class="form-text text-danger" th:if="${#fields.hasErrors('fullDescription')}" th:errors="*{fullDescription}">FullDescription Error</small>
+        </div>
+
+        <div class="form-group">
+          <button class="btn btn-primary btn-block" type="submit"
+                  aria-describedby="submitHelp">수정하기</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<script th:replace="fragments/script:: formValidation"></script>
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>
