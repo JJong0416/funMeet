@@ -4,7 +4,6 @@ import com.funmeet.annotation.CurrentAccount;
 import com.funmeet.domain.Account;
 import com.funmeet.domain.Club;
 import com.funmeet.form.ClubDescriptionForm;
-import com.funmeet.repository.ClubRepository;
 import com.funmeet.service.ClubService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -57,6 +56,40 @@ public class ClubSettingsController {
         clubService.updateClub_fullDescription(club, studyDescriptionForm);
         attributes.addFlashAttribute("message", "성공");
         return "redirect:/club/" + getPath(path) + "/settings/description";
+    }
+
+    @GetMapping("/banner")
+    public String clubBannerForm(@CurrentAccount Account account, @PathVariable String path, Model model){
+        Club club = clubService.getClubUpdate(account,path);
+        model.addAttribute(account);
+        model.addAttribute(club);
+        return "club/settings/banner";
+    }
+
+    @PostMapping("/banner")
+    public String studyImageSubmit(@CurrentAccount Account account, @PathVariable String path,
+                                   String image, RedirectAttributes attributes) {
+        Club club = clubService.getClubUpdate(account, path);
+        clubService.updateStudyImage(club, image);
+        attributes.addFlashAttribute("message", "성공");
+        return "redirect:/club/" + getPath(path) + "/settings/banner";
+    }
+
+
+    @PostMapping("/banner/enable")
+    public String enableStudyBanner(@CurrentAccount Account account, @PathVariable String path) {
+        Club club = clubService.getClubUpdate(account, path);
+        clubService.enableStudyBanner(club);
+        return "redirect:/club/" + getPath(path) + "/settings/banner";
+    }
+
+    @PostMapping("/banner/disable")
+    public String disableClubBanner(@CurrentAccount Account account, @PathVariable String path){
+        System.out.println(path);
+        System.out.println(path);
+        Club club = clubService.getClubUpdate(account,path);
+        clubService.disableStudyBanner(club);
+        return "redirect:/club/" + getPath(path) + "/settings/banner";
     }
 
 }

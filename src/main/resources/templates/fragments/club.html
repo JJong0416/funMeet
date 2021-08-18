@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-<div th:fragment="clubBanner" th:if="${club.useBanner}" class="row">
+<div th:fragment="clubBanner" th:if="${club.useBanner}" class="row" id="study-logo">
   <img th:src="${club.banner}"/>
 </div>
 
@@ -106,11 +106,11 @@
   </ul>
 </div>
 
-<div th:fragment="club-settings-menu (currentMenu)" class="list-group">
+<div th:fragment="club_settings_menu (currentMenu)" class="list-group">
   <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'description'}? active"
      href="#" th:href="@{'/club/' + ${club.clubPath} + '/settings/description'}">소개</a>
-  <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'image'}? active"
-     href="#" th:href="@{'/club/' + ${club.clubPath} + '/settings/image'}">배너 이미지</a>
+  <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'banner'}? active"
+     href="#" th:href="@{'/club/' + ${club.clubPath} + '/settings/banner'}">배너 이미지</a>
   <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'hobby'}? active"
      href="#" th:href="@{'/club/' + ${club.clubPath} + '/settings/tags'}">스터디 주제</a>
   <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'city'}? active"

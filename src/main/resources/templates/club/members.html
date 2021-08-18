@@ -6,17 +6,19 @@
 </head>
 
 <body class="bg-light">
-    <div th:replace="fragments/header :: main_nav"></div>
-    <div th:replace="fragments/club :: clubBanner"></div>
+<div th:replace="fragments/header :: main_nav"></div>
+<div th:replace="fragments/club :: clubBanner"></div>
 
-    <div class="container">
-        <div th:replace="fragments/club :: club_stat"></div>
-        <div th:replace="fragments/club :: club_menu (members)"></div>
+<div class="container">
+    <div th:replace="fragments/club :: club_stat"></div>
+    <div th:replace="fragments/club :: club_menu (members)"></div>
 
-        <div th:replace="fragments/club :: member-list(members=${club.managers},isManager=${true})"></div>
-        <div th:replace="fragments/club :: member-list(members=${club.members},isManager=${false})"></div>
-    </div>
+    <div th:replace="fragments/club :: member-list(members=${club.managers},isManager=${true})"></div>
+    <div th:replace="fragments/club :: member-list(members=${club.members},isManager=${false})"></div>
+</div>
 <script th:replace="fragments/script:: formValidation"></script>
+<script th:replace="fragments/script :: tooltip"></script>
 <div th:replace="fragments/footer :: footer"></div>
+
 </body>
 </html>

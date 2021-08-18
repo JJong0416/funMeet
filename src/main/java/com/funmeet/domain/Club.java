@@ -73,4 +73,9 @@ public class Club {
     public boolean isManager(AdaptAccount userAccount) {
         return this.managers.contains(userAccount.getAccount());
     }
+
+    public String getBanner() {
+        return banner != null ? banner : "/images/default_banner.png";
+    }
+
 }

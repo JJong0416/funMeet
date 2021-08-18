@@ -19,7 +19,7 @@
     </div>
 
     <div class="col-2">
-      <div th:replace="fragments/club :: club-settings-menu(currentMenu='description')"></div>
+      <div th:replace="fragments/club :: club_settings_menu (description)"></div>
     </div>
     <div class="col-8">
       <form class="formValidation" th:action="@{'/club/' + ${club.getClubPath()} + '/settings/description'}"
@@ -55,6 +55,7 @@
     </div>
   </div>
 </div>
+<script th:replace="fragments/script :: tooltip"></script>
 <script th:replace="fragments/script:: formValidation"></script>
 <div th:replace="fragments/footer :: footer"></div>
 </body>

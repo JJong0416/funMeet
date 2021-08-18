@@ -47,4 +47,16 @@ public class ClubService {
     public void updateClub_fullDescription(Club club, ClubDescriptionForm clubDescriptionForm) {
         modelMapper.map(clubDescriptionForm, club);
     }
+
+    public void updateStudyImage(Club club, String image) {
+        club.setBanner(image);
+    }
+
+    public void enableStudyBanner(Club club) {
+        club.setUseBanner(true);
+    }
+
+    public void disableStudyBanner(Club club) {
+        club.setUseBanner(false);
+    }
 }

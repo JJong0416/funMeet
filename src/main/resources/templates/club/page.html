@@ -20,10 +20,6 @@
 
 <script th:replace="fragments/script:: formValidation"></script>
 <div th:replace="fragments/footer :: footer"></div>
-<script type="application/javascript">
-    $(function () {
-        $('[data-toggle="tooltip"]').tooltip()
-    })
-</script>
+<script th:replace="fragments/script :: tooltip"></script>
 </body>
 </html>
