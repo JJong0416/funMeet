@@ -1,9 +1,9 @@
 package com.funmeet.service;
 
-
-
 import com.funmeet.domain.Account;
+import com.funmeet.domain.City;
 import com.funmeet.domain.Club;
+import com.funmeet.domain.Hobby;
 import com.funmeet.form.ClubDescriptionForm;
 import com.funmeet.repository.ClubRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,19 +28,13 @@ public class ClubService {
 
     public Club getClub(String path) {
         Club club = clubRepository.findByClubPath(path);
-        if (club == null) {
-            throw new IllegalArgumentException(path + "에 해당하는 모임이 없습니다.");
-        }
-
+        checkIfExistingClub(path,club);
         return club;
     }
 
     public Club getClubUpdate(Account account, String path) {
         Club club = this.getClub(path);
-        if (!account.isManagerOf(club)) {
-            throw new AccessDeniedException("해당 기능을 사용할 수 없습니다.");
-        }
-
+        checkIfManager(account,club);
         return club;
     }
 
@@ -48,15 +42,60 @@ public class ClubService {
         modelMapper.map(clubDescriptionForm, club);
     }
 
-    public void updateStudyImage(Club club, String image) {
+    public void updateClubImage(Club club, String image) {
         club.setBanner(image);
     }
 
-    public void enableStudyBanner(Club club) {
+    public void enableClubBanner(Club club) {
         club.setUseBanner(true);
     }
 
-    public void disableStudyBanner(Club club) {
+    public void disableClubBanner(Club club) {
         club.setUseBanner(false);
     }
+
+
+    public void addHobby(Club club, Hobby hobby) {
+        club.getHobby().add(hobby);
+    }
+
+    public void removeHobby(Club club, Hobby hobby) {
+        club.getHobby().remove(hobby);
+    }
+
+    public void addCity(Club club, City city) {
+        club.getCity().add(city);
+
+    }
+
+    public void removeCity(Club club, City city) {
+        club.getCity().remove(city);
+    }
+
+    public Club getClubUpdateHobby(Account account, String path) {
+        Club club = clubRepository.findByClubPath(path); // 여기 부분 시간효율 추가
+        checkIfExistingClub(path, club);
+        checkIfManager(account, club);
+        return club;
+    }
+
+    public Club getClubUpdateCity(Account account, String path) {
+        Club club = clubRepository.findByClubPath(path); // 여기 부분도!
+        checkIfExistingClub(path, club);
+        checkIfManager(account, club);
+        return club;
+    }
+
+    private void checkIfManager(Account account, Club club) {
+        if (!account.isManagerOf(club)) {
+            throw new AccessDeniedException("해당 기능을 사용할 수 없습니다.");
+        }
+    }
+
+    private void checkIfExistingClub(String path, Club club) {
+        if (club == null) {
+            throw new IllegalArgumentException(path + "에 해당하는 모임이 없습니다.");
+        }
+    }
+
 }

@@ -11,6 +11,7 @@ import com.funmeet.form.*;
 import com.funmeet.repository.CityRepository;
 import com.funmeet.repository.HobbyRepository;
 import com.funmeet.service.AccountService;
+import com.funmeet.service.HobbyService;
 import com.funmeet.validator.NicknameValidator;
 import com.funmeet.validator.PasswordFormValidation;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +37,7 @@ public class SettingsController {
     private final HobbyRepository hobbyRepository;
     private final ModelMapper modelMapper;
     private final ObjectMapper objectMapper;
+    private final HobbyService hobbyService;
 
     /* Validator */
     private final NicknameValidator nicknameValidator;
@@ -93,12 +95,8 @@ public class SettingsController {
     @PostMapping("/settings/hobby/add")
     @ResponseBody
     public ResponseEntity addHobby(@CurrentAccount Account account, @RequestBody HobbyForm hobbyForm){
-
         String title = hobbyForm.getHobbyTitle();
-        Hobby hobby = hobbyRepository.findByTitle(title).orElseGet(() -> hobbyRepository.save(Hobby.builder()
-                .title(hobbyForm.getHobbyTitle())
-                .build()));
-
+        Hobby hobby = hobbyService.findOrCreateHobby(hobbyForm.getHobbyTitle());
         accountService.addHobby(account, hobby);
         return ResponseEntity.ok().build();
     }

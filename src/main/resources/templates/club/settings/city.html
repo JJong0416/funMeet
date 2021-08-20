@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <span th:replace="fragments/config :: config"></span>
+    <link rel="stylesheet" href="/node_modules/@yaireo/tagify/dist/tagify.css">
+</head>
+
+<body class="bg-light">
+<div th:replace="fragments/header :: main_nav"></div>
+<div th:replace="fragments/club :: clubBanner"></div>
+
+<div class="container">
+    <div th:replace="fragments/club :: club_stat"></div>
+    <div th:replace="fragments/club :: club_menu (city)"></div>
+
+    <div class="row mt-3 justify-content-center">
+        <div class="col-2">
+            <div th:replace="fragments/club :: club_settings_menu(city)"></div>
+        </div>
+        <div class="col-8">
+            <div class="row">
+                <h2 class="col-sm-12">주요 활동 지역</h2>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="alert alert-info" role="alert">
+                        주로 취미를 하는 지역을 등록하세요.<br/>
+                        시스템에 등록된 지역만 선택할 수 있습니다.
+                    </div>
+                    <div id="whitelist" th:text="${whitelist}" hidden></div>
+                    <input id="city" type="text" name="cities" th:value="${#strings.listJoin(city, ',')}"
+                           class="input-body">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<div th:replace="fragments/footer :: footer"></div>
+<script th:replace="fragments/script :: csrfScript"></script>
+<script th:replace="fragments/script :: update-city(baseUrl='/club/' + ${club.clubPath} + '/settings/city')"></script>
+</body>
+</html>
