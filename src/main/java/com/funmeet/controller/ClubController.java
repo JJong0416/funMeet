@@ -70,4 +70,18 @@ public class ClubController {
         return "club/members";
     }
 
+    @GetMapping("/club/{path}/join")
+    public String joinClub(@CurrentAccount Account account, @PathVariable String path) {
+        Club club = clubRepository.findByClubPath(path);
+        clubService.addMember(club, account);
+        return "redirect:/club/" + club.getEncodedPath() + "/members";
+    }
+
+    @GetMapping("/club/{path}/leave")
+    public String leaveClub(@CurrentAccount Account account, @PathVariable String path) {
+        Club club = clubRepository.findByClubPath(path);
+        clubService.removeMember(club, account);
+        return "redirect:/club/" + club.getEncodedPath() + "/members";
+    }
+
 }

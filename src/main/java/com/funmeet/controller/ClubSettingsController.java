@@ -12,6 +12,7 @@ import com.funmeet.form.ClubDescriptionForm;
 import com.funmeet.form.ClubForm;
 import com.funmeet.form.HobbyForm;
 import com.funmeet.repository.CityRepository;
+import com.funmeet.repository.ClubRepository;
 import com.funmeet.repository.HobbyRepository;
 import com.funmeet.service.CityService;
 import com.funmeet.service.ClubService;
@@ -42,13 +43,10 @@ public class ClubSettingsController {
 
     private final HobbyRepository hobbyRepository;
     private final CityRepository cityRepository;
+    private final ClubRepository clubRepository;
 
     private final ObjectMapper objectMapper;
     private final ModelMapper modelMapper;
-
-    private String getPath(String path) {
-        return URLEncoder.encode(path, StandardCharsets.UTF_8);
-    }
 
     @GetMapping("/description")
     public String viewStudySetting(@CurrentAccount Account account, @PathVariable String path, Model model) {
@@ -73,7 +71,7 @@ public class ClubSettingsController {
 
         clubService.updateClub_fullDescription(club, studyDescriptionForm);
         attributes.addFlashAttribute("message", "성공");
-        return "redirect:/club/" + getPath(path) + "/settings/description";
+        return "redirect:/club/" + club.getEncodedPath() + "/settings/description";
     }
 
     @GetMapping("/banner")
@@ -90,7 +88,7 @@ public class ClubSettingsController {
         Club club = clubService.getClubUpdate(account, path);
         clubService.updateClubImage(club, image);
         attributes.addFlashAttribute("message", "성공");
-        return "redirect:/club/" + getPath(path) + "/settings/banner";
+        return "redirect:/club/" + club.getEncodedPath() + "/settings/banner";
     }
 
 
@@ -98,14 +96,14 @@ public class ClubSettingsController {
     public String enableStudyBanner(@CurrentAccount Account account, @PathVariable String path) {
         Club club = clubService.getClubUpdate(account, path);
         clubService.enableClubBanner(club);
-        return "redirect:/club/" + getPath(path) + "/settings/banner";
+        return "redirect:/club/" + club.getEncodedPath() + "/settings/banner";
     }
 
     @PostMapping("/banner/disable")
     public String disableClubBanner(@CurrentAccount Account account, @PathVariable String path){
         Club club = clubService.getClubUpdate(account,path);
         clubService.disableClubBanner(club);
-        return "redirect:/club/" + getPath(path) + "/settings/banner";
+        return "redirect:/club/" + club.getEncodedPath()+ "/settings/banner";
     }
 
     @GetMapping("/hobby")
@@ -207,7 +205,7 @@ public class ClubSettingsController {
         Club club = clubService.getClubUpdateStatus(account, path);
         clubService.publish(club);
         attributes.addFlashAttribute("message", "스터디를 공개했습니다.");
-        return "redirect:/club/" + getPath(path) + "/settings/club";
+        return "redirect:/club/" + club.getEncodedPath()+ "/settings/club";
     }
 
     @PostMapping("/club/close")
@@ -216,7 +214,7 @@ public class ClubSettingsController {
         Club club = clubService.getClubUpdateStatus(account, path);
         clubService.close(club);
         attributes.addFlashAttribute("message", "스터디를 종료했습니다.");
-        return "redirect:/club/" + getPath(path) + "/settings/club";
+        return "redirect:/club/" + club.getEncodedPath() + "/settings/club";
     }
 
     @PostMapping("/recruit/start")
@@ -225,12 +223,12 @@ public class ClubSettingsController {
         Club club = clubService.getClubUpdateStatus(account, path);
         if (!club.canUpdateRecruiting()) {
             attributes.addFlashAttribute("message", "30분 안에 인원 모집 설정을 여러번 변경할 수 없습니다.");
-            return "redirect:/club/" + getPath(path) + "/settings/club";
+            return "redirect:/club/" + club.getEncodedPath() + "/settings/club";
         }
 
         clubService.startRecruit(club);
         attributes.addFlashAttribute("message", "인원 모집을 시작합니다.");
-        return "redirect:/club/" + getPath(path) + "/settings/club";
+        return "redirect:/club/" + club.getEncodedPath() + "/settings/club";
     }
 
     @PostMapping("/recruit/stop")
@@ -239,11 +237,53 @@ public class ClubSettingsController {
         Club club = clubService.getClubUpdate(account, path);
         if (!club.canUpdateRecruiting()) {
             attributes.addFlashAttribute("message", "1시간 안에 인원 모집 설정을 여러번 변경할 수 없습니다.");
-            return "redirect:/club/" + getPath(path) + "/settings/club";
+            return "redirect:/club/" + club.getEncodedPath() + "/settings/club";
         }
 
         clubService.stopRecruit(club);
         attributes.addFlashAttribute("message", "인원 모집을 종료합니다.");
-        return "redirect:/club/" + getPath(path) + "/settings/club";
+        return "redirect:/club/" + club.getEncodedPath() + "/settings/club";
     }
+
+
+    @PostMapping("/club/path")
+    public String updateClubPath(@CurrentAccount Account account, @PathVariable String path, String newPath,
+                                  Model model, RedirectAttributes attributes) {
+        Club club = clubService.getClubUpdateStatus(account, path);
+        if (!clubService.isValidPath(newPath)) {
+            model.addAttribute(account);
+            model.addAttribute(club);
+            model.addAttribute("clubPathError", "해당 모임 경로는 사용할 수 없습니다. 다른 값을 입력하세요.");
+            return "club/settings/club";
+        }
+
+        clubService.updateClubPath(club, newPath);
+        attributes.addFlashAttribute("message", "모임 경로를 수정했습니다.");
+        return "redirect:/club/" + club.getEncodedPath() + "/settings/club";
+    }
+
+    @PostMapping("/club/title")
+    public String updateClubTitle(@CurrentAccount Account account, @PathVariable String path, String newTitle,
+                                   Model model, RedirectAttributes attributes) {
+        Club club = clubService.getClubUpdateStatus(account, path);
+        if (!clubService.isValidTitle(newTitle)) {
+            model.addAttribute(account);
+            model.addAttribute(club);
+            model.addAttribute("ClubTitleError", "스터디 이름을 다시 입력하세요.");
+            return "club/settings/club";
+        }
+
+        clubService.updateClubTitle(club, newTitle);
+        attributes.addFlashAttribute("message", "모임 이름을 수정했습니다.");
+        return "redirect:/club/" + club.getEncodedPath() + "/settings/club";
+    }
+
+    @PostMapping("/club/remove")
+    public String removeClub(@CurrentAccount Account account, @PathVariable String path, Model model) {
+        Club club = clubService.getClubUpdateStatus(account, path);
+        clubService.remove(club);
+        return "redirect:/";
+    }
+
+
 }

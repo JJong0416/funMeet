@@ -3,6 +3,8 @@ package com.funmeet.domain;
 import com.funmeet.adaptor.AdaptAccount;
 import lombok.*;
 import javax.persistence.*;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +61,9 @@ public class Club {
         this.managers.add(account);
     }
 
-    public void addMember(Account account) { this.members.add(account); }
+    public void addMember(Account account) {
+        this.members.add(account);
+    }
 
     public boolean isJoinable(AdaptAccount adaptAccount) {
         Account account = adaptAccount.getAccount();
@@ -116,5 +120,18 @@ public class Club {
 
     public boolean canUpdateRecruiting() {
         return this.published && this.recruitingTime == null || this.recruitingTime.isBefore(LocalDateTime.now().minusMinutes(30));
+    }
+
+    public boolean isRemovable() {
+        return !this.published;
+    }
+
+
+    public void removeMember(Account account) {
+        this.getMembers().remove(account);
+    }
+
+    public String getEncodedPath() {
+        return URLEncoder.encode(this.clubPath, StandardCharsets.UTF_8);
     }
 }

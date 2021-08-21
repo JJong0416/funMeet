@@ -26,6 +26,8 @@ public class ClubService {
         return createClub;
     }
 
+
+
     public Club getClub(String path) {
         Club club = clubRepository.findByClubPath(path);
         checkIfExistingClub(path,club);
@@ -120,4 +122,39 @@ public class ClubService {
     public void stopRecruit(Club club) {
         club.stopRecruit();
     }
+
+    public boolean isValidPath(String newPath) {
+        if (!newPath.matches("^[ㄱ-ㅎ가-힣a-z0-9_-]{2,20}$")) {
+            return false;
+        }
+
+        return !clubRepository.existsByClubPath(newPath);
+    }
+
+    public void updateClubPath(Club club, String newPath) {
+        club.setClubPath(newPath);
+    }
+
+    public boolean isValidTitle(String newTitle) { // TODO validation new Title
+        return newTitle.length() <= 30;
+    }
+
+    public void updateClubTitle(Club club, String newTitle) {
+        club.setTitle(newTitle);
+    }
+
+    public void remove(Club club) {
+        if (club.isRemovable()) {
+            clubRepository.delete(club);
+        } else {
+            throw new IllegalArgumentException("클럽을 삭제할 수 없습니다.");
+        }
+    }
+    public void addMember(Club club, Account account) {
+        club.addMember(account);
+    }
+
+    public void removeMember(Club club, Account account) {
+        club.removeMember(account);
+    }   
 }

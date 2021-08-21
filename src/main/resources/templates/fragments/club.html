@@ -45,7 +45,8 @@
         <button class="btn btn-primary btn-sm" style="pointer-events: none;" type="button" disabled>OFF</button>
       </span>
 
-      <span sec:authorize="isAuthenticated()" th:if="${club.isJoinable(#authentication.principal)}" class="btn-group" role="group" aria-label="Basic example">
+      <span sec:authorize="isAuthenticated()" th:if="${club.isJoinable(#authentication.principal)}"
+            class="btn-group" role="group" aria-label="Basic example">
         <a class="btn btn-primary" th:href="@{'/club/' + ${club.clubPath} + '/join'}">
           모임 가입</a>
 
