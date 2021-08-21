@@ -86,6 +86,13 @@ public class ClubService {
         return club;
     }
 
+    public Club getClubUpdateStatus(Account account, String path) {
+        Club club = clubRepository.findByClubPath(path);
+        checkIfExistingClub(path, club);
+        checkIfManager(account, club);
+        return club;
+    }
+
     private void checkIfManager(Account account, Club club) {
         if (!account.isManagerOf(club)) {
             throw new AccessDeniedException("해당 기능을 사용할 수 없습니다.");
@@ -98,4 +105,19 @@ public class ClubService {
         }
     }
 
+    public void publish(Club club) {
+        club.publish();
+    }
+
+    public void close(Club club) {
+        club.close();
+    }
+
+    public void startRecruit(Club club) {
+        club.startRecruit();
+    }
+
+    public void stopRecruit(Club club) {
+        club.stopRecruit();
+    }
 }

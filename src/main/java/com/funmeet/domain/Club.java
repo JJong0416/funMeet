@@ -78,4 +78,43 @@ public class Club {
         return banner != null ? banner : "/images/default_banner.png";
     }
 
+    public void publish() {
+        if (!this.closed && !this.published) {
+            this.published = true;
+            this.publishDateTime = LocalDateTime.now();
+        } else {
+            throw new RuntimeException("취미가 종료되었거나, 출시 준비 상태입니다.");
+        }
+    }
+
+    public void close() {
+        if (this.published && !this.closed) {
+            this.closed = true;
+            this.closedDateTime = LocalDateTime.now();
+        } else {
+            throw new RuntimeException("취미가 종료되었거나, 출시 준비 상태입니다.");
+        }
+    }
+
+    public void startRecruit() {
+        if (canUpdateRecruiting()) {
+            this.recruiting = true;
+            this.recruitingTime = LocalDateTime.now();
+        } else {
+            throw new RuntimeException("인원 모집을 시작할 수 없습니다. 모임을 공개하거나 30분 후 다시 시도해보십시오.");
+        }
+    }
+
+    public void stopRecruit() {
+        if (canUpdateRecruiting()) {
+            this.recruiting = false;
+            this.recruitingTime = LocalDateTime.now();
+        } else {
+            throw new RuntimeException("인원 모집을 멈출 수 없습니다. 모임을 공개하거나 30분 후 다시 시도해보십시오.");
+        }
+    }
+
+    public boolean canUpdateRecruiting() {
+        return this.published && this.recruitingTime == null || this.recruitingTime.isBefore(LocalDateTime.now().minusMinutes(30));
+    }
 }
