@@ -40,7 +40,7 @@ public class ClubService {
         return club;
     }
 
-    public void updateClub_fullDescription(Club club, ClubDescriptionForm clubDescriptionForm) {
+    public void updateClubDescription(Club club, ClubDescriptionForm clubDescriptionForm) {
         modelMapper.map(clubDescriptionForm, club);
     }
 

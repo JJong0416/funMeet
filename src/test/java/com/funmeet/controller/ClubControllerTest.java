@@ -7,6 +7,7 @@ import com.funmeet.repository.AccountRepository;
 import com.funmeet.repository.ClubRepository;
 import com.funmeet.service.AccountService;
 import com.funmeet.service.ClubService;
+import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -25,32 +26,34 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-
-
 @Transactional
 @SpringBootTest
 @AutoConfigureMockMvc
 class ClubControllerTest {
-    @Autowired MockMvc mockMvc;
-    @Autowired ClubService clubService;
-    @Autowired ClubRepository clubRepository;
-    @Autowired AccountRepository accountRepository;
-    @Autowired AccountService accountService;
+    @Autowired protected MockMvc mockMvc;
+    @Autowired protected ClubService clubService;
+    @Autowired protected ClubRepository clubRepository;
+    @Autowired protected AccountRepository accountRepository;
+    @Autowired protected AccountService accountService;
+
+    public Account jongchan = null;
 
     @BeforeEach
     void beforeEach(){
+        /* UserDetails Account 생성 */
         SignUpForm signUpForm = new SignUpForm();
         signUpForm.setNickname("jongchan");
         signUpForm.setPassword("12345678");
-        signUpForm.setEmail("jjong@gmail.com");
+        signUpForm.setEmail("jjong@email.com");
         accountService.processSignUpAccount(signUpForm);
     }
 
     @AfterEach
     void afterEach() {
         accountRepository.deleteAll();
-        clubRepository.deleteAll();
     }
+
+
 
     @Test
     @WithUserDetails(value="jongchan",setupBefore = TestExecutionEvent.TEST_EXECUTION)
@@ -107,7 +110,7 @@ class ClubControllerTest {
 
     @Test
     @WithUserDetails(value="jongchan",setupBefore = TestExecutionEvent.TEST_EXECUTION)
-    @DisplayName("모임뷰 보기")
+    @DisplayName("모임 조회")
     void pageClub() throws Exception {
         Club club = new Club();
         club.setClubPath("test");
@@ -123,5 +126,56 @@ class ClubControllerTest {
                 .andExpect(model().attributeExists("account"))
                 .andExpect(model().attributeExists("club"));
 
+    }
+
+    @Test
+    @WithUserDetails(value="jongchan",setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @DisplayName("모임 가입 가입")
+    void joinNewClub() throws Exception {
+        Account managerAccount = createNewAccount("account");
+        Account jongchan = accountRepository.findByNickname("jongchan");
+
+        Club club = createNewClub("url",managerAccount);
+        clubService.addMember(club, jongchan);
+
+        mockMvc.perform(get("/club/" + club.getClubPath() + "/join"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/club/" + club.getClubPath() + "/members"));
+
+        assertTrue(club.getMembers().contains(jongchan));
+        assertTrue(club.getManagers().contains(managerAccount));
+    }
+
+    @Test
+    @WithUserDetails(value="jongchan",setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @DisplayName("스터디 탈퇴")
+    void leaveClub() throws Exception {
+        Account managerAccount = createNewAccount("account");
+        Account jongchan = accountRepository.findByNickname("jongchan");
+
+        Club club = createNewClub("url",managerAccount);
+        clubService.addMember(club, jongchan);
+
+        mockMvc.perform(get("/club/" + club.getClubPath() + "/leave"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/club/" + club.getClubPath() + "/members"));
+
+        assertFalse(club.getMembers().contains(jongchan));
+    }
+
+    protected Account createNewAccount(String nickname){
+        Account account = new Account();
+        account.setNickname(nickname);
+        account.setEmail("test@gmail.com");
+        account.setPassword("123456");
+        accountRepository.save(account);
+        return account;
+    }
+
+    protected Club createNewClub(String clubPath, Account Manager){
+        Club club = new Club();
+        club.setClubPath(clubPath);
+        clubService.createNewClub(club,Manager);
+        return club;
     }
 }
