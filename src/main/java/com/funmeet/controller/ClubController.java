@@ -55,7 +55,7 @@ public class ClubController {
     }
 
     @GetMapping("/club/{path}")
-    public String viewStudy(@CurrentAccount Account account, @PathVariable String path, Model model) {
+    public String viewClub(@CurrentAccount Account account, @PathVariable String path, Model model) {
         Club club = clubRepository.findByClubPath(path);
         model.addAttribute(account);
         model.addAttribute(club);
@@ -63,7 +63,7 @@ public class ClubController {
     }
 
     @GetMapping("/club/{path}/members")
-    public String viewStudyMembers(@CurrentAccount Account account, @PathVariable String path, Model model) {
+    public String viewClubMembers(@CurrentAccount Account account, @PathVariable String path, Model model) {
         Club club = clubRepository.findByClubPath(path);
         model.addAttribute(account);
         model.addAttribute(club);

@@ -49,27 +49,27 @@
 
               <form id="imageForm" action="#" th:action="@{'/club/' + ${club.getClubPath()} + '/settings/banner'}" method="post" novalidate>
                 <div class="form-group">
-                  <input id="studyImage" type="hidden" name="image" class="form-control" />
+                  <input id="clubImage" type="hidden" name="image" class="form-control" />
                 </div>
               </form>
 
               <div class="card text-center">
-                <div id="current-study-image" class="mt-3">
+                <div id="current-club-image" class="mt-3">
                   <img class="rounded" th:src="${club.banner}" width="640" alt="name" th:alt="${club.title}"/>
                 </div>
-                <div id="new-study-image" class="mt-3"></div>
+                <div id="new-club-image" class="mt-3"></div>
                 <div class="card-body">
                   <div class="custom-file">
-                    <input type="file" class="custom-file-input" id="study-image-file">
-                    <label class="custom-file-label" for="study-image-file">스터디 이미지 변경</label>
+                    <input type="file" class="custom-file-input" id="club-image-file">
+                    <label class="custom-file-label" for="club-image-file">스터디 이미지 변경</label>
                   </div>
-                  <div id="new-study-image-control" class="mt-3">
+                  <div id="new-club-image-control" class="mt-3">
                     <button class="btn btn-outline-primary btn-block" id="cut-button">자르기</button>
                     <button class="btn btn-outline-success btn-block" id="confirm-button">확인</button>
                     <button class="btn btn-primary btn-block" id="save-button">저장</button>
                     <button class="btn btn-outline-warning btn-block" id="reset-button">취소</button>
                   </div>
-                  <div id="cropped-new-study-image" class="mt-3"></div>
+                  <div id="cropped-new-club-image" class="mt-3"></div>
                 </div>
               </div>
     </div>
@@ -90,18 +90,18 @@
     let $resetBtn = $("#reset-button");
     let $cutBtn = $("#cut-button");
     let $saveBtn = $("#save-button");
-    let $newStudyImage = $("#new-study-image");
-    let $currentStudyImage = $("#current-study-image");
-    let $resultImage = $("#cropped-new-study-image");
-    let $studyImage = $("#studyImage");
+    let $newClubImage = $("#new-club-image");
+    let $currentClubImage = $("#current-club-image");
+    let $resultImage = $("#cropped-new-club-image");
+    let $clubImage = $("#clubImage");
 
-    $newStudyImage.hide();
+    $newClubImage.hide();
     $cutBtn.hide();
     $resetBtn.hide();
     $confirmBtn.hide();
     $saveBtn.hide();
 
-    $("#study-image-file").change(function(e) {
+    $("#club-image-file").change(function(e) {
       if (e.target.files.length === 1) {
         const reader = new FileReader();
         reader.onload = e => {
@@ -112,13 +112,13 @@
             }
 
             let img = document.createElement("img");
-            img.id = 'new_study';
+            img.id = 'new_club';
             img.src = e.target.result;
             img.setAttribute('width', '100%');
 
-            $newStudyImage.html(img);
-            $newStudyImage.show();
-            $currentStudyImage.hide();
+            $newClubImage.html(img);
+            $newClubImage.show();
+            $currentClubImage.hide();
 
             let $newImage = $(img);
             $newImage.cropper({aspectRatio: 13/2});
@@ -135,14 +135,14 @@
     });
 
     $resetBtn.click(function() {
-      $currentStudyImage.show();
-      $newStudyImage.hide();
+      $currentClubImage.show();
+      $newClubImage.hide();
       $resultImage.hide();
       $resetBtn.hide();
       $cutBtn.hide();
       $confirmBtn.hide();
       $saveBtn.hide();
-      $studyImage.val('');
+      $clubImage.val('');
     });
 
     $cutBtn.click(function () {
@@ -154,7 +154,7 @@
       }
 
       let newImage = document.createElement("img");
-      newImage.id = "cropped-new-study-image";
+      newImage.id = "cropped-new-club-image";
       newImage.src = dataUrl;
       newImage.width = 640;
       $resultImage.html(newImage);
@@ -162,10 +162,10 @@
       $confirmBtn.show();
 
       $confirmBtn.click(function () {
-        $newStudyImage.html(newImage);
+        $newClubImage.html(newImage);
         $cutBtn.hide();
         $confirmBtn.hide();
-        $studyImage.val(dataUrl);
+        $clubImage.val(dataUrl);
         $saveBtn.show();
       });
     });

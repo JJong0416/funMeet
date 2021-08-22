@@ -69,7 +69,7 @@ public class ClubSettingsController {
             return "club/settings/description";
         }
 
-        clubService.updateClubDescription(club, studyDescriptionForm);
+        clubService.updateClubDescription(club, clubDescriptionForm);
         attributes.addFlashAttribute("message", "성공");
         return "redirect:/club/" + club.getEncodedPath() + "/settings/description";
     }

@@ -143,7 +143,7 @@
             </div>
             <div class="row" th:if="${!club.isRemovable()}">
                 <h5 class="col-sm-12 text-danger">스터디 삭제</h5>
-                <form class="col-sm-12" th:action="@{'/study/' + ${club.getClubPath()} + '/settings/club/remove'}" method="post" novalidate>
+                <form class="col-sm-12" th:action="@{'/club/' + ${club.getClubPath()} + '/settings/club/remove'}" method="post" novalidate>
                     <div class="alert alert-danger" role="alert">
                         공개 중이고 모임을 했던 클럽는 삭제할 수 없습니다.
                     </div>
