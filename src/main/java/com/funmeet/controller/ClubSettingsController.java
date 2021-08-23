@@ -49,7 +49,7 @@ public class ClubSettingsController {
     private final ModelMapper modelMapper;
 
     @GetMapping("/description")
-    public String viewStudySetting(@CurrentAccount Account account, @PathVariable String path, Model model) {
+    public String viewClubSetting(@CurrentAccount Account account, @PathVariable String path, Model model) {
         Club club = clubService.getClubUpdate(account, path);
         model.addAttribute(account);
         model.addAttribute(club);
@@ -58,8 +58,8 @@ public class ClubSettingsController {
     }
 
     @PostMapping("/description")
-    public String updateStudyInfo(@CurrentAccount Account account, @PathVariable String path,
-                                  @Valid ClubDescriptionForm studyDescriptionForm, Errors errors,
+    public String updateClubInfo(@CurrentAccount Account account, @PathVariable String path,
+                                  @Valid ClubDescriptionForm clubDescriptionForm, Errors errors,
                                   Model model, RedirectAttributes attributes) {
         Club club = clubService.getClubUpdate(account,path);
 
@@ -83,7 +83,7 @@ public class ClubSettingsController {
     }
 
     @PostMapping("/banner")
-    public String studyImageSubmit(@CurrentAccount Account account, @PathVariable String path,
+    public String clubImageSubmit(@CurrentAccount Account account, @PathVariable String path,
                                    String image, RedirectAttributes attributes) {
         Club club = clubService.getClubUpdate(account, path);
         clubService.updateClubImage(club, image);
@@ -93,7 +93,7 @@ public class ClubSettingsController {
 
 
     @PostMapping("/banner/enable")
-    public String enableStudyBanner(@CurrentAccount Account account, @PathVariable String path) {
+    public String enableClubBanner(@CurrentAccount Account account, @PathVariable String path) {
         Club club = clubService.getClubUpdate(account, path);
         clubService.enableClubBanner(club);
         return "redirect:/club/" + club.getEncodedPath() + "/settings/banner";
@@ -156,8 +156,8 @@ public class ClubSettingsController {
         model.addAttribute(club);
         model.addAttribute("city", club.getCity().stream()
                 .map(City::toString).collect(Collectors.toList()));
-        List<String> allZones = cityRepository.findAll().stream().map(City::toString).collect(Collectors.toList());
-        model.addAttribute("whitelist", objectMapper.writeValueAsString(allZones));
+        List<String> allCity = cityRepository.findAll().stream().map(City::toString).collect(Collectors.toList());
+        model.addAttribute("whitelist", objectMapper.writeValueAsString(allCity));
         return "club/settings/city";
     }
 
