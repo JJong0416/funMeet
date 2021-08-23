@@ -18,7 +18,7 @@ public class Enrollment {
     private Long id;
 
     @ManyToOne
-    private Meet meet;
+    private Meeting meeting;
 
     @ManyToOne
     private Account account;

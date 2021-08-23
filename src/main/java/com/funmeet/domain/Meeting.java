@@ -1,6 +1,5 @@
 package com.funmeet.domain;
 
-import com.funmeet.adaptor.AdaptAccount;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,14 +10,14 @@ import java.util.List;
 
 @Entity
 @Getter @Setter @EqualsAndHashCode(of = "id")
-public class Meet {
+public class Meeting {
 
     @Id
     @GeneratedValue
     private Long id;
 
     @ManyToOne
-    private Account account;
+    private Account createdAccount;
 
     @ManyToOne
     private Club club;
@@ -44,10 +43,10 @@ public class Meet {
     @Column(nullable = false)
     private LocalDateTime endDateTime;
 
-    @OneToMany(mappedBy = "meet")
+    @OneToMany(mappedBy = "meeting")
     private List<Enrollment> enrollments;
 
     @Enumerated(EnumType.STRING)
-    private MeetType meetType;
+    private MeetingType meetingType;
 
 }
