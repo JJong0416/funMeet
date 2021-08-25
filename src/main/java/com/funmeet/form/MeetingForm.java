@@ -29,4 +29,6 @@ public class MeetingForm {
     @Min(2)
     private Integer limitOfEnrollments = 2;
 
+    private Integer meetingPrice;
+
 }
