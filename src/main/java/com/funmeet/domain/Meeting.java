@@ -1,5 +1,6 @@
 package com.funmeet.domain;
 
+import com.funmeet.adaptor.AdaptAccount;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -49,4 +50,35 @@ public class Meeting {
     @Enumerated(EnumType.STRING)
     private MeetingType meetingType;
 
+    public boolean isEnrollable(AdaptAccount adaptAccount) {
+        return isNotClosed() && !isAlreadyEnrolled(adaptAccount);
+    }
+
+    public boolean isDisEnrollable(AdaptAccount adaptAccount) {
+        return isNotClosed() && isAlreadyEnrolled(adaptAccount);
+    }
+
+    private boolean isNotClosed() {
+        return this.endDateTime.isAfter(LocalDateTime.now());
+    }
+
+    public boolean isAttended(AdaptAccount adaptAccount) {
+        Account account = adaptAccount.getAccount();
+        for (Enrollment e : this.enrollments) {
+            if (e.getAccount().equals(account) && e.isAttended()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isAlreadyEnrolled(AdaptAccount adaptAccount) {
+        Account account = adaptAccount.getAccount();
+        for (Enrollment e : this.enrollments) {
+            if (e.getAccount().equals(account)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
