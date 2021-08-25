@@ -18,6 +18,9 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -68,5 +71,28 @@ public class MeetingController {
         return "meeting/page";
     }
 
+    @GetMapping("/meeting")
+    public String viewClubMain(@CurrentAccount Account account, @PathVariable String path, Model model) {
+        Club club = clubService.getClub(path);
+        model.addAttribute(account);
+        model.addAttribute(club);
+
+        List<Meeting> meetings = meetingRepository.findByClubOrderByStartDateTime(club);
+        List<Meeting> newMeetings = new ArrayList<>();
+        List<Meeting> oldMeetings = new ArrayList<>();
+
+        meetings.forEach(e -> {
+            if (e.getEndDateTime().isBefore(LocalDateTime.now())) {
+                oldMeetings.add(e);
+            } else {
+                newMeetings.add(e);
+            }
+        });
+
+        model.addAttribute("newMeetings", newMeetings);
+        model.addAttribute("oldMeetings", oldMeetings);
+
+        return "club/meeting";
+    }
 
 }

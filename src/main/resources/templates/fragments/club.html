@@ -14,7 +14,7 @@
     <a class="nav-item nav-link" th:classappend="${Menu == 'members'}? active" th:href="@{'/club/' + ${club.clubPath} + '/members'}">
       <i class="fa fa-user"></i> 구성원
     </a>
-    <a class="nav-item nav-link" th:classappend="${Menu == 'events'}? active" href="#" th:href="@{'/club/' + ${club.clubPath} + '/events'}">
+    <a class="nav-item nav-link" th:classappend="${Menu == 'meeting'}? active" href="#" th:href="@{'/club/' + ${club.clubPath} + '/meeting'}">
       <i class="fa fa-calendar"></i> 모임
     </a>
     <a sec:authorize="isAuthenticated()" th:if="${club.isManager(#authentication.principal)}"

@@ -81,4 +81,8 @@ public class Meeting {
         }
         return false;
     }
+
+    public int numberOfRemain(){
+        return this.limitOfEnrollments - (int) this.enrollments.stream().filter(Enrollment::isAccepted).count();
+    }
 }
