@@ -39,13 +39,75 @@
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-                        <form th:action="@{'/club/' + ${club.clubPath} + '/meeting/' + ${meeting.id} + '/leave'}" method="post">
+                        <form th:action="@{'/club/' + ${club.clubPath} + '/meeting/' + ${meeting.id} + '/disenroll'}" method="post">
                             <button class="btn btn-primary" type="submit" aria-describedby="submitHelp">확인</button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
+
+
+        <!-- -->
+        <div class="col-7 pt-3">
+            <dt class="font-weight-light">상세 모임 설명</dt>
+            <dd th:utext="${meeting.description}"></dd>
+
+            <dt class="font-weight-light">모임 참가 신청 (<span th:text="${meeting.enrollments.size()}"></span>)</dt>
+            <dd>
+                <table class="table table-borderless table-sm" th:if="${meeting.enrollments.size() > 0}">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">참석자</th>
+                        <th scope="col">참가 신청 일시</th>
+                        <th scope="col">참가 상태</th>
+                        <th th:if="${club.isManager(#authentication.principal)}" scope="col">
+                            참가 신청 관리
+                        </th>
+                        <th th:if="${club.isManager(#authentication.principal)}" scope="col">
+                            출석 체크
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="enroll: ${meeting.enrollments}">
+                        <th scope="row" th:text="${enrollStat.count}"></th>
+                        <td>
+                            <a th:href="@{'/profile/' + ${enroll.account.nickname}}"
+                               class="text-decoration-none">
+                                <svg th:if="${#strings.isEmpty(enroll.account?.profileImage)}" data-jdenticon-value="nickname"
+                                     th:data-jdenticon-value="${enroll.account.nickname}" width="24" height="24" class="rounded border bg-light"></svg>
+                                <img th:if="${!#strings.isEmpty(enroll.account?.profileImage)}"
+                                     th:src="${enroll.account?.profileImage}" width="24" height="24" class="rounded border"/>
+                                <span th:text="${enroll.account.nickname}"></span>
+                            </a>
+                        </td>
+                        <td>
+                            <span class="date-time" th:text="${enroll.enrolledAt}"></span>
+                        </td>
+                        <td>
+                            <span th:if="${enroll.accepted}">확정</span>
+                            <span th:if="${!enroll.accepted}">대기중</span>
+                        </td>
+                        <td th:if="${club.isManager(#authentication.principal)}">
+                            <a th:if="${meeting.canAccept(enroll)}" href="#" class="text-decoration-none"
+                               th:href="@{'/club/' + ${club.clubPath} + '/meeting/' + ${meeting.id} + '/enrollments/' + ${enroll.id} + '/accept'}" >신청 수락</a>
+                            <a th:if="${meeting.canReject(enroll)}" href="#" class="text-decoration-none"
+                               th:href="@{'/club/' + ${club.clubPath} + '/meeting/' + ${meeting.id} + '/enrollments/' + ${enroll.id} + '/reject'}">취소</a>
+                        </td>
+                        <td th:if="${club.isManager(#authentication.principal)}">
+                            <a th:if="${enroll.accepted && !enroll.attended}" href="#" class="text-decoration-none"
+                               th:href="@{'/club/' + ${club.clubPath} + '/meeting/' + ${meeting.id} + '/enrollments/' + ${enroll.id} + '/checkin'}">체크인</a>
+                            <a th:if="${enroll.accepted && enroll.attended}" href="#" class="text-decoration-none"
+                               th:href="@{'/club/' + ${club.clubPath} + '/meeting/' + ${meeting.id} + '/enrollments/' + ${enroll.id} + '/cancel-checkin'}">체크인 취소</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </dd>
+        </div>
+        <!-- -->
 
         <div class="modal fade" id="enroll" tabindex="-1" role="dialog" aria-labelledby="enrollmentTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">

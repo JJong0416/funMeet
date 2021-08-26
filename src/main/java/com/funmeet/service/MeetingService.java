@@ -50,6 +50,7 @@ public class MeetingService {
             enrollment.setMeeting(meeting);
             enrollment.setAccount(account);
             enrollment.setAccepted(meeting.isAbleToWaitingEnrollment());
+            enrollment.setShortIntroduce("안녕하세요!");
 
             meeting.addEnrollment(enrollment);
             enrollmentRepository.save(enrollment);
