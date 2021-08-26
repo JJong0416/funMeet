@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<div th:fragment="meeting_form (mode, action)">
+  <div class="halfContainer">
+    <div class="py-5 text-center">
+      <h2>
+        <a th:href="@{'/club/' + ${club.clubPath}}"><span th:text="${club.title}">스터디</span></a> /
+        <span th:if="${mode == 'edit'}" th:text="${club.title}"></span>
+        <span th:if="${mode == 'create'}">새 모임 만들기</span>
+      </h2>
+      <hr>
+    </div>
+
+    <div class="row justify-content-center">
+      <form class="formValidation col-sm-10" th:action="@{'/club/' + ${club.clubPath} + '/create_meeting'}"
+            th:object="${meetingForm}" method="post" novalidate>
+
+        <div class="form-group">
+          <label for="title">만남 이름</label>
+          <input id="title" type="text" th:field="*{title}" class="form-control"
+                 placeholder="만남 이름" required>
+          <small class="form-text text-muted">
+            만남의 제목을 작성하세요.
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label for="meetingType">모집 방법</label>
+          <select th:field="*{meetingType}"  class="custom-select mr-sm-2" id="meetingType" aria-describedby="meetingTypeHelp">
+            <option th:value="FCFSB">선착순</option>
+            <option th:value="CONFIRM">관리자 확인</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-3">
+            <label for="limitOfEnrollments">모집 인원</label>
+            <input id="limitOfEnrollments" type="number" th:field="*{limitOfEnrollments}" class="form-control">
+            <small id="limitOfEnrollmentsHelp" class="form-text text-muted">
+              모임 참석 인원을 설정하세요. 최소 2인 이상 모임이어야 합니다.
+            </small>
+            <small class="form-text text-danger" th:if="${#fields.hasErrors('limitOfEnrollments')}" th:errors="*{limitOfEnrollments}">Error</small>
+          </div>
+
+          <div class="form-group col-md-3">
+            <label for="meetingPrice">모집 비용</label>
+            <input id="meetingPrice" type="number" th:field="*{meetingPrice}" class="form-control">
+            <small id="meetingPriceHelp" class="form-text text-muted">
+              모임 참석 비용을 입력하시오
+            </small>
+            <small class="form-text text-danger" th:if="${#fields.hasErrors('meetingPrice')}" th:errors="*{meetingPrice}">Error</small>
+          </div>
+
+
+          <div class="form-group col-md-3">
+            <label for="startDateTime">모임 시작 일시</label>
+            <input id="startDateTime" type="datetime-local" th:field="*{startDateTime}" class="form-control"
+                   aria-describedby="startDateTimeHelp" required>
+            <small class="form-text text-danger" th:if="${#fields.hasErrors('startDateTime')}" th:errors="*{startDateTime}">Error</small>
+          </div>
+
+          <div class="form-group col-md-3">
+            <label for="startDateTime">모임 종료 일시</label>
+            <input id="endDateTime" type="datetime-local" th:field="*{endDateTime}" class="form-control"
+                   aria-describedby="endDateTimeHelp" required>
+            <small class="form-text text-danger" th:if="${#fields.hasErrors('endDateTime')}" th:errors="*{endDateTime}">Error</small>
+          </div>
+
+        </div>
+
+        <div class="form-group">
+          <label for="description">모임 설명</label>
+          <textarea id="description" type="textarea" th:field="*{description}" class="editor form-control"
+                    placeholder="모임을 자세히 설명해 주세요." aria-describedby="descriptionHelp" required></textarea>
+          <small class="form-text text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Error</small>
+        </div>
+
+        <div class="form-group">
+          <button class="btn btn-primary btn-block" type="submit"
+                  aria-describedby="submitHelp" th:text="${mode == 'edit' ? '모임수정' : '모임 만들기'}">모임 만들기</button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+  <script th:replace="fragments/script:: formValidation"></script>
+  <script th:replace="fragments/script :: editor_script"></script>
+  <div th:replace="fragments/footer :: footer"></div>
+</div>
+
+</html>

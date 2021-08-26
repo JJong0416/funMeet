@@ -1,5 +1,6 @@
 package com.funmeet.validator;
 
+import com.funmeet.domain.Meeting;
 import com.funmeet.form.MeetingForm;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -34,5 +35,11 @@ public class MeetingFormValidator implements Validator {
     private boolean isNotValidEndDateTime(MeetingForm meetingForm){
         LocalDateTime endDateTime = meetingForm.getEndDateTime();
         return endDateTime.isAfter(meetingForm.getStartDateTime());
+    }
+
+    public void validateUpdateForm(MeetingForm meetingForm, Meeting meeting, Errors errors) {
+        if (meetingForm.getLimitOfEnrollments() < meeting.getNumberOfAcceptedEnrollments()) {
+            errors.rejectValue("limitOfEnrollments", "wrong.value", "확인된 참기 신청보다 모집 인원 수가 커야 합니다.");
+        }
     }
 }

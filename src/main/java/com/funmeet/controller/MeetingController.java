@@ -94,5 +94,44 @@ public class MeetingController {
 
         return "club/meeting";
     }
+    @GetMapping("/meeting/{id}/edit")
+    public String updateMeetingForm(@CurrentAccount Account account,
+                                  @PathVariable String path, @PathVariable Long id, Model model) {
+        Club club = clubService.getClubUpdate(account, path);
+        Meeting meeting = meetingRepository.findById(id).orElseThrow();
+        model.addAttribute(club);
+        model.addAttribute(meeting);
+        model.addAttribute(account);
+        model.addAttribute(modelMapper.map(meeting, MeetingForm.class));
+        return "meeting/update";
+    }
 
+
+    @PostMapping("/meeting/{id}/edit")
+    public String updateMeetingSubmit(@CurrentAccount Account account, @PathVariable String path,
+                                    @PathVariable Long id, @Valid MeetingForm meetingForm, Errors errors,
+                                    Model model) {
+        Club club = clubService.getClubUpdate(account, path);
+
+        Meeting meeting = meetingRepository.findById(id).orElseThrow();
+        meetingForm.setMeetingType(meeting.getMeetingType());
+        meetingFormValidator.validateUpdateForm(meetingForm, meeting, errors);
+
+        if (errors.hasErrors()) {
+            model.addAttribute(account);
+            model.addAttribute(club);
+            model.addAttribute(meeting);
+            return "meeting/update";
+        }
+
+        meetingService.updateMeeting(meeting, meetingForm);
+        return "redirect:/club/" + club.getEncodedPath() +  "/club/" + meeting.getId();
+    }
+
+    @PostMapping("/meeting/{id}/delete")
+    public String cancelMeeting(@CurrentAccount Account account, @PathVariable String path, @PathVariable Long id) {
+        Club club = clubService.getClubUpdateStatus(account, path);
+        meetingService.deleteEvent(meetingRepository.findById(id).orElseThrow());
+        return "redirect:/club/" + club.getEncodedPath() + "/meeting";
+    }
 }

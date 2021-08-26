@@ -82,7 +82,7 @@ public class ClubService {
     }
 
     public Club getClubUpdateCity(Account account, String path) {
-        Club club = clubRepository.findByClubPath(path); // 여기 부분도!
+        Club club = clubRepository.findByClubPath(path);
         checkIfExistingClub(path, club);
         checkIfManager(account, club);
         return club;

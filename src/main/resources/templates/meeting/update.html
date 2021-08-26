@@ -7,9 +7,8 @@
 <div th:replace="fragments/club :: clubBanner"></div>
 
 <div class="container">
-    <div th:replace="fragments/meeting :: meeting_form (mode='create', action='/club/' + ${club.clubPath} + '/create_meeting/')"></div>
+    <div th:replace="fragments/meeting :: meeting_form (mode='edit', action='/club/' + ${club.clubPath} + '/meeting/' + ${meeting.id} + '/edit')"></div>
 </div>
-
 
 <script th:replace="fragments/script:: formValidation"></script>
 <script th:replace="fragments/script :: editor_script"></script>
