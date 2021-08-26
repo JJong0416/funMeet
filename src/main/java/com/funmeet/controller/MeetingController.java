@@ -129,9 +129,31 @@ public class MeetingController {
     }
 
     @PostMapping("/meeting/{id}/delete")
-    public String cancelMeeting(@CurrentAccount Account account, @PathVariable String path, @PathVariable Long id) {
+    public String cancelMeeting(@CurrentAccount Account account,
+                                @PathVariable String path, @PathVariable Long id) {
         Club club = clubService.getClubUpdateStatus(account, path);
         meetingService.deleteEvent(meetingRepository.findById(id).orElseThrow());
         return "redirect:/club/" + club.getEncodedPath() + "/meeting";
     }
+
+    @PostMapping("/meeting/{id}/enroll")
+    public String newEnrollment(@CurrentAccount Account account,
+                                @PathVariable String path, @PathVariable Long id) {
+        Club club = clubService.getClubToEnroll(path);
+        Meeting meeting = meetingRepository.findById(id).orElseThrow();
+        meetingService.newEnrollment(meeting,account);
+
+        return "redirect:/club/" + club.getEncodedPath() + "/meeting/" + id;
+    }
+
+    @PostMapping("/meeting/{id}/disenroll")
+    public String cancelEnrollment(@CurrentAccount Account account,
+                                   @PathVariable String path, @PathVariable Long id) {
+        Club club = clubService.getClubToEnroll(path);
+        Meeting meeting = meetingRepository.findById(id).orElseThrow();
+        meetingService.cancelEnrollment(meeting,account);
+
+        return "redirect:/club/" + club.getEncodedPath() +  "/meeting/" + id;
+    }
+
 }

@@ -13,4 +13,5 @@ public interface ClubRepository extends JpaRepository<Club,Long> {
 
     boolean existsByTitle(String newTitle);
 
+    Club findClubOnlyByClubPath(String path);
 }

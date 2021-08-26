@@ -156,5 +156,11 @@ public class ClubService {
 
     public void removeMember(Club club, Account account) {
         club.removeMember(account);
-    }   
+    }
+
+    public Club getClubToEnroll(String path){
+        Club club = clubRepository.findClubOnlyByClubPath(path);
+        checkIfExistingClub(path,club);
+        return club;
+    }
 }

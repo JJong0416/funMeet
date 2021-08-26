@@ -7,7 +7,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter @Setter @EqualsAndHashCode(of = "id")
@@ -45,7 +47,7 @@ public class Meeting {
     private LocalDateTime endDateTime;
 
     @OneToMany(mappedBy = "meeting")
-    private List<Enrollment> enrollments;
+    private List<Enrollment> enrollments = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private MeetingType meetingType;
@@ -88,5 +90,63 @@ public class Meeting {
 
     public long getNumberOfAcceptedEnrollments() {
         return this.enrollments.stream().filter(Enrollment::isAccepted).count();
+    }
+
+    public void addEnrollment(Enrollment enrollment) {
+        this.enrollments.add(enrollment);
+        enrollment.setMeeting(this);
+    }
+
+    public void removeEnrollment(Enrollment enrollment) {
+        this.enrollments.remove(enrollment);
+        enrollment.setMeeting(null);
+    }
+
+    public boolean isAbleToWaitingEnrollment() {
+        return this.limitOfEnrollments > this.getNumberOfAcceptedEnrollments() && this.meetingType == MeetingType.FCFSB;
+    }
+
+    public boolean canAccept(Enrollment enrollment) {
+        return this.meetingType == MeetingType.FCFSB
+                && this.enrollments.contains(enrollment)
+                && !enrollment.isAttended()
+                && !enrollment.isAccepted();
+    }
+
+    public boolean canReject(Enrollment enrollment) {
+        return this.meetingType == MeetingType.CONFIRM
+                && this.enrollments.contains(enrollment)
+                && !enrollment.isAttended()
+                && enrollment.isAccepted();
+    }
+
+    private List<Enrollment> getWaitingList() {
+        return this.enrollments.stream().filter(enrollment -> !enrollment.isAccepted()).collect(Collectors.toList());
+    }
+
+    public void acceptWaitingList() {
+        if (this.isAbleToWaitingEnrollment()) {
+            var waitingList = getWaitingList();
+            int numberToAccept = (int) Math.min(this.limitOfEnrollments - this.getNumberOfAcceptedEnrollments(), waitingList.size());
+            waitingList.subList(0, numberToAccept).forEach(e -> e.setAccepted(true));
+        }
+    }
+
+    public void acceptNextWaitingEnrollment() {
+        if (this.isAbleToWaitingEnrollment()) {
+            Enrollment enrollmentToAccept = this.getTheFirstWaitingEnrollment();
+            if (enrollmentToAccept != null) {
+                enrollmentToAccept.setAccepted(true);
+            }
+        }
+    }
+
+    private Enrollment getTheFirstWaitingEnrollment() {
+        for (Enrollment e : this.enrollments) {
+            if (!e.isAccepted()) {
+                return e;
+            }
+        }
+        return null;
     }
 }
