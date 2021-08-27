@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 @SpringBootTest
 @AutoConfigureMockMvc
-class ClubControllerTest {
+public class ClubControllerTest {
     @Autowired protected MockMvc mockMvc;
     @Autowired protected ClubService clubService;
     @Autowired protected ClubRepository clubRepository;
@@ -166,7 +166,7 @@ class ClubControllerTest {
     protected Account createNewAccount(String nickname){
         Account account = new Account();
         account.setNickname(nickname);
-        account.setEmail("test@gmail.com");
+        account.setEmail( nickname + "@gmail.com");
         account.setPassword("123456");
         accountRepository.save(account);
         return account;
