@@ -30,6 +30,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation' // spring boot 3버젼부터 빠져서 추가 삽입.
     implementation 'org.modelmapper:modelmapper:2.3.6'
 
+
     /* NPM 세팅*/
     implementation 'com.github.node-gradle:gradle-node-plugin:3.1.0'
     implementation 'org.jetbrains:annotations:20.1.0'
@@ -37,6 +38,7 @@ dependencies {
     /* 타임리프 dialect 적용*/
 //    implementation group: 'nz.net.ultraq.thymeleaf', name: 'thymeleaf-layout-dialect', version: '2.4.1'
 
+    testImplementation 'com.tngtech.archunit:archunit-junit5:0.21.0'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'com.h2database:h2'

@@ -1,7 +1,7 @@
 package com.funmeet.modules.main;
 
-import com.funmeet.modules.account.CurrentAccount;
 import com.funmeet.modules.account.Account;
+import com.funmeet.modules.account.CurrentAccount;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

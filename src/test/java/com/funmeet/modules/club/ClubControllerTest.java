@@ -1,12 +1,9 @@
 package com.funmeet.modules.club;
 
 import com.funmeet.modules.account.Account;
-import com.funmeet.modules.club.Club;
-import com.funmeet.modules.account.form.SignUpForm;
 import com.funmeet.modules.account.AccountRepository;
-import com.funmeet.modules.club.ClubRepository;
 import com.funmeet.modules.account.AccountService;
-import com.funmeet.modules.club.ClubService;
+import com.funmeet.modules.account.form.SignUpForm;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

@@ -1,10 +1,11 @@
 package com.funmeet.modules.club;
 
+import com.funmeet.modules.account.Account;
+import com.funmeet.modules.account.AdaptAccount;
 import com.funmeet.modules.city.City;
 import com.funmeet.modules.hobby.Hobby;
-import com.funmeet.modules.account.AdaptAccount;
-import com.funmeet.modules.account.Account;
 import lombok.*;
+
 import javax.persistence.*;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -136,5 +137,9 @@ public class Club {
 
     public String getEncodedPath() {
         return URLEncoder.encode(this.clubPath, StandardCharsets.UTF_8);
+    }
+
+    public boolean isManagerOfBy(Account account) {
+        return this.getManagers().contains(account);
     }
 }

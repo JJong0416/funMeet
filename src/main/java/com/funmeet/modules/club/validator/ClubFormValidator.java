@@ -1,8 +1,8 @@
 package com.funmeet.modules.club.validator;
 
 
-import com.funmeet.modules.club.form.ClubForm;
 import com.funmeet.modules.club.ClubRepository;
+import com.funmeet.modules.club.form.ClubForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;

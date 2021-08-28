@@ -2,8 +2,8 @@ package com.funmeet.modules.club;
 
 import com.funmeet.modules.account.Account;
 import com.funmeet.modules.city.City;
-import com.funmeet.modules.hobby.Hobby;
 import com.funmeet.modules.club.form.ClubDescriptionForm;
+import com.funmeet.modules.hobby.Hobby;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.access.AccessDeniedException;
@@ -94,7 +94,7 @@ public class ClubService {
     }
 
     private void checkIfManager(Account account, Club club) {
-        if (!account.isManagerOf(club)) {
+        if (!club.isManagerOfBy(account)) {
             throw new AccessDeniedException("해당 기능을 사용할 수 없습니다.");
         }
     }

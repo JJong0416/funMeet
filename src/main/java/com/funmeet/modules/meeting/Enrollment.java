@@ -1,7 +1,6 @@
 package com.funmeet.modules.meeting;
 
 import com.funmeet.modules.account.Account;
-import com.funmeet.modules.meeting.Meeting;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;

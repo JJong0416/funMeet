@@ -5,8 +5,7 @@ import com.funmeet.modules.account.AccountFactory;
 import com.funmeet.modules.account.AccountRepository;
 import com.funmeet.modules.account.AccountService;
 import com.funmeet.modules.account.form.SignUpForm;
-import com.funmeet.modules.meeting.EnrollmentRepository;
-import com.funmeet.modules.meeting.MeetingService;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -29,8 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class ClubSettingsControllerTest{
 
-    @Autowired private MeetingService meetingService;
-    @Autowired private EnrollmentRepository enrollmentRepository;
+
     @Autowired private AccountFactory accountFactory;
     @Autowired private ClubFactory clubFactory;
     @Autowired private AccountRepository accountRepository;

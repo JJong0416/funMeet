@@ -1,9 +1,7 @@
 package com.funmeet.modules.account;
 
-import com.funmeet.modules.account.Account;
 import com.funmeet.infra.mail.EmailMessageForm;
 import com.funmeet.infra.mail.EmailService;
-import com.funmeet.modules.account.AccountRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

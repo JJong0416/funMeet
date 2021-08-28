@@ -1,8 +1,8 @@
 package com.funmeet.modules.account.validator;
 
 import com.funmeet.modules.account.Account;
-import com.funmeet.modules.account.form.NicknameForm;
 import com.funmeet.modules.account.AccountRepository;
+import com.funmeet.modules.account.form.NicknameForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;

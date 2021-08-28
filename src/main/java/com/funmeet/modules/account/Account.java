@@ -76,10 +76,6 @@ public class Account {
         this.joinedAt = LocalDateTime.now();
     }
 
-    public boolean isManagerOf(Club club) {
-        return club.getManagers().contains(this);
-    }
-
     public boolean isValidToken(String token) {
         return this.emailCheckToken.equals(token);
     }

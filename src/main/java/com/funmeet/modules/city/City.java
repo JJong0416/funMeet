@@ -2,6 +2,7 @@ package com.funmeet.modules.city;
 
 
 import lombok.*;
+
 import javax.persistence.*;
 
 @Entity @Getter

@@ -1,13 +1,13 @@
 package com.funmeet.modules.club;
 
-import com.funmeet.modules.account.AdaptAccount;
 import com.funmeet.modules.account.Account;
-import com.funmeet.modules.club.Club;
+import com.funmeet.modules.account.AdaptAccount;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ClubServiceTest {
 

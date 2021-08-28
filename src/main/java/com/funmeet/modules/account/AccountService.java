@@ -1,13 +1,13 @@
 package com.funmeet.modules.account;
 
 import com.funmeet.infra.config.AppProperties;
-import com.funmeet.modules.city.City;
-import com.funmeet.modules.hobby.Hobby;
 import com.funmeet.infra.mail.EmailMessageForm;
+import com.funmeet.infra.mail.EmailService;
 import com.funmeet.modules.account.form.NotificationForm;
 import com.funmeet.modules.account.form.Profile;
 import com.funmeet.modules.account.form.SignUpForm;
-import com.funmeet.infra.mail.EmailService;
+import com.funmeet.modules.city.City;
+import com.funmeet.modules.hobby.Hobby;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

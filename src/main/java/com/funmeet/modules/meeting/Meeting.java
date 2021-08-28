@@ -1,8 +1,8 @@
 package com.funmeet.modules.meeting;
 
-import com.funmeet.modules.club.Club;
-import com.funmeet.modules.account.AdaptAccount;
 import com.funmeet.modules.account.Account;
+import com.funmeet.modules.account.AdaptAccount;
+import com.funmeet.modules.club.Club;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
