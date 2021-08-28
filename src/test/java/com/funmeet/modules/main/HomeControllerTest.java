@@ -1,4 +1,4 @@
-package com.funmeet.controller;
+package com.funmeet.modules.main;
 
 import com.funmeet.modules.account.form.SignUpForm;
 import com.funmeet.modules.account.AccountRepository;

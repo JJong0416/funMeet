@@ -1,4 +1,4 @@
-package com.funmeet.controller;
+package com.funmeet.modules.account;
 
 import com.funmeet.modules.account.Account;
 import com.funmeet.infra.mail.EmailMessageForm;

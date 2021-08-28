@@ -1,4 +1,4 @@
-package com.funmeet.service;
+package com.funmeet.modules.club;
 
 import com.funmeet.modules.account.AdaptAccount;
 import com.funmeet.modules.account.Account;

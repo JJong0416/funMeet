@@ -1,16 +1,23 @@
-package com.funmeet.controller;
+package com.funmeet.modules.meeting;
 
 import com.funmeet.modules.account.Account;
+import com.funmeet.modules.account.AccountFactory;
+import com.funmeet.modules.account.AccountRepository;
+import com.funmeet.modules.account.AccountService;
+import com.funmeet.modules.account.form.SignUpForm;
 import com.funmeet.modules.club.Club;
-import com.funmeet.modules.meeting.Meeting;
-import com.funmeet.modules.meeting.MeetingType;
-import com.funmeet.modules.meeting.EnrollmentRepository;
-import com.funmeet.modules.meeting.MeetingService;
+import com.funmeet.modules.club.ClubFactory;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.TestExecutionEvent;
 import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
@@ -20,17 +27,41 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class MeetingControllerTest extends ClubControllerTest {
+@Transactional
+@SpringBootTest
+@AutoConfigureMockMvc
+class MeetingControllerTest{
 
-    @Autowired MeetingService meetingService;
-    @Autowired EnrollmentRepository enrollmentRepository;
+    @Autowired private MeetingService meetingService;
+    @Autowired private EnrollmentRepository enrollmentRepository;
+    @Autowired private AccountFactory accountFactory;
+    @Autowired private ClubFactory clubFactory;
+    @Autowired private AccountRepository accountRepository;
+    @Autowired private MockMvc mockMvc;
+    @Autowired private AccountService accountService;
+
+    @BeforeEach
+    void beforeEach(){
+        /* UserDetails Account 생성 */
+        SignUpForm signUpForm = new SignUpForm();
+        signUpForm.setNickname("jongchan");
+        signUpForm.setPassword("12345678");
+        signUpForm.setEmail("jjong@email.com");
+        accountService.processSignUpAccount(signUpForm);
+    }
+
+    @AfterEach
+    void afterEach() {
+        accountRepository.deleteAll();
+    }
+
 
     @Test
     @WithUserDetails(value="jongchan",setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @DisplayName("선착순 참가 신청 - 수락")
     void Enrollment_FCFS_meeting_right() throws Exception {
-        Account adminAccount = createNewAccount("adminAccount");
-        Club club = createNewClub("test-path",adminAccount);
+        Account adminAccount = accountFactory.createNewAccount("adminAccount");
+        Club club = clubFactory.createNewClub("test-path",adminAccount);
         Meeting meeting = createNewMeeting("테스트미팅", MeetingType.FCFSB,2,1000,club,adminAccount);
 
         mockMvc.perform(post("/club/" + club.getClubPath() + "/meeting/" + meeting.getId() + "/enroll")
@@ -48,13 +79,13 @@ class MeetingControllerTest extends ClubControllerTest {
     @DisplayName("선착순 모임에 참가 신청 - 인원 full, 선착순 대기중")
     @WithUserDetails(value="jongchan",setupBefore = TestExecutionEvent.TEST_EXECUTION)
     void Enrollment_FCFS_meeting_fail() throws Exception {
-        Account adminAccount = createNewAccount("adminAccount");
-        Club club = createNewClub("test-path",adminAccount);
+        Account adminAccount = accountFactory.createNewAccount("adminAccount");
+        Club club = clubFactory.createNewClub("test-path",adminAccount);
         Meeting meeting = createNewMeeting("테스트미팅",MeetingType.FCFSB,2,1000,club,adminAccount);
 
         Account lastAccount = accountRepository.findByNickname("jongchan");
-        Account joinAccount1 = createNewAccount("check1");
-        Account joinAccount2 = createNewAccount("check2");
+        Account joinAccount1 = accountFactory.createNewAccount("check1");
+        Account joinAccount2 = accountFactory.createNewAccount("check2");
         meetingService.newEnrollment(meeting,joinAccount1);
         meetingService.newEnrollment(meeting,joinAccount2);
         meetingService.newEnrollment(meeting,lastAccount);
@@ -80,10 +111,10 @@ class MeetingControllerTest extends ClubControllerTest {
     @WithUserDetails(value="jongchan",setupBefore = TestExecutionEvent.TEST_EXECUTION)
     void CancelEnrollment_FCFS_meeting_and_next_accepted() throws Exception {
         Account adminAccount = accountRepository.findByNickname("jongchan");
-        Account joinAccount = createNewAccount("테스트1");
-        Account lastAccount = createNewAccount("테스트2");
+        Account joinAccount = accountFactory.createNewAccount("테스트1");
+        Account lastAccount = accountFactory.createNewAccount("테스트2");
 
-        Club club = createNewClub("test-path",adminAccount);
+        Club club = clubFactory.createNewClub("test-path",adminAccount);
         Meeting meeting = createNewMeeting("test-metting",MeetingType.FCFSB,2,1000,club,adminAccount);
 
         meetingService.newEnrollment(meeting, adminAccount);
@@ -112,10 +143,10 @@ class MeetingControllerTest extends ClubControllerTest {
     @WithUserDetails(value="jongchan",setupBefore = TestExecutionEvent.TEST_EXECUTION)
     void CancelEnrollment_FCFS_meeting_and_next_accepted_and_restAccount_remains() throws Exception {
         Account adminAccount = accountRepository.findByNickname("jongchan");
-        Account joinAccount = createNewAccount("테스트1");
-        Account lastAccount = createNewAccount("테스트2");
+        Account joinAccount = accountFactory.createNewAccount("테스트1");
+        Account lastAccount = accountFactory.createNewAccount("테스트2");
 
-        Club club = createNewClub("test-path",adminAccount);
+        Club club = clubFactory.createNewClub("test-path",adminAccount);
         Meeting meeting = createNewMeeting("test-metting",MeetingType.FCFSB,2,1000,club,adminAccount);
 
         meetingService.newEnrollment(meeting, joinAccount);
@@ -144,10 +175,10 @@ class MeetingControllerTest extends ClubControllerTest {
     @WithUserDetails(value="jongchan",setupBefore = TestExecutionEvent.TEST_EXECUTION)
     void Enrollment_CONFRIM_meeting_right_Waiting() throws Exception {
         Account adminAccount = accountRepository.findByNickname("jongchan");
-        Account joinAccount = createNewAccount("테스트1");
-        Account lastAccount = createNewAccount("테스트2");
+        Account joinAccount = accountFactory.createNewAccount("테스트1");
+        Account lastAccount = accountFactory.createNewAccount("테스트2");
 
-        Club club = createNewClub("test-path",adminAccount);
+        Club club = clubFactory.createNewClub("test-path",adminAccount);
         Meeting meeting = createNewMeeting("test-metting",MeetingType.CONFIRM,2,1000,club,adminAccount);
 
         meetingService.newEnrollment(meeting, adminAccount);

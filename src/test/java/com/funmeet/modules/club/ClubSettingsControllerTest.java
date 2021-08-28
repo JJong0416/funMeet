@@ -1,32 +1,63 @@
-package com.funmeet.controller;
+package com.funmeet.modules.club;
 
 import com.funmeet.modules.account.Account;
-import com.funmeet.modules.club.Club;
+import com.funmeet.modules.account.AccountFactory;
+import com.funmeet.modules.account.AccountRepository;
+import com.funmeet.modules.account.AccountService;
+import com.funmeet.modules.account.form.SignUpForm;
+import com.funmeet.modules.meeting.EnrollmentRepository;
+import com.funmeet.modules.meeting.MeetingService;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.TestExecutionEvent;
 import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 
 @Transactional
 @SpringBootTest
 @AutoConfigureMockMvc
-class ClubSettingsControllerTest extends ClubControllerTest{
+class ClubSettingsControllerTest{
+
+    @Autowired private MeetingService meetingService;
+    @Autowired private EnrollmentRepository enrollmentRepository;
+    @Autowired private AccountFactory accountFactory;
+    @Autowired private ClubFactory clubFactory;
+    @Autowired private AccountRepository accountRepository;
+    @Autowired private MockMvc mockMvc;
+    @Autowired private AccountService accountService;
+
+    @BeforeEach
+    void beforeEach(){
+        /* UserDetails Account 생성 */
+        SignUpForm signUpForm = new SignUpForm();
+        signUpForm.setNickname("jongchan");
+        signUpForm.setPassword("12345678");
+        signUpForm.setEmail("jjong@email.com");
+        accountService.processSignUpAccount(signUpForm);
+    }
+
+    @AfterEach
+    void afterEach() {
+        accountRepository.deleteAll();
+    }
 
     @Test
     @WithUserDetails(value="jongchan",setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @DisplayName("모임 소개 수정 - 실패 (권한이 없는 사람이 접근할 때)")
     void updateDescriptionForm_wrong() throws Exception {
-        Account joinAccount = createNewAccount("account");
-        Club club = createNewClub("url",joinAccount);
+        Account joinAccount = accountFactory.createNewAccount("account");
+        Club club = clubFactory.createNewClub("url",joinAccount);
 
         mockMvc.perform(get("/club/" + club.getClubPath() + "/settings/description"))
                 .andExpect(status().isForbidden());
@@ -37,7 +68,7 @@ class ClubSettingsControllerTest extends ClubControllerTest{
     @DisplayName("모임 소개 수정폼 - 성공 (관리자가 접근할 때)")
     void updateDescriptionForm_right() throws Exception {
         Account managerAccount = accountRepository.findByNickname("jongchan");
-        Club club = createNewClub("url",managerAccount);
+        Club club = clubFactory.createNewClub("url",managerAccount);
 
         mockMvc.perform(get("/club/" + club.getClubPath() + "/settings/description"))
                 .andExpect(status().isOk())
@@ -53,7 +84,7 @@ class ClubSettingsControllerTest extends ClubControllerTest{
     @DisplayName("스터디 소개 수정 - 실패")
     void updateDescription_wrong() throws Exception {
         Account managerAccount = accountRepository.findByNickname("jongchan");
-        Club club = createNewClub("url",managerAccount);
+        Club club = clubFactory.createNewClub("url",managerAccount);
 
 
         mockMvc.perform(post("/club/" + club.getClubPath() + "/settings/description")
@@ -72,7 +103,7 @@ class ClubSettingsControllerTest extends ClubControllerTest{
     @DisplayName("모임 소개 수정 - 성공")
     void updateDescription_right() throws Exception {
         Account managerAccount = accountRepository.findByNickname("jongchan");
-        Club club = createNewClub("url",managerAccount);
+        Club club = clubFactory.createNewClub("url",managerAccount);
 
         mockMvc.perform(post("/club/" + club.getClubPath() + "/settings/description")
                 .param("shortDescription", "짧은 소개 체크")

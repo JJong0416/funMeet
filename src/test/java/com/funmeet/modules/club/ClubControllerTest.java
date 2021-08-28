@@ -1,4 +1,4 @@
-package com.funmeet.controller;
+package com.funmeet.modules.club;
 
 import com.funmeet.modules.account.Account;
 import com.funmeet.modules.club.Club;
@@ -28,12 +28,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 @SpringBootTest
 @AutoConfigureMockMvc
-public class ClubControllerTest {
-    @Autowired protected MockMvc mockMvc;
-    @Autowired protected ClubService clubService;
-    @Autowired protected ClubRepository clubRepository;
-    @Autowired protected AccountRepository accountRepository;
-    @Autowired protected AccountService accountService;
+class ClubControllerTest {
+    @Autowired private MockMvc mockMvc;
+    @Autowired private ClubService clubService;
+    @Autowired private ClubRepository clubRepository;
+    @Autowired private AccountRepository accountRepository;
+    @Autowired private AccountService accountService;
 
     public Account jongchan = null;
 

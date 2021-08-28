@@ -1,4 +1,4 @@
-package com.funmeet.controller;
+package com.funmeet.modules.account;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.funmeet.modules.account.Account;
@@ -35,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 
-class SettingsControllerTest {
+class AccountSettingsControllerTest {
 
     @Autowired MockMvc mockMvc;
 
@@ -45,8 +45,7 @@ class SettingsControllerTest {
 
     @Autowired PasswordEncoder passwordEncoder;
 
-    @Autowired
-    HobbyRepository hobbyRepository;
+    @Autowired HobbyRepository hobbyRepository;
 
     @Autowired ObjectMapper objectMapper;
 
