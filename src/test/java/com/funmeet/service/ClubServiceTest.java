@@ -1,8 +1,8 @@
 package com.funmeet.service;
 
-import com.funmeet.adaptor.AdaptAccount;
-import com.funmeet.domain.Account;
-import com.funmeet.domain.Club;
+import com.funmeet.modules.account.AdaptAccount;
+import com.funmeet.modules.account.Account;
+import com.funmeet.modules.club.Club;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

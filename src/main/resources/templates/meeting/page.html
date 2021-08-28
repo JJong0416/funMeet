@@ -124,8 +124,8 @@
         <dl class="col-3 pt-3 text-right">
             <dt class="font-weight-light">모집 방법</dt>
             <dd>
-                <span th:if="${meeting.meetingType == T(com.funmeet.domain.MeetingType).FCFSB}">선착순</span>
-                <span th:if="${meeting.meetingType == T(com.funmeet.domain.MeetingType).CONFIRM}">관리자 확인</span>
+                <span th:if="${meeting.meetingType == T(com.funmeet.modules.meeting.MeetingType).FCFSB}">선착순</span>
+                <span th:if="${meeting.meetingType == T(com.funmeet.modules.meeting.MeetingType).CONFIRM}">관리자 확인</span>
             </dd>
 
             <dt class="font-weight-light">모집 인원</dt>

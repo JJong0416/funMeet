@@ -1,13 +1,12 @@
 package com.funmeet.controller;
 
-import com.funmeet.domain.Account;
-import com.funmeet.domain.Club;
-import com.funmeet.form.SignUpForm;
-import com.funmeet.repository.AccountRepository;
-import com.funmeet.repository.ClubRepository;
-import com.funmeet.service.AccountService;
-import com.funmeet.service.ClubService;
-import org.checkerframework.checker.units.qual.A;
+import com.funmeet.modules.account.Account;
+import com.funmeet.modules.club.Club;
+import com.funmeet.modules.account.form.SignUpForm;
+import com.funmeet.modules.account.AccountRepository;
+import com.funmeet.modules.club.ClubRepository;
+import com.funmeet.modules.account.AccountService;
+import com.funmeet.modules.club.ClubService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

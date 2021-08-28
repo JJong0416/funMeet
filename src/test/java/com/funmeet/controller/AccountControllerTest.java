@@ -1,17 +1,15 @@
 package com.funmeet.controller;
 
-import com.funmeet.domain.Account;
-import com.funmeet.form.EmailMessageForm;
-import com.funmeet.mail.EmailService;
-import com.funmeet.repository.AccountRepository;
+import com.funmeet.modules.account.Account;
+import com.funmeet.infra.mail.EmailMessageForm;
+import com.funmeet.infra.mail.EmailService;
+import com.funmeet.modules.account.AccountRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 

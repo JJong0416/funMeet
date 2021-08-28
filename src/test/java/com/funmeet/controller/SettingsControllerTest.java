@@ -1,16 +1,16 @@
 package com.funmeet.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.funmeet.domain.Account;
-import com.funmeet.domain.City;
-import com.funmeet.domain.Hobby;
-import com.funmeet.form.CityForm;
-import com.funmeet.form.HobbyForm;
-import com.funmeet.form.SignUpForm;
-import com.funmeet.repository.AccountRepository;
-import com.funmeet.repository.CityRepository;
-import com.funmeet.repository.HobbyRepository;
-import com.funmeet.service.AccountService;
+import com.funmeet.modules.account.Account;
+import com.funmeet.modules.city.City;
+import com.funmeet.modules.hobby.Hobby;
+import com.funmeet.modules.city.CityForm;
+import com.funmeet.modules.hobby.HobbyForm;
+import com.funmeet.modules.account.form.SignUpForm;
+import com.funmeet.modules.account.AccountRepository;
+import com.funmeet.modules.city.CityRepository;
+import com.funmeet.modules.hobby.HobbyRepository;
+import com.funmeet.modules.account.AccountService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

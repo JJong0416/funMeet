@@ -1,8 +1,11 @@
 package com.funmeet.controller;
 
-import com.funmeet.domain.*;
-import com.funmeet.repository.EnrollmentRepository;
-import com.funmeet.service.MeetingService;
+import com.funmeet.modules.account.Account;
+import com.funmeet.modules.club.Club;
+import com.funmeet.modules.meeting.Meeting;
+import com.funmeet.modules.meeting.MeetingType;
+import com.funmeet.modules.meeting.EnrollmentRepository;
+import com.funmeet.modules.meeting.MeetingService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +31,7 @@ class MeetingControllerTest extends ClubControllerTest {
     void Enrollment_FCFS_meeting_right() throws Exception {
         Account adminAccount = createNewAccount("adminAccount");
         Club club = createNewClub("test-path",adminAccount);
-        Meeting meeting = createNewMeeting("테스트미팅",MeetingType.FCFSB,2,1000,club,adminAccount);
+        Meeting meeting = createNewMeeting("테스트미팅", MeetingType.FCFSB,2,1000,club,adminAccount);
 
         mockMvc.perform(post("/club/" + club.getClubPath() + "/meeting/" + meeting.getId() + "/enroll")
                 .with(csrf()))

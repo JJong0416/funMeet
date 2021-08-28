@@ -1,8 +1,8 @@
 package com.funmeet.controller;
 
-import com.funmeet.form.SignUpForm;
-import com.funmeet.repository.AccountRepository;
-import com.funmeet.service.AccountService;
+import com.funmeet.modules.account.form.SignUpForm;
+import com.funmeet.modules.account.AccountRepository;
+import com.funmeet.modules.account.AccountService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
