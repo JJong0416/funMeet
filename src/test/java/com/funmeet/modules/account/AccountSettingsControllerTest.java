@@ -1,6 +1,7 @@
 package com.funmeet.modules.account;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.funmeet.infra.MockMvcTest;
 import com.funmeet.modules.account.form.SignUpForm;
 import com.funmeet.modules.city.City;
 import com.funmeet.modules.city.CityForm;
@@ -13,8 +14,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.TestExecutionEvent;
@@ -29,9 +28,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
-@SpringBootTest
-@AutoConfigureMockMvc
-
+@MockMvcTest
 class AccountSettingsControllerTest {
 
     @Autowired MockMvc mockMvc;
