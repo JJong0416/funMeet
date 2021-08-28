@@ -65,9 +65,6 @@
                         <th th:if="${club.isManager(#authentication.principal)}" scope="col">
                             참가 신청 관리
                         </th>
-                        <th th:if="${club.isManager(#authentication.principal)}" scope="col">
-                            출석 체크
-                        </th>
                     </tr>
                     </thead>
                     <tbody>
@@ -90,17 +87,12 @@
                             <span th:if="${enroll.accepted}">확정</span>
                             <span th:if="${!enroll.accepted}">대기중</span>
                         </td>
+
                         <td th:if="${club.isManager(#authentication.principal)}">
                             <a th:if="${meeting.canAccept(enroll)}" href="#" class="text-decoration-none"
                                th:href="@{'/club/' + ${club.clubPath} + '/meeting/' + ${meeting.id} + '/enrollments/' + ${enroll.id} + '/accept'}" >신청 수락</a>
                             <a th:if="${meeting.canReject(enroll)}" href="#" class="text-decoration-none"
                                th:href="@{'/club/' + ${club.clubPath} + '/meeting/' + ${meeting.id} + '/enrollments/' + ${enroll.id} + '/reject'}">취소</a>
-                        </td>
-                        <td th:if="${club.isManager(#authentication.principal)}">
-                            <a th:if="${enroll.accepted && !enroll.attended}" href="#" class="text-decoration-none"
-                               th:href="@{'/club/' + ${club.clubPath} + '/meeting/' + ${meeting.id} + '/enrollments/' + ${enroll.id} + '/checkin'}">체크인</a>
-                            <a th:if="${enroll.accepted && enroll.attended}" href="#" class="text-decoration-none"
-                               th:href="@{'/club/' + ${club.clubPath} + '/meeting/' + ${meeting.id} + '/enrollments/' + ${enroll.id} + '/cancel-checkin'}">체크인 취소</a>
                         </td>
                     </tr>
                     </tbody>

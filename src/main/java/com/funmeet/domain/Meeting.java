@@ -46,6 +46,7 @@ public class Meeting {
     @Column(nullable = false)
     private LocalDateTime endDateTime;
 
+    @OrderBy("enrolledAt")
     @OneToMany(mappedBy = "meeting")
     private List<Enrollment> enrollments = new ArrayList<>();
 
@@ -53,11 +54,11 @@ public class Meeting {
     private MeetingType meetingType;
 
     public boolean isEnrollable(AdaptAccount adaptAccount) {
-        return isNotClosed() && !isAlreadyEnrolled(adaptAccount);
+        return isNotClosed() && !isAttended(adaptAccount) && !isAlreadyEnrolled(adaptAccount);
     }
 
     public boolean isDisEnrollable(AdaptAccount adaptAccount) {
-        return isNotClosed() && isAlreadyEnrolled(adaptAccount);
+        return isNotClosed() && !isAttended(adaptAccount) && isAlreadyEnrolled(adaptAccount);
     }
 
     private boolean isNotClosed() {
@@ -107,7 +108,8 @@ public class Meeting {
     }
 
     public boolean canAccept(Enrollment enrollment) {
-        return this.meetingType == MeetingType.FCFSB
+        return this.meetingType == MeetingType.CONFIRM
+                && this.limitOfEnrollments > this.getNumberOfAcceptedEnrollments()
                 && this.enrollments.contains(enrollment)
                 && !enrollment.isAttended()
                 && !enrollment.isAccepted();
@@ -134,19 +136,32 @@ public class Meeting {
 
     public void acceptNextWaitingEnrollment() {
         if (this.isAbleToWaitingEnrollment()) {
-            Enrollment enrollmentToAccept = this.getTheFirstWaitingEnrollment();
+            Enrollment enrollmentToAccept = this.getConsecutiveWaitingEnrollment();
             if (enrollmentToAccept != null) {
                 enrollmentToAccept.setAccepted(true);
             }
         }
     }
 
-    private Enrollment getTheFirstWaitingEnrollment() {
+    private Enrollment getConsecutiveWaitingEnrollment() {
         for (Enrollment e : this.enrollments) {
             if (!e.isAccepted()) {
                 return e;
             }
         }
         return null;
+    }
+
+    public void accept(Enrollment enrollment) {
+        if (this.meetingType == MeetingType.CONFIRM
+                && this.limitOfEnrollments > this.getNumberOfAcceptedEnrollments()) {
+            enrollment.setAccepted(true);
+        }
+    }
+
+    public void reject(Enrollment enrollment) {
+        if (this.meetingType == MeetingType.CONFIRM) {
+            enrollment.setAccepted(false);
+        }
     }
 }

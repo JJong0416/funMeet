@@ -3,8 +3,10 @@ package com.funmeet.controller;
 import com.funmeet.annotation.CurrentAccount;
 import com.funmeet.domain.Account;
 import com.funmeet.domain.Club;
+import com.funmeet.domain.Enrollment;
 import com.funmeet.domain.Meeting;
 import com.funmeet.form.MeetingForm;
+import com.funmeet.repository.EnrollmentRepository;
 import com.funmeet.repository.MeetingRepository;
 import com.funmeet.service.ClubService;
 import com.funmeet.service.MeetingService;
@@ -32,6 +34,7 @@ public class MeetingController {
     private final ModelMapper modelMapper;
     private final MeetingFormValidator meetingFormValidator;
     private final MeetingRepository meetingRepository;
+    private final EnrollmentRepository enrollmentRepository;
 
     @InitBinder("meetForm")
     public void initBinder(WebDataBinder webDataBinder) {
@@ -132,7 +135,7 @@ public class MeetingController {
     public String cancelMeeting(@CurrentAccount Account account,
                                 @PathVariable String path, @PathVariable Long id) {
         Club club = clubService.getClubUpdateStatus(account, path);
-        meetingService.deleteEvent(meetingRepository.findById(id).orElseThrow());
+        meetingService.deleteMeeting(meetingRepository.findById(id).orElseThrow());
         return "redirect:/club/" + club.getEncodedPath() + "/meeting";
     }
 
@@ -151,9 +154,34 @@ public class MeetingController {
                                    @PathVariable String path, @PathVariable Long id) {
         Club club = clubService.getClubToEnroll(path);
         Meeting meeting = meetingRepository.findById(id).orElseThrow();
+
         meetingService.cancelEnrollment(meeting,account);
 
         return "redirect:/club/" + club.getEncodedPath() +  "/meeting/" + id;
     }
 
+    @GetMapping("/meeting/{meetingId}/enrollments/{enrollmentId}/accept")
+    public String acceptEnrollmentAccount(@CurrentAccount Account account, @PathVariable String path,
+                                   @PathVariable Long meetingId, @PathVariable Long enrollmentId) { // check
+        Club club = clubService.getClubUpdateStatus(account,path);
+        Meeting meeting = meetingRepository.findById(meetingId).orElseThrow();
+        Enrollment enrollment = enrollmentRepository.findById(enrollmentId).orElseThrow();
+
+        meetingService.acceptEnrollment(meeting,enrollment);
+
+        return "redirect:/club/" + club.getEncodedPath() + "/meeting/" + meeting.getId();
+    }
+
+    @GetMapping("/meeting/{meetingId}/enrollments/{enrollmentId}/reject")
+    public String rejectEnrollmentAccount(@CurrentAccount Account account, @PathVariable String path,
+                                   @PathVariable Long meetingId, @PathVariable Long enrollmentId) {
+
+        Club club = clubService.getClubUpdateStatus(account,path);
+        Meeting meeting = meetingRepository.findById(meetingId).orElseThrow();
+        Enrollment enrollment = enrollmentRepository.findById(enrollmentId).orElseThrow();
+
+        meetingService.rejectEnrollment(meeting,enrollment);
+
+        return "redirect:/club/" + club.getEncodedPath() + "/meeting/" + meeting.getId();
+    }
 }

@@ -38,7 +38,7 @@ public class MeetingService {
         meeting.acceptWaitingList();
     }
 
-    public void deleteEvent(Meeting meeting) {
+    public void deleteMeeting(Meeting meeting) {
         meetingRepository.delete(meeting);
         meeting.acceptWaitingList();
     }
@@ -63,5 +63,13 @@ public class MeetingService {
         meeting.removeEnrollment(enrollment); // 위임
         enrollmentRepository.delete(enrollment); // 삭제
         meeting.acceptNextWaitingEnrollment(); // 다음 대기자
+    }
+
+    public void acceptEnrollment(Meeting meeting, Enrollment enrollment) {
+        meeting.accept(enrollment);
+    }
+
+    public void rejectEnrollment(Meeting meeting, Enrollment enrollment) {
+        meeting.reject(enrollment);
     }
 }

@@ -127,7 +127,6 @@ public class ClubSettingsController {
                                  @RequestBody HobbyForm hobbyForm) {
 
         Club club = clubService.getClubUpdateHobby(account, path);
-        System.out.println(hobbyForm.getHobbyTitle() + "check");
         Hobby hobby = hobbyService.findOrCreateHobby(hobbyForm.getHobbyTitle());
         clubService.addHobby(club, hobby);
         return ResponseEntity.ok().build();
