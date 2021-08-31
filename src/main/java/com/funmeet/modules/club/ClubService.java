@@ -2,10 +2,12 @@ package com.funmeet.modules.club;
 
 import com.funmeet.modules.account.Account;
 import com.funmeet.modules.city.City;
+import com.funmeet.modules.club.event.ClubCreatedEvent;
 import com.funmeet.modules.club.form.ClubDescriptionForm;
 import com.funmeet.modules.hobby.Hobby;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +19,8 @@ public class ClubService {
 
     private final ClubRepository clubRepository;
     private final ModelMapper modelMapper;
+    private final ApplicationEventPublisher applicationEventPublisher;
+
 
     public Club createNewClub(Club club, Account account){
         Club createClub = clubRepository.save(club);
@@ -107,6 +111,8 @@ public class ClubService {
 
     public void publish(Club club) {
         club.publish();
+        applicationEventPublisher.publishEvent(new ClubCreatedEvent(club)); // Async
+
     }
 
     public void close(Club club) {

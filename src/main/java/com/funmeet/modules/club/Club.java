@@ -16,6 +16,11 @@ import java.util.List;
 @Entity
 @Getter @Setter @EqualsAndHashCode(of = "id")
 @Builder @AllArgsConstructor @NoArgsConstructor
+
+//@NamedEntityGraph(name = "Club.withHobbyAndCity", attributeNodes = {
+//        @NamedAttributeNode("hobby"),
+//        @NamedAttributeNode("city")})
+
 public class Club {
 
     @Id
@@ -27,7 +32,7 @@ public class Club {
 
     private String title;
 
-    @ManyToMany // 관리자
+    @ManyToMany
     private List<Account> managers  = new ArrayList<>();
 
     @ManyToMany // 여러 사람들이 여러개 취미에 들 수 있음

@@ -1,5 +1,6 @@
 package com.funmeet.modules.club;
 
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,4 +14,7 @@ public interface ClubRepository extends JpaRepository<Club,Long> {
     boolean existsByTitle(String newTitle);
 
     Club findClubOnlyByClubPath(String path);
+
+//    @EntityGraph(value = "Club.withHobbyAndCity", type = EntityGraph.EntityGraphType.FETCH)
+    Club findClubWithHobbyAndCityById(Long id);
 }

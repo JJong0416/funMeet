@@ -24,7 +24,7 @@ public class PackageDependencyTests {
             .resideInAnyPackage("com.funmeet.modules..");
 
     @ArchTest
-    ArchRule studyPackageRule = classes().that().resideInAPackage("..modules.club..")
+    ArchRule clubPackageRule = classes().that().resideInAPackage("..modules.club..")
             .should().onlyBeAccessed().byClassesThat()
             .resideInAnyPackage(MEETING, CLUB);
 
@@ -34,7 +34,7 @@ public class PackageDependencyTests {
             .should().accessClassesThat().resideInAnyPackage(CITY, HOBBY, ACCOUNT);
 
     @ArchTest
-    ArchRule eventPackageRule = classes().that().resideInAPackage(MEETING)
+    ArchRule meetingPackageRule = classes().that().resideInAPackage(MEETING)
             .should().accessClassesThat().resideInAnyPackage(MEETING, ACCOUNT, CLUB);
 
     /*  순환참조에 사이클이 발생하는지 체크*/
