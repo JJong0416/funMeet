@@ -21,6 +21,8 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @Transactional
@@ -42,33 +44,54 @@ public class ClubEventListener {
         Iterable<Account> accounts = accountRepository.findAll(AccountPredicates.findByHobbyAndCity(club.getHobby(), club.getCity()));
         accounts.forEach(account -> {
             if (account.isMeetCreatedByWeb()){
-                saveClubAlarmByWeb(club,account);
+                saveClubAlarmByWeb(club,account,club.getShortDescription(),AlarmType.CREATED);
             }
 
             if ( account.isMeetCreatedByEmail()){
-                noticeClubAlarmByEmail(club,account);
+                noticeClubAlarmByEmail(club,account,"새로운 모임이 생겼습니다","뻔모임, '" + club.getTitle() + "' 모임이 생겼습니다.");
             }
         });
     }
 
-    private void saveClubAlarmByWeb(Club club, Account account) {
+    @EventListener
+    public void handleClubUpdateEvent(ClubUpdateEvent clubUpdateEvent) {
+        Club club = clubRepository.findClubWithManagersAndMembersById(clubUpdateEvent.getClub().getId());
+        List<Account> accounts = new ArrayList<>();
+        accounts.addAll(club.getMembers());
+        accounts.addAll(club.getManagers());
+
+        accounts.forEach(account -> {
+
+            if (account.isMeetCreatedByWeb()) {
+                saveClubAlarmByWeb(club, account, clubUpdateEvent.getMessage(), AlarmType.UPDATED);
+            }
+
+            if (account.isMeetCreatedByEmail()) {
+                noticeClubAlarmByEmail(club, account, clubUpdateEvent.getMessage(),
+                        "뻔모임'" + club.getTitle() + "' 에 새 소식이 있습니다.");
+            }
+        });
+    }
+
+
+    private void saveClubAlarmByWeb(Club club, Account account,String message, AlarmType alarmType) {
         Alarm alarm = new Alarm();
         alarm.setTitle(club.getTitle());
         alarm.setLink("/club/" + club.getEncodedPath());
         alarm.setChecked(false);
         alarm.setCreatedDateTime(LocalDateTime.now());
-        alarm.setMessage(club.getShortDescription());
+        alarm.setMessage(message);
         alarm.setAccount(account);
-        alarm.setAlarmType(AlarmType.CREATED);
+        alarm.setAlarmType(alarmType);
 
         alarmRepository.save(alarm);
     }
 
-    private void noticeClubAlarmByEmail(Club club, Account account){
+    private void noticeClubAlarmByEmail(Club club, Account account, String contextMessage, String emailSubject){
         Context context = new Context();
         context.setVariable("link","/club/" + club.getEncodedPath());
         context.setVariable("nickname",account.getNickname());
-        context.setVariable("message","새로운 모임이 생겼습니다!");
+        context.setVariable("message",contextMessage);
         context.setVariable("linkName",club.getTitle());
         context.setVariable("host",appProperties.getHost());
 
@@ -76,7 +99,7 @@ public class ClubEventListener {
         String message = templateEngine.process("email/html_email_link",context);
 
         EmailMessageForm emailMessageForm = EmailMessageForm.builder()
-                .subject("뻔(Fun)모임, '" + club.getTitle() + "' 스터디가 생겼습니다.")
+                .subject(emailSubject)
                 .to(account.getEmail())
                 .text(message)
                 .build();

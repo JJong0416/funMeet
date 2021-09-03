@@ -18,4 +18,6 @@ public interface ClubRepository extends JpaRepository<Club,Long> {
     // @EntityGraph(value = "Club.withHobbyAndCity", type = EntityGraph.EntityGraphType.FETCH)
     // TODO EntityGraph 공부. 가지고 오는 DB데이터들이 너무 많음.
     Club findClubWithHobbyAndCityById(Long id);
+
+    Club findClubWithManagersAndMembersById(Long id);
 }

@@ -17,10 +17,6 @@ import java.util.List;
 @Getter @Setter @EqualsAndHashCode(of = "id")
 @Builder @AllArgsConstructor @NoArgsConstructor
 
-//@NamedEntityGraph(name = "Club.withHobbyAndCity", attributeNodes = {
-//        @NamedAttributeNode("hobby"),
-//        @NamedAttributeNode("city")})
-
 public class Club {
 
     @Id

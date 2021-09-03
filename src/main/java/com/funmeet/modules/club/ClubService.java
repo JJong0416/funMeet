@@ -3,6 +3,7 @@ package com.funmeet.modules.club;
 import com.funmeet.modules.account.Account;
 import com.funmeet.modules.city.City;
 import com.funmeet.modules.club.event.ClubCreatedEvent;
+import com.funmeet.modules.club.event.ClubUpdateEvent;
 import com.funmeet.modules.club.form.ClubDescriptionForm;
 import com.funmeet.modules.hobby.Hobby;
 import lombok.RequiredArgsConstructor;
@@ -44,6 +45,8 @@ public class ClubService {
 
     public void updateClubDescription(Club club, ClubDescriptionForm clubDescriptionForm) {
         modelMapper.map(clubDescriptionForm, club);
+        applicationEventPublisher.publishEvent(new ClubUpdateEvent(club,"모임 소개를 수정했습니다."));
+
     }
 
     public void updateClubImage(Club club, String image) {
@@ -117,14 +120,19 @@ public class ClubService {
 
     public void close(Club club) {
         club.close();
+        applicationEventPublisher.publishEvent(new ClubUpdateEvent(club,"모임을 종료합니다."));
     }
 
     public void startRecruit(Club club) {
         club.startRecruit();
+        applicationEventPublisher.publishEvent(new ClubUpdateEvent(club,"모임원 모집을 시작합니다."));
+
     }
 
     public void stopRecruit(Club club) {
         club.stopRecruit();
+        applicationEventPublisher.publishEvent(new ClubUpdateEvent(club,"모임원 모집을 종료합니다."));
+
     }
 
     public boolean isValidPath(String newPath) {
