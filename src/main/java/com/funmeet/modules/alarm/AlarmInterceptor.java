@@ -1,4 +1,4 @@
-package com.funmeet.modules.alert;
+package com.funmeet.modules.alarm;
 
 import com.funmeet.modules.account.Account;
 import com.funmeet.modules.account.AdaptAccount;
@@ -15,9 +15,9 @@ import javax.servlet.http.HttpServletResponse;
 
 @Component
 @RequiredArgsConstructor
-public class AlertInterceptor implements HandlerInterceptor {
+public class AlarmInterceptor implements HandlerInterceptor {
 
-    private final AlertRepository alertRepository;
+    private final AlarmRepository alarmRepository;
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws  Exception {
@@ -26,8 +26,8 @@ public class AlertInterceptor implements HandlerInterceptor {
 
         if (modelAndView != null && !isRedirectView(modelAndView) && authentication != null && authentication.getPrincipal() instanceof AdaptAccount) {
             Account account = ((AdaptAccount)authentication.getPrincipal()).getAccount();
-            long count = alertRepository.countByAccountAndChecked(account, false);
-            modelAndView.addObject("alertMessage", count > 0);
+            long count = alarmRepository.countByAccountAndChecked(account, false);
+            modelAndView.addObject("alarmMessage", count > 0);
         }
     }
 

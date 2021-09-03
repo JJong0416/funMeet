@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<ul th:fragment="alarm_list (alarmList)" class="list-group list-group-flush">
+  <a href="#" th:href="@{${al.link}}" th:each="al: ${alarmList}"
+     class="list-group-item list-group-item-action">
+    <div class="d-flex w-100 justify-content-between">
+      <small class="text-muted" th:text="${al.title}">Noti title</small>
+      <small class="fromNow text-muted" th:text="${al.createdDateTime}">3 days ago</small>
+    </div>
+    <p th:text="${al.message}" class="text-left mb-0 mt-1">message</p>
+  </a>
+</ul>
+
+
+</html>

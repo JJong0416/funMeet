@@ -6,9 +6,9 @@ import com.funmeet.infra.mail.EmailService;
 import com.funmeet.modules.account.Account;
 import com.funmeet.modules.account.AccountPredicates;
 import com.funmeet.modules.account.AccountRepository;
-import com.funmeet.modules.alert.Alert;
-import com.funmeet.modules.alert.AlertRepository;
-import com.funmeet.modules.alert.AlertType;
+import com.funmeet.modules.alarm.Alarm;
+import com.funmeet.modules.alarm.AlarmRepository;
+import com.funmeet.modules.alarm.AlarmType;
 import com.funmeet.modules.club.Club;
 import com.funmeet.modules.club.ClubRepository;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +33,7 @@ public class ClubEventListener {
     private final AccountRepository accountRepository;
     private final AppProperties appProperties;
     private final TemplateEngine templateEngine;
-    private final AlertRepository alertRepository;
+    private final AlarmRepository alarmRepository;
     private final EmailService emailService;
 
     @EventListener
@@ -42,29 +42,29 @@ public class ClubEventListener {
         Iterable<Account> accounts = accountRepository.findAll(AccountPredicates.findByHobbyAndCity(club.getHobby(), club.getCity()));
         accounts.forEach(account -> {
             if (account.isMeetCreatedByWeb()){
-                saveClubAlertByWeb(club,account);
+                saveClubAlarmByWeb(club,account);
             }
 
             if ( account.isMeetCreatedByEmail()){
-                noticeClubAlertByEmail(club,account);
+                noticeClubAlarmByEmail(club,account);
             }
         });
     }
 
-    private void saveClubAlertByWeb(Club club, Account account) {
-        Alert alert = new Alert();
-        alert.setTitle(club.getTitle());
-        alert.setLink("/club/" + club.getEncodedPath());
-        alert.setChecked(false);
-        alert.setCreatedLocalDateTime(LocalDateTime.now());
-        alert.setMessage(club.getShortDescription());
-        alert.setAccount(account);
-        alert.setAlertType(AlertType.CREATED);
+    private void saveClubAlarmByWeb(Club club, Account account) {
+        Alarm alarm = new Alarm();
+        alarm.setTitle(club.getTitle());
+        alarm.setLink("/club/" + club.getEncodedPath());
+        alarm.setChecked(false);
+        alarm.setCreatedDateTime(LocalDateTime.now());
+        alarm.setMessage(club.getShortDescription());
+        alarm.setAccount(account);
+        alarm.setAlarmType(AlarmType.CREATED);
 
-        alertRepository.save(alert);
+        alarmRepository.save(alarm);
     }
 
-    private void noticeClubAlertByEmail(Club club, Account account){
+    private void noticeClubAlarmByEmail(Club club, Account account){
         Context context = new Context();
         context.setVariable("link","/club/" + club.getEncodedPath());
         context.setVariable("nickname",account.getNickname());

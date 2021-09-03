@@ -1,6 +1,6 @@
 package com.funmeet.infra.config;
 
-import com.funmeet.modules.alert.AlertInterceptor;
+import com.funmeet.modules.alarm.AlarmInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.StaticResourceLocation;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    private final AlertInterceptor alertInterceptor;
+    private final AlarmInterceptor alarmInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -24,7 +24,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .collect(Collectors.toList());
         staticResourcesPath.add("/node_modules/**");
 
-        registry.addInterceptor(alertInterceptor)
+        registry.addInterceptor(alarmInterceptor)
                 .excludePathPatterns(staticResourcesPath);
     }
 }

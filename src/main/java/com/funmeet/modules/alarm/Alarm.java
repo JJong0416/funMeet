@@ -1,4 +1,4 @@
-package com.funmeet.modules.alert;
+package com.funmeet.modules.alarm;
 
 import com.funmeet.modules.account.Account;
 import lombok.EqualsAndHashCode;
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter @Setter
 @EqualsAndHashCode(of = "id")
-public class Alert {
+public class Alarm {
 
     @Id @GeneratedValue
     private Long id;
@@ -22,7 +22,7 @@ public class Alert {
 
     private String link;
 
-    private LocalDateTime createdLocalDateTime;
+    private LocalDateTime createdDateTime;
 
     private boolean checked;
 
@@ -30,6 +30,6 @@ public class Alert {
     private Account account;
 
     @Enumerated(EnumType.STRING)
-    private AlertType alertType;
+    private AlarmType AlarmType;
 
 }
