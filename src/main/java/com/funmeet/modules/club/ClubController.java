@@ -81,4 +81,10 @@ public class ClubController {
         return "redirect:/club/" + club.getEncodedPath() + "/members";
     }
 
+    /* Club 만들기 위한 Test Controller */
+    @GetMapping("/club/data")
+    public String generateTestData(@CurrentAccount Account account){
+        clubService.generateTestClub(account);
+        return "redirect:/";
+    }
 }

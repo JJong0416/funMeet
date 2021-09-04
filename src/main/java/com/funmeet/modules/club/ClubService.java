@@ -6,12 +6,17 @@ import com.funmeet.modules.club.event.ClubCreatedEvent;
 import com.funmeet.modules.club.event.ClubUpdateEvent;
 import com.funmeet.modules.club.form.ClubDescriptionForm;
 import com.funmeet.modules.hobby.Hobby;
+import com.funmeet.modules.hobby.HobbyRepository;
+import com.funmeet.modules.hobby.HobbyService;
 import lombok.RequiredArgsConstructor;
+import net.bytebuddy.utility.RandomString;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
 
 @Service
 @Transactional
@@ -21,6 +26,7 @@ public class ClubService {
     private final ClubRepository clubRepository;
     private final ModelMapper modelMapper;
     private final ApplicationEventPublisher applicationEventPublisher;
+    private final HobbyService hobbyService;
 
 
     public Club createNewClub(Club club, Account account){
@@ -28,8 +34,6 @@ public class ClubService {
         createClub.addManager(account);
         return createClub;
     }
-
-
 
     public Club getClub(String path) {
         Club club = clubRepository.findByClubPath(path);
@@ -174,5 +178,26 @@ public class ClubService {
         Club club = clubRepository.findClubOnlyByClubPath(path);
         checkIfExistingClub(path,club);
         return club;
+    }
+
+    /* Club 만들기 위한 Test Service */
+    public void generateTestClub(Account account) {
+        for ( int i = 0; i < 15 ; i++){
+            String randomValue = RandomString.make(5);
+            Club club = Club.builder()
+                    .title("테스트 스터디" + randomValue)
+                    .clubPath("test" + randomValue)
+                    .shortDescription("테스트용 테스트입니다")
+                    .fullDescription("test")
+                    .hobby(new ArrayList<>())
+                    .managers(new ArrayList<>())
+                    .build();
+
+            club.publish();
+            Club newClub = this.createNewClub(club, account);
+
+            Hobby hobby = hobbyService.findOrCreateHobby("JPA");
+            newClub.getHobby().add(hobby);
+        }
     }
 }

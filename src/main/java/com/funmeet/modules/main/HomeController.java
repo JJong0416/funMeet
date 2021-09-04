@@ -5,6 +5,10 @@ import com.funmeet.modules.account.CurrentAccount;
 import com.funmeet.modules.club.Club;
 import com.funmeet.modules.club.ClubRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,8 +35,10 @@ public class HomeController {
     }
 
     @GetMapping("/search/club")
-    public String searchClub(String keyword, Model model) {
-        List<Club> clubList = clubRepository.findByKeyword(keyword);
+    public String searchClub(String keyword, Model model,
+                             @PageableDefault(size = 6, sort = "publishDateTime", direction = Sort.Direction.DESC)
+                                     Pageable pageable)  {
+        Page<Club> clubList = clubRepository.findByKeyword(keyword, pageable);
         model.addAttribute(clubList);
         model.addAttribute("keyword", keyword);
         return "search";

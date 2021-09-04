@@ -31,7 +31,7 @@ public class Club {
     @ManyToMany
     private List<Account> managers  = new ArrayList<>();
 
-    @ManyToMany // 여러 사람들이 여러개 취미에 들 수 있음
+    @ManyToMany
     private List<Account> members  = new ArrayList<>();
 
     private String shortDescription;
