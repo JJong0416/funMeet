@@ -2,8 +2,59 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/config :: config"></head>
 <div th:replace="fragments/header :: main_nav"></div>
+
 <div class="container">
-<!-- TODO View Edit -->
+    <div class="py-5 text-center">
+        <p class="lead" th:if="${clubList.getTotalElements() == 0}">
+            <strong th:text="${keyword}" id="keyword" class="context"></strong>에 해당하는 스터디가 없습니다.
+        </p>
+        <p class="lead" th:if="${clubList.getTotalElements() > 0}">
+            <strong th:text="${keyword}" id="keywords" class="context"></strong>에 해당하는 스터디를
+            <span th:text="${clubList.getTotalElements()}"></span>개
+            찾았습니다.
+        </p>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-sm-10">
+            <div class="row">
+                <div class="col-md-4" th:each=" club : ${clubList.getContent()}">
+                    <div class="card mb-4 shadow-sm">
+                        <img th:src="${club.banner}" class="context card-img-top" th:alt="${club.title}" >
+                        <div class="card-body">
+                            <a th:href="@{'/club/' + ${club.clubPath}}" class="text-decoration-none">
+                                <h5 class="card-title context" th:text="${club.title}"></h5>
+                            </a>
+                            <p class="card-text" th:text="${club.shortDescription}">Short description</p>
+
+                            <p class="card-text context">
+                            <span th:each="tag: ${club.hobby}" class="font-weight-light text-monospace badge badge-pill badge-info mr-3">
+                              <a th:href="@{'/search/tag/' + ${club.title}}" class="text-decoration-none text-white">
+                                <i class="fa fa-tag"></i> <span th:text="${club.title}">Tag</span>
+                              </a>
+                            </span>
+
+                            <span th:each="city: ${club.city}" class="font-weight-light text-monospace badge badge-primary mr-3">
+                                <a th:href="@{'/search/zone/' + ${city.id}}" class="text-decoration-none text-white">
+                                    <i class="fa fa-globe"></i> <span th:text="${city.localNameOfCity}" class="text-white">City</span>
+                                  </a>
+                                </span>
+                            </p>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">
+                                    <i class="fa fa-user-circle"></i>
+                                    <span th:text="${club.members.size()}"></span>명
+                                </small>
+                                <small class="text-muted date" th:text="${club.publishDateTime}">9 mins</small>
+                                <!-- -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <div th:replace="fragments/footer :: footer"></div>
 </html>

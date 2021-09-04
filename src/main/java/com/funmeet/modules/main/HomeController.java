@@ -34,12 +34,12 @@ public class HomeController {
         return "login";
     }
 
-    @GetMapping("/search/club")
+    @GetMapping("/search")
     public String searchClub(String keyword, Model model,
                              @PageableDefault(size = 6, sort = "publishDateTime", direction = Sort.Direction.DESC)
                                      Pageable pageable)  {
         Page<Club> clubList = clubRepository.findByKeyword(keyword, pageable);
-        model.addAttribute(clubList);
+        model.addAttribute("clubList",clubList);
         model.addAttribute("keyword", keyword);
         return "search";
     }
