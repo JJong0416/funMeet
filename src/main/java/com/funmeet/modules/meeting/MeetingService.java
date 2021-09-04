@@ -3,9 +3,13 @@ package com.funmeet.modules.meeting;
 
 import com.funmeet.modules.account.Account;
 import com.funmeet.modules.club.Club;
+import com.funmeet.modules.club.event.ClubUpdateEvent;
+import com.funmeet.modules.meeting.event.EnrollmentEventAccepted;
+import com.funmeet.modules.meeting.event.EnrollmentEventRejected;
 import com.funmeet.modules.meeting.form.MeetingForm;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,23 +24,30 @@ public class MeetingService {
 
     private final MeetingRepository meetingRepository;
     private final EnrollmentRepository enrollmentRepository;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     public Meeting createMeeting(Account account, Club club , Meeting meeting){
 
         meeting.setCreatedDateTime(LocalDateTime.now());
         meeting.setCreatedAccount(account);
         meeting.setClub(club);
+        applicationEventPublisher.publishEvent(new ClubUpdateEvent(meeting.getClub(),
+                "'" + meeting.getTitle() + "' 모임을 만들었습니다."));
         return meetingRepository.save(meeting);
     }
 
     public void updateMeeting(Meeting meeting, MeetingForm meetingForm) {
         modelMapper.map(meetingForm, meeting);
         meeting.acceptWaitingList();
+        applicationEventPublisher.publishEvent(new ClubUpdateEvent(meeting.getClub(),
+                "'" + meeting.getTitle() + "' 모임 정보가 변경되었습니다.."));
     }
 
     public void deleteMeeting(Meeting meeting) {
         meetingRepository.delete(meeting);
         meeting.acceptWaitingList();
+        applicationEventPublisher.publishEvent(new ClubUpdateEvent(meeting.getClub(),
+                "'" + meeting.getTitle() + "' 모임 정보가 취소되었습니다.."));
     }
 
     public void newEnrollment(Meeting meeting, Account account){
@@ -63,9 +74,12 @@ public class MeetingService {
 
     public void acceptEnrollment(Meeting meeting, Enrollment enrollment) {
         meeting.accept(enrollment);
+        applicationEventPublisher.publishEvent(new EnrollmentEventAccepted(enrollment));
     }
 
     public void rejectEnrollment(Meeting meeting, Enrollment enrollment) {
         meeting.reject(enrollment);
+        applicationEventPublisher.publishEvent(new EnrollmentEventRejected(enrollment));
+
     }
 }
