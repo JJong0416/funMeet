@@ -1,8 +1,5 @@
 package com.funmeet.modules.club;
 
-import com.funmeet.modules.account.QAccount;
-import com.funmeet.modules.city.QCity;
-import com.funmeet.modules.hobby.QHobby;
 import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
 import org.springframework.data.domain.Page;

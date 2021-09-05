@@ -41,6 +41,8 @@ public class HomeController {
         Page<Club> clubList = clubRepository.findByKeyword(keyword, pageable);
         model.addAttribute("clubList",clubList);
         model.addAttribute("keyword", keyword);
+        model.addAttribute("sortProperty",
+                pageable.getSort().toString().contains("publishDateTime") ? "publishDateTime" : "memberCount");
         return "search";
     }
 }

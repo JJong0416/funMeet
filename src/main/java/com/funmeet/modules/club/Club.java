@@ -42,6 +42,8 @@ public class Club {
     @Lob @Basic(fetch = FetchType.EAGER)
     private String banner;
 
+    private Integer memberCount;
+
     @ManyToMany
     private List<Hobby> hobby  = new ArrayList<>();
 
@@ -68,6 +70,7 @@ public class Club {
 
     public void addMember(Account account) {
         this.members.add(account);
+        this.memberCount++;
     }
 
     public boolean isJoinable(AdaptAccount adaptAccount) {
@@ -134,6 +137,7 @@ public class Club {
 
     public void removeMember(Account account) {
         this.getMembers().remove(account);
+        this.memberCount--;
     }
 
     public String getEncodedPath() {
