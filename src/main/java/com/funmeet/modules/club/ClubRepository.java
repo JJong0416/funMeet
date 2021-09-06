@@ -1,8 +1,11 @@
 package com.funmeet.modules.club;
 
+import com.funmeet.modules.account.Account;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Transactional(readOnly = true)
 public interface ClubRepository extends JpaRepository<Club,Long>, ClubRepositoryAnnexation {
@@ -20,4 +23,8 @@ public interface ClubRepository extends JpaRepository<Club,Long>, ClubRepository
     Club findClubWithHobbyAndCityById(Long id);
 
     Club findClubWithManagersAndMembersById(Long id);
+
+    List<Club> findClubsByMembers(Account account);
+
+    List<Club> findClubsByManagers(Account account);
 }

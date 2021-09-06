@@ -14,7 +14,7 @@
             <div class="fb-profile-block">
                 <div class="fb-profile-block-thumb cover-container"></div>
                 <div class="profile-img">
-                    <a href="#">
+                    <a>
                         <svg th:if="${#strings.isEmpty(account.profileImage)}" class="img-fluid float-left rounded img-thumbnail"
                              th:data-jdenticon-value="${account.nickname}" width="160" height="160"></svg>
                         <img th:if="${!#strings.isEmpty(account.profileImage)}" class="img-fluid float-left rounded img-thumbnail"
@@ -22,8 +22,9 @@
                              width="125" height="125"/>
                     </a>
                 </div>
+
                 <div class="profile-name">
-                    <h2 th:text="${account.nickname}">이름</h2>
+                    <h2 th:text="${account.nickname}"></h2>
                     <div class="lead">
                         <a class="short-bio" th:text="${account.short_bio}"></a>
                         <span th:if="${isOwner}">
@@ -38,10 +39,10 @@
                             <li class="nav-item flex-column nav-pills">
                                 <a class="nav-link active" id="intro-tab" data-toggle="pill" href="#v-pills-profile"
                                    role="tab" aria-controls="profile" aria-selected="true">소개</a>
-                                <a class="nav-link" id="hobby-tab" data-toggle="pill" href="#v-pills-hobby"
-                                   role="tab" aria-controls="hobby" aria-selected="false">취미</a>
-                                <a class="nav-link" id="friend-tab" data-toggle="pill" href="#v-pills-freind"
-                                   role="tab" aria-controls="friends" aria-selected="false">친구</a>
+<!--                                <a class="nav-link" id="hobby-tab" data-toggle="pill" href="#v-pills-hobby"-->
+<!--                                   role="tab" aria-controls="hobby" aria-selected="false">취미</a>-->
+<!--                                <a class="nav-link" id="-tab" data-toggle="pill" href="#v-pills-location"-->
+<!--                                   role="tab" aria-controls="hobby" aria-selected="false">지역</a>-->
                             </li>
                         </ul>
                     </div>
@@ -49,18 +50,12 @@
             </div>
         </div>
     </div>
-<!-- -->
+    <!-- -->
     <div class="halfContainer inf-content row mt-5 justify-content-center">
-
         <div class="mt-4 col-7">
             <div class="tab-content" id="v-pills-tabContent">
                 <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-home-tab">
-                    <p th:if="${!#strings.isEmpty(account.location)}">
-                            <span style="font-size: 20px;">
-                                <i class="fa fa-location-arrow col-1"></i>
-                            </span>
-                        <span th:text="${account.location}" class="col-9"></span>
-                    </p>
+
                     <p th:if="${isOwner}">
                             <span style="font-size: 20px;">
                                 <i class="fa fa-envelope-o col-1"></i>
@@ -68,24 +63,34 @@
                         <span th:text="${account.email}" class="col-9"></span>
                     </p>
 
+                    <p th:if="${cityList}">
+                            <span style="font-size: 20px;">
+                                <i class="fa fa-location-arrow col-1"></i>
+                            </span>
+                        <span th:text="${cityList}" class="col-9"></span>
+                    </p>
+
+
+
                     <p th:if="${isOwner || account.emailVerified}">
                             <span style="font-size: 20px;">
                                 <i class="fa fa-calendar-o col-1"></i>
                             </span>
                         <span th:if="${isOwner && !account.emailVerified}" class="col-9">
-                                <a href="#" th:href="@{'/checkemail?email=' + ${account.email}}">가입을 완료하려면 이메일을 확인하세요.</a>
+                                <a href="#" th:href="@{'/certification_email'}">가입을 완료하려면 이메일을 확인하세요.</a>
                             </span>
                         <span th:text="${#temporals.format(account.joinedAt, 'yyyy년 M월 dd일 가입')}" class="col-9"></span>
                     </p>
                 </div>
-                <div class="tab-pane fade" id="v-pills-hobby" role="tabpanel" aria-labelledby="v-pills-profile-tab">
-                    club
-                </div>
-                <br/>
+
+
             </div>
         </div>
     </div>
-
 </div>
 <div th:replace="fragments/footer :: footer"></div>
 </html>
+
+
+<!--<div class="tab-pane fade" id="v-pills-location" role="tabpanel" aria-labelledby="v-pills-location-tab">-->
+<!--</div>-->

@@ -6,14 +6,14 @@
 <head th:replace="fragments/config :: config"></head>
 <div th:replace="fragments/header :: main_nav"></div>
 
-<div class="container">
+<div class="container col-sm-10">
 
     <div class="py-5 text-center">
         <h2>뻔모임 회원 가입</h2>
     </div>
 
     <div class="row justify-content-center">
-        <form class="formValidation col-sm-6"
+        <form class="formValidation"
               th:action="@{/sign_up}" th:object="${signUpForm}" method="post" novalidate> <!-- form 생성 -->
 
             <div class="form-group">
@@ -52,7 +52,7 @@
 
             <div class="form-group">
                 <button class="btn btn-primary btn-block" type="submit"
-                        aria-describedby="submitHelp">가입하기</button>
+                        aria-describedby="submitHelp">회원가입</button>
             </div>
         </form>
     </div>

@@ -1,14 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-
->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/config :: config"></head>
 <div th:replace="fragments/header :: main_nav"></div>
 <div class="container">
+
     <div class="alert alert-warning" role="alert" th:if="${account != null && !account.emailVerified}">
         뻔모임을 이용하시기 위해서는 <a th:href="@{/certification_email}" class="alert-link">계정 인증 이메일을 확인</a>해주셔야 합니다.
     </div>
+
     <div class="py-5 text-center">
         <h1>뻔(Fun)하면서, 뻔하지 않은 모임. 뻔모임</h1>
     </div>

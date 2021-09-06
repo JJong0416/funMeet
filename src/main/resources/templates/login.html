@@ -4,16 +4,17 @@
 <haed>
     <span th:replace="fragments/config :: config"></span>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
 </haed>
 <div th:replace="fragments/header :: main_nav"></div>
 
-<div class="container">
+<div class="container col-sm-10">
     <div class="py-5 text-center">
         <p class="blockquote">뻔모임</p>
         <h2>로그인</h2>
     </div>
 
-    <div class="row justify-content-center">
+    <div class="row justify-content-center ">
         <form class="formValidation col-sm-4" th:action="@{/login}" method="post">
             <div th:if="${param.error}">
                 <div th:replace="fragments/script :: loginError"></div>
@@ -40,15 +41,24 @@
             </div>
 
             <div class="form-group">
-                <button class="btn btn-success btn-block" type="submit"
+                <button class="btn btn-primary btn-block" type="submit"
                         aria-describedby="submitHelp">로그인</button>
-                <small id="signupHelp" class="form-text text-muted">
-                    서비스를 이용하시고 싶으신 분은 <a href="#" th:href="@{/sign_up}">계정을 먼저 만드세요.</a>
-                </small>
             </div>
         </form>
-        <script th:replace="fragments/script :: formValidation"></script>
     </div>
+
+    <hr>
+
+    <h4 class="text-center ">간편로그인</h4>
+    <form class="row justify-content-center" th:action="@{/oauth}" method="post">
+        <div class="form-group">
+            <button class="btn btn- btn-block" type="submit"
+                    aria-describedby="submitHelp"><img class="btn-image container" src="/images/kakao_login.png"> </button>
+        </div>
+    </form>
+
 </div>
+<script th:replace="fragments/script :: formValidation"></script>
 <div th:replace="fragments/footer :: footer"></div>
 </html>
+

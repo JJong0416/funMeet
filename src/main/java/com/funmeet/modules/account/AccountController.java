@@ -3,6 +3,12 @@ package com.funmeet.modules.account;
 
 import com.funmeet.modules.account.form.SignUpForm;
 import com.funmeet.modules.account.validator.SignUpFormValidator;
+import com.funmeet.modules.city.City;
+import com.funmeet.modules.club.Club;
+import com.funmeet.modules.club.ClubRepository;
+import com.funmeet.modules.club.ClubService;
+import com.funmeet.modules.hobby.Hobby;
+import com.funmeet.modules.hobby.HobbyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -20,6 +27,8 @@ public class AccountController {
     private final SignUpFormValidator signUpFormValidator;
     private final AccountService accountService;
     private final AccountRepository accountRepository;
+    private final ClubRepository clubRepository;
+    private final ClubService clubService;
 
 
     @InitBinder("signUpForm")
@@ -130,12 +139,15 @@ public class AccountController {
     @GetMapping("/profile/{nickname}")
     public String viewProfile(@PathVariable String nickname, Model model, @CurrentAccount Account account){
         Account viewAccount = accountRepository.findByNickname(nickname);
+
         if (viewAccount == null){
             throw new IllegalArgumentException(nickname + "에 해당하는 사용자가 없습니다");
         }
 
         model.addAttribute("account",viewAccount);
         model.addAttribute("isOwner",viewAccount.equals(account));
+        model.addAttribute("cityList",viewAccount.getCity());
+
         return "account/profile";
     }
 

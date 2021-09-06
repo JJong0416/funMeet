@@ -1,7 +1,6 @@
 package com.funmeet.modules.account;
 
 import com.funmeet.modules.city.City;
-import com.funmeet.modules.club.Club;
 import com.funmeet.modules.hobby.Hobby;
 import lombok.*;
 

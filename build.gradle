@@ -36,13 +36,13 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation' // spring boot 3버젼부터 빠져서 추가 삽입.
     implementation 'org.modelmapper:modelmapper:2.3.6'
 
-
-
     /* NPM 세팅*/
     implementation 'com.github.node-gradle:gradle-node-plugin:3.1.0'
     implementation 'org.jetbrains:annotations:20.1.0'
 
+    /* Arch Unit Test */
     testImplementation 'com.tngtech.archunit:archunit-junit5:0.21.0'
+
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'com.h2database:h2'
@@ -51,8 +51,10 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+    /* Docker TestContainer*/
     testImplementation "org.testcontainers:postgresql:1.13.0"
-    // QueryDSL
+
+    /* QueryDSL */
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
     annotationProcessor(
             "javax.persistence:javax.persistence-api",
