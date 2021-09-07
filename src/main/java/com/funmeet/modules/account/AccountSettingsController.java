@@ -26,13 +26,15 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
-public class SettingsController {
+public class AccountSettingsController {
 
     private final AccountService accountService;
     private final CityRepository cityRepository;
@@ -177,36 +179,22 @@ public class SettingsController {
     }
 
     /* 알림 끝*/
-    /* 보안 */
+
     @GetMapping("/settings/security")
-    public String updateSecurityForm(@CurrentAccount Account account, Model model) {
+    public String updateSecurity(@CurrentAccount Account account, Model model) {
         model.addAttribute(account);
-        model.addAttribute(new PasswordForm());
-        return "settings/security";
+        model.addAttribute("passwordForm",new PasswordForm());
+        return "settings/account";
     }
 
-    @PostMapping("/settings/security")
-    public String updateSecurity(@CurrentAccount Account account, @Valid PasswordForm passwordForm,
-                                    Errors errors, Model model, RedirectAttributes attributes) {
 
-
-        if (errors.hasErrors()) {
-            model.addAttribute(account);
-            return "settings/security";
-        }
-
-        accountService.updatePassword(account, passwordForm.getNewPassword());
-        attributes.addFlashAttribute("message", "성공");
-        return "redirect:" + "/settings/security";
-    }
-
-    /* 보안 끝*/
     /* 계정 */
 
     @GetMapping("/settings/account")
     public String updateAccountForm(@CurrentAccount Account account, Model model) {
         model.addAttribute(account);
-        model.addAttribute(new NicknameForm());
+        model.addAttribute("nicknameForm",new NicknameForm());
+        model.addAttribute("passwordForm",new PasswordForm());
         return "settings/account";
     }
 
@@ -222,5 +210,29 @@ public class SettingsController {
         attributes.addFlashAttribute("message", "성공");
         return "redirect:" + "/settings/account";
     }
+
+    @PostMapping("/settings/security")
+    public String updateSecurity(@CurrentAccount Account account, @Valid PasswordForm passwordForm,
+                                 Errors errors, Model model, RedirectAttributes attributes) {
+
+        if (errors.hasErrors()) {
+            model.addAttribute(account);
+            return "settings/account";
+        }
+
+        accountService.updatePassword(account, passwordForm.getNewPassword());
+        attributes.addFlashAttribute("message", "성공");
+        return "redirect:" + "/settings/account";
+    }
+
+    @PostMapping("/settings/delete")
+    public String deleteAccount(@CurrentAccount Account account, HttpServletRequest request){
+        accountService.deleteAccount(account);
+        // 세션 삭제
+        HttpSession session = request.getSession();
+        session.invalidate();
+        return "redirect:/";
+    }
+
     /* 계정 끝*/
 }

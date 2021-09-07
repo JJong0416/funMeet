@@ -169,5 +169,10 @@ public class AccountService implements UserDetailsService {
         Optional<Account> byId = accountRepository.findById(account.getId());
         byId.ifPresent(a -> a.getCity().remove(city));
     }
+
+    public void deleteAccount(Account account) {
+        accountRepository.delete(account);
+        //TODO 자기가 모임장 하나라도 있으면, 에러메시지 출력
+    }
 }
 

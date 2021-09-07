@@ -10,7 +10,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 public interface ClubRepository extends JpaRepository<Club,Long>, ClubRepositoryAnnexation {
 
-    boolean existsByClubPath(String path);
+    boolean existsByClubPath(String clubPath);
 
     Club findByClubPath(String path);
 

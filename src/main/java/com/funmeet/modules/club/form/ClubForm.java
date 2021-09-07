@@ -1,17 +1,20 @@
 package com.funmeet.modules.club.form;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
-@Data
+@Getter
+@Setter
 public class ClubForm {
 
     @NotBlank
     @Length(min = 2, max = 15)
-    @Pattern(regexp = "^[ㄱ-ㅎ가-힣a-z0-9_-]{2,15}$")
+    @Pattern(regexp = "^[ㄱ-ㅎ가-힣a-z0-9-]{2,15}$")
     private String clubPath;
 
     @NotBlank

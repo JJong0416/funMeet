@@ -2,68 +2,78 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/config :: config"></head>
 <body>
-    <div th:replace="fragments/header :: main_nav"></div>
-    <div class="halfContainer">
-        <div class="py-5 text-center">
-            <h1>취미모임 개설</h1>
-            <hr>
-        </div>
+<div th:replace="fragments/header :: main_nav"></div>
+<div class="halfContainer">
 
-        <div class="row justify-content-center">
-            <form class="formValidation col-sm-10" th:action="@{/create_club}" th:object="${clubForm}" method="post" novalidate>
-                <div class="form-group">
-                    <label for="title" class="text-info"><strong>취미모임 이름</strong></label>
-                    <input id="title" type="text" th:field="*{title}" class="form-control"
-                           placeholder="취미 이름" required max="20">
-                    <small class="form-text text-muted">
-                        모임 이름을 20자 이내로 입력하세요.
-                    </small>
-                    <small class="invalid-feedback">취미 제목을 입력하세요</small>
-                    <small class="form-text text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">제목 오류입니다.</small>
-                </div>
 
-                <div class="form-group">
-                    <label for="clubPath" class="text-info"><strong>취미모임 URL</strong></label>
-                    <input id = clubPath th:field="*{clubPath}" type="text" class="form-control"
-                            placeholder="예시) Hiking-hobby" required min="2" max="15">
-                    <small>공백없이 대시(-)와 언더바(_)만 2자 이상 15자 이내로 입력하세요. 모임 주소로 사용할 예정입니다. 예) /club/<b>club-path</b> </small>
-                    <small class="invalid-feedback">경로를 입력하세요</small>
-                    <small class="form-text text-danger" th:if="${#fields.hasErrors('clubPath')}" th:errors="*{clubPath}">경로 오류입니다.</small>
-                </div>
-
-                <div class="form-group">
-                    <label for="shortDescription" class="text-info"><strong>짧은 소개</strong></label>
-                    <textarea id="shortDescription" type="textarea" th:field="*{shortDescription}" class="form-control"
-                              placeholder="취미에 대한 짧게 소개해 주세요." required maxlength="100"></textarea>
-                    <small id="shortDescriptionHelp" class="form-text text-muted">
-                        100자 이내로 짧은 소개를 작성해주세요.
-                    </small>
-                    <small class="invalid-feedback">짧은 소개를 입력하세요.</small>
-                    <small class="form-text text-danger" th:if="${#fields.hasErrors('shortDescription')}" th:errors="*{shortDescription}">짧은 소개 오류</small>
-                </div>
-
-                <div class="form-group">
-                    <label for="fullDescription" class="text-info"><strong>상세 소개</strong></label>
-                    <textarea id="fullDescription" type="textarea" th:field="*{fullDescription}" class="editor form-control"
-                              placeholder="모임에 대해 자세히 설명해 주세요."></textarea>
-                    <small id="fullDescriptionHelp" class="form-text text-muted">
-                        취미를 통한 모임 주기, 참여비 등 취미모임에 있어서 주요한 사항을 작성해주시길 바랍니다.
-                    </small>
-                    <small class="invalid-feedback">상세 소개를 입력하세요.</small>
-                    <small class="form-text text-danger" th:if="${#fields.hasErrors('fullDescription')}" th:errors="*{fullDescription}">상세 소개 오류</small>
-                </div>
-                <div class="form-group">
-                    <button class="btn btn-primary btn-primary" type="submit"
-                            aria-describedby="submitHelp">모임 만들기</button>
-                </div>
-            </form>
-        </div>
+    <div class="py-5 text-center">
+        <h1>취미모임 개설</h1>
+        <hr>
     </div>
 
-    <script th:replace="fragments/script :: tooltip"></script>
-    <script th:replace="fragments/script:: formValidation"></script>
-    <script th:replace="fragments/script :: editor_script"></script>
-    <div th:replace="fragments/footer :: footer"></div>
+    <div class="card">
+        <div class="card-body tab-content">
+
+            <div class="row justify-content-center">
+                <form class="formValidation col-sm-10" th:action="@{/create_club}" th:object="${clubForm}" method="post" novalidate>
+
+                    <div class="form-group">
+                        <label for="title" class="text-info"><strong>취미모임 이름</strong></label>
+                        <input id="title" type="text" th:field="*{title}" class="form-control"
+                               placeholder="취미 이름" required max="20">
+                        <small class="form-text text-muted">
+                            모임 이름을 20자 이내로 입력하세요.
+                        </small>
+                        <small class="invalid-feedback">취미 제목을 입력하세요</small>
+                        <small class="form-text text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">제목 오류입니다.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="clubPath" class="text-info"><strong>URL</strong></label>
+                        <input id = clubPath th:field="*{clubPath}" type="text" class="form-control"
+                               placeholder="예시) Hiking-hobby" required min="2" max="15">
+                        <small>공백없이 소문자,대시(-)를 이용해, 모임을 위한 URL을 작성해주세요. 2자 이상 15자 이내로 입력하세요. 예)<b>club-path</b> </small>
+                        <small class="invalid-feedback">경로를 입력하세요</small>
+                        <small class="form-text text-danger" th:if="${#fields.hasErrors('clubPath')}" th:errors="*{clubPath}">경로 오류입니다.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="shortDescription" class="text-info"><strong>짧은 소개</strong></label>
+                        <textarea id="shortDescription" type="textarea" th:field="*{shortDescription}" class="form-control"
+                                  placeholder="취미에 대한 짧게 소개해 주세요." required maxlength="100"></textarea>
+                        <small id="shortDescriptionHelp" class="form-text text-muted">
+                            100자 이내로 짧은 소개를 작성해주세요.
+                        </small>
+                        <small class="invalid-feedback">짧은 소개를 입력하세요.</small>
+                        <small class="form-text text-danger" th:if="${#fields.hasErrors('shortDescription')}" th:errors="*{shortDescription}">짧은 소개 오류</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fullDescription" class="text-info"><strong>상세 소개</strong></label>
+                        <textarea id="fullDescription" type="textarea" th:field="*{fullDescription}" class="editor form-control"
+                                  placeholder="모임에 대해 자세히 설명해 주세요."></textarea>
+                        <small id="fullDescriptionHelp" class="form-text text-muted">
+                            취미를 통한 모임 주기, 참여비 등 취미모임에 있어서 주요한 사항을 작성해주시길 바랍니다.
+                        </small>
+                        <small class="invalid-feedback">상세 소개를 입력하세요.</small>
+                        <small class="form-text text-danger" th:if="${#fields.hasErrors('fullDescription')}" th:errors="*{fullDescription}">상세 소개 오류</small>
+                    </div>
+
+                    <div class="container form-group">
+                        <button class="btn btn-primary btn-block" type="submit"
+                                aria-describedby="submitHelp">모임 만들기</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:replace="fragments/script :: tooltip"></script>
+<script th:replace="fragments/script:: formValidation"></script>
+<script th:replace="fragments/script :: editor_script"></script>
+<div th:replace="fragments/footer :: footer"></div>
 
 </body>
 </html>

@@ -21,25 +21,79 @@
 
             <div class="card">
                 <div class="card-body tab-content">
-                    <div class="tab-pane active" id="changeNickname">
-                        <h4>닉네임 수정</h4>
-                        <hr>
+                    <div class="tab-pane active">
+                        <div>
+                            <h4>닉네임 수정</h4>
+                            <hr>
+                            <div class="col">
+                                <div class="card text-left halfContainer">
+                                    <form class="formValidation col-12 mt-3" th:object="${nicknameForm}" th:action="@{/settings/account}" method="post" novalidate>
+                                        <label for="nickname" style="font-size: 20px">새로운 닉네임</label>
+                                        <div class="form-group">
+                                            <input id="nickname" type="text" th:field="*{nickname}" class="form-control" aria-describedby="nicknameHelp"  required>
+                                            <small id="nicknameHelp" class="form-text text-muted">
+                                                공백없이 문자와 숫자로만 6자 이상 20자 이내로 입력하세요. 가입후에 변경할 수 있습니다.
+                                            </small>
+                                            <small class="invalid-feedback">닉네임을 입력하세요.</small>
+                                            <small class="form-text text-danger" th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}">nickname Error</small>
+                                        </div>
+                                        <div class="form-group">
+                                            <button class="btn btn-outline-primary" type="submit" aria-describedby="submitHelp" name="id" th:value="id">변경하기</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="col">
+                            <div class="mt-5">
+                                <h4>비밀번호 수정</h4>
+                                <hr>
+                            </div>
+
                             <div class="card text-left halfContainer">
-                                <form class="formValidation col-12 mt-3" th:object="${nicknameForm}" th:action="@{/settings/account}" method="post" novalidate>
-                                    <label for="nickname" style="font-size: 20px">새로운 닉네임</label>
-                                    <div class="form-group">
-                                        <input id="nickname" type="text" th:field="*{nickname}" class="form-control" aria-describedby="nicknameHelp"  required>
-                                        <small id="nicknameHelp" class="form-text text-muted">
-                                            공백없이 문자와 숫자로만 6자 이상 20자 이내로 입력하세요. 가입후에 변경할 수 있습니다.
+                                <form class="formValidation col-12" action="#"
+                                      th:action="@{/settings/security}" th:object="${passwordForm}" method="post" novalidate>
+                                    <div class="form-group mt-2">
+                                        <label for="newPassword">새 패스워드</label>
+                                        <input id="newPassword" type="password" th:field="*{newPassword}" class="form-control"
+                                               aria-describedby="newPasswordHelp" required min="8" max="50">
+                                        <small class="form-text text-muted">
+                                            새 패스워드를 입력하세요.
                                         </small>
-                                        <small class="invalid-feedback">닉네임을 입력하세요.</small>
-                                        <small class="form-text text-danger" th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}">nickname Error</small>
+                                        <small class="invalid-feedback">패스워드를 입력하세요.</small>
+                                        <small class="form-text text-danger" th:if="${#fields.hasErrors('newPassword')}" th:errors="*{newPassword}">새 패스워드 오류</small>
                                     </div>
+
                                     <div class="form-group">
-                                        <button class="btn btn-outline-primary" type="submit" aria-describedby="submitHelp" name="id" th:value="id">변경하기</button>
+                                        <label for="newPasswordConfirm">새 패스워드 확인</label>
+                                        <input id="newPasswordConfirm" type="password" th:field="*{newPasswordConfirm}" class="form-control"
+                                               aria-describedby="newPasswordConfirmHelp" required min="8" max="50">
+                                        <small class="form-text text-muted">
+                                            새 패스워드를 다시 한번 입력하세요.
+                                        </small>
+                                        <small class="invalid-feedback">새 패스워드를 다시 입력하세요.</small>
+                                        <small class="form-text text-danger" th:if="${#fields.hasErrors('newPasswordConfirm')}" th:errors="*{newPasswordConfirm}">새 패스워드 확인 오류</small>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <button class="btn btn-outline-primary" type="submit" aria-describedby="submitHelp" name="pw" th:value="pw">패스워드 변경하기</button>
                                     </div>
                                 </form>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="mt-5">
+                                <h4>계정 삭제</h4>
+                                <hr>
+                                <div class="form-group text-center mt-3">
+                                    <form class="formValidation col-12" action="#"
+                                          th:action="@{/settings/delete}" th:object="${passwordForm}" method="post" novalidate>
+                                        <button class="btn btn-outline-danger btn-lg" type="submit" th:value="delete">계정 삭제하기</button>
+                                    </form>
+                                    <span><small> 계정을 삭제하게 되면, 기존에 저장되어있던 모든 정보는 삭제가 됩니다. </small></span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -48,7 +102,6 @@
         </div>
     </div>
 </div>
-
 <script th:replace="fragments/script :: formValidation"></script>
 </body>
 <div th:replace="fragments/footer :: footer"></div>
