@@ -48,13 +48,13 @@ public class AlarmController {
 
     private void showDividedAlarm(Model model, List<Alarm> alarmList, long numberOfRead, long numberOfNotRead) {
         List<Alarm> newClubAlarm = new ArrayList<>();
-        List<Alarm> alreadyReadAlarm = new ArrayList<>();
+        List<Alarm> alreadyJoinClubAlarm = new ArrayList<>();
         List<Alarm> meetingEnrollmentAlarm = new ArrayList<>();
 
         for (var alarm : alarmList) {
             switch (alarm.getAlarmType()) {
                 case CREATED: newClubAlarm.add(alarm);
-                case UPDATED: alreadyReadAlarm.add(alarm);
+                case UPDATED: alreadyJoinClubAlarm.add(alarm);
                 case ENROLLMENT: meetingEnrollmentAlarm.add(alarm);
             }
         }
@@ -63,7 +63,7 @@ public class AlarmController {
         model.addAttribute("numberOfNotRead", numberOfNotRead);
         model.addAttribute("alarmList", alarmList);
         model.addAttribute("newClubAlarm", newClubAlarm);
-        model.addAttribute("alreadyReadAlarm", alreadyReadAlarm);
+        model.addAttribute("alreadyJoinClubAlarm", alreadyJoinClubAlarm);
         model.addAttribute("meetingEnrollmentAlarm", meetingEnrollmentAlarm);
     }
 }

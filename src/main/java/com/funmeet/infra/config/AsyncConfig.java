@@ -8,7 +8,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.concurrent.Executor;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @EnableAsync
 @Slf4j
 public class AsyncConfig implements AsyncConfigurer{

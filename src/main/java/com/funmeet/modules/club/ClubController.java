@@ -71,6 +71,7 @@ public class ClubController {
     public String joinClub(@CurrentAccount Account account, @PathVariable String path) {
         Club club = clubRepository.findByClubPath(path);
         clubService.addMember(club, account);
+
         return "redirect:/club/" + club.getEncodedPath() + "/members";
     }
 

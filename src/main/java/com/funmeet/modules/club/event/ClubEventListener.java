@@ -39,8 +39,8 @@ public class ClubEventListener {
     private final EmailService emailService;
 
     @EventListener
-    public void handleClubEvent(ClubCreatedEvent clubCreatedEvent){
-        Club club = clubRepository.findByClubPath(clubCreatedEvent.getClub().getClubPath());
+    public void handleClubCreateEvent(ClubCreatedEvent clubCreatedEvent){
+        Club club = clubRepository.findClubWithHobbyAndCityById(clubCreatedEvent.getClub().getId());
         Iterable<Account> accounts = accountRepository.findAll(AccountPredicates.findByHobbyAndCity(club.getHobby(), club.getCity()));
         accounts.forEach(account -> {
             if (account.isMeetCreatedByWeb()){
@@ -68,7 +68,7 @@ public class ClubEventListener {
 
             if (account.isMeetCreatedByEmail()) {
                 noticeClubAlarmByEmail(club, account, clubUpdateEvent.getMessage(),
-                        "뻔모임'" + club.getTitle() + "' 에 새 소식이 있습니다.");
+                        "뻔모임'" + club.getTitle() + "' 에 업데이트 소식이 있습니다.");
             }
         });
     }

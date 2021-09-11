@@ -66,7 +66,7 @@
                 </span>
 
                 <span sec:authorize="isAuthenticated()" th:if="${!club.closed && club.isManager(#authentication.principal)}" class="btn-group" role="group">
-                    <a class="btn btn-outline-danger" th:href="@{'/club/' + ${club.clubPath} + '/settings/club'}">모임 삭제  </a>
+                    <a class="btn btn-outline-danger" th:href="@{'/club/' + ${club.clubPath} + '/settings/club'}">모임 관리  </a>
                 </span>
             </div>
         </div>

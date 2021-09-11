@@ -42,7 +42,7 @@ public class Club {
     @Lob @Basic(fetch = FetchType.EAGER)
     private String banner;
 
-    private Integer memberCount;
+    private int memberCount;
 
     @ManyToMany
     private List<Hobby> hobby  = new ArrayList<>();

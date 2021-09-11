@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class WebConfig implements WebMvcConfigurer {
 
     private final AlarmInterceptor alarmInterceptor;

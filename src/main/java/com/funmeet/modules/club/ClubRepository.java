@@ -24,6 +24,8 @@ public interface ClubRepository extends JpaRepository<Club,Long>, ClubRepository
 
     Club findClubWithManagersAndMembersById(Long id);
 
+
+
     List<Club> findClubsByMembers(Account account);
 
     List<Club> findClubsByManagers(Account account);
