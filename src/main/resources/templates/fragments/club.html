@@ -7,91 +7,92 @@
 </div>
 
 <div th:fragment="club_menu (Menu)" class="row  px-3 justify-content-center">
-  <nav class="col-10 nav nav-tabs">
-    <a class="nav-item nav-link" th:classappend="${Menu == 'info'}? active" th:href="@{'/club/' + ${club.clubPath}}">
-      <i class="fa fa-info-circle"></i> 소개
-    </a>
-    <a class="nav-item nav-link" th:classappend="${Menu == 'members'}? active" th:href="@{'/club/' + ${club.clubPath} + '/members'}">
-      <i class="fa fa-user"></i> 구성원
-    </a>
-    <a class="nav-item nav-link" th:classappend="${Menu == 'meeting'}? active" href="#" th:href="@{'/club/' + ${club.clubPath} + '/meeting'}">
-      <i class="fa fa-calendar"></i> 모임
-    </a>
-    <a sec:authorize="isAuthenticated()" th:if="${club.isManager(#authentication.principal)}"
-       class="nav-item nav-link" th:classappend="${Menu == 'settings'}? active" href="#" th:href="@{'/club/' + ${club.clubPath} + '/settings/description'}">
-      <i class="fa fa-cog"></i> 설정
-    </a>
-  </nav>
+    <nav class="col-10 nav nav-tabs">
+        <a class="nav-item nav-link" style="color: darkmagenta" th:classappend="${Menu == 'info'}? active" th:href="@{'/club/' + ${club.clubPath}}">
+            <i class="fa fa-question-circle fa-lg" aria-hidden="true"></i> 모임 정보
+        </a>
+
+        <a class="nav-item nav-link" style="color: darkmagenta" th:classappend="${Menu == 'members'}? active" th:href="@{'/club/' + ${club.clubPath} + '/members'}">
+            <i class="fa fa-user fa-lg "></i> 구성원
+        </a>
+
+        <a class="nav-item nav-link" style="color: darkmagenta" th:classappend="${Menu == 'meeting'}? active" href="#" th:href="@{'/club/' + ${club.clubPath} + '/meeting'}">
+            <i class="fa fa-handshake-o fa-lg" aria-hidden="true"></i> 미팅
+        </a>
+
+        <a sec:authorize="isAuthenticated()" th:if="${club.isManager(#authentication.principal)}"
+           class="nav-item nav-link"  style=" color: darkmagenta " th:classappend="${Menu == 'settings'}? active" href="#" th:href="@{'/club/' + ${club.clubPath} + '/settings/description'}">
+            <i class="fa fa-cogs fa-lg" aria-hidden="true"></i> 설정
+        </a>
+
+    </nav>
 </div>
 
 <div th:fragment="club_stat">
-  <div class="row pt-4 text-left justify-content-center bg-light">
-    <div class="col-6">
-      <a class="text-decoration-none" th:href="@{'/club/' + ${club.clubPath}}">
-        <span class="h1" th:text="${club.title}">모임 이름</span>
-      </a>
+    <div class="row mt-5 text-left justify-content-center bg-light">
+        <div class="col-6">
+            <a class="text-decoration-none" th:href="@{'/club/' + ${club.clubPath}}">
+                <span class="h1" th:text="${club.title}">모임 이름</span>
+            </a>
+
+            <span th:if="${!club.published}" class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="모임방 공개를 하시오.">
+                <button class="btn btn-secondary btn-sm" style="pointer-events: none;" type="button" disabled>미공개</button>
+            </span>
+
+            <span th:if="${club.published && club.closed}" class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="모임 삭제중">
+                <button class="btn btn-danger btn-sm" style="pointer-events: none;" type="button" disabled>삭제</button>
+            </span>
+
+            <span th:if="${club.published && !club.closed}" class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="모임 공개중">
+                <button class="btn btn-primary btn-sm" style="pointer-events: none;" type="button" disabled>공개</button>
+            </span>
+        </div>
+
+        <div class="col-4 row text-right justify-content-end">
+            <div>
+                <span sec:authorize="isAuthenticated()" th:if="${club.isJoinable(#authentication.principal)}" class="btn-group" role="group" aria-label="Basic example">
+                <a class="btn btn-primary" th:href="@{'/club/' + ${club.clubPath} + '/join'}"> 모임 가입</a>
+                <a class="btn btn-outline-info" th:href="@{'/club/' + ${club.clubPath} + '/members'}" th:text="${club.members.size()}"></a>
+                </span>
+
+                <span sec:authorize="isAuthenticated()" th:if="${club.published && !club.closed && club.isManager(#authentication.principal)}">
+                    <a class="btn btn-outline-info" th:href="@{'/club/' + ${club.clubPath} + '/create_meeting'}">
+                        <i class="fa fa-plus"></i> 미팅 만들기
+                    </a>
+                </span>
+
+                <span sec:authorize="isAuthenticated()" th:if="${!club.closed && club.isMember(#authentication.principal)}" class="btn-group" role="group">
+                    <a class="btn btn-outline-warning" th:href="@{'/club/' + ${club.clubPath} + '/leave'}">모임 탈퇴 </a>
+                </span>
+
+                <span sec:authorize="isAuthenticated()" th:if="${!club.closed && club.isManager(#authentication.principal)}" class="btn-group" role="group">
+                    <a class="btn btn-outline-danger" th:href="@{'/club/' + ${club.clubPath} + '/settings/club'}">모임 삭제  </a>
+                </span>
+            </div>
+        </div>
     </div>
 
-    <div class="col-4 text-right justify-content-end">
-      <span th:if="${!club.published}" class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="모임방 준비중">
-        <button class="btn btn-primary btn-sm" style="pointer-events: none;" type="button" disabled>DRAFT</button>
-      </span>
+    <div class="row mt-3 justify-content-center bg-light">
+        <div class="col-10">
+            <p>
+                취미: <span th:each="hobby: ${club.hobby}" class="font-weight-light text-monospace badge badge-pill badge-info mr-3">
+                     <a th:href="@{'/search/hobby/' + ${hobby.title}}" class="text-decoration-none text-white">
+                        <i class="fa fa-hashtag"></i> <span th:text="${hobby.title}">Tag</span>
+                     </a>
+                </span>
+            </p>
+        </div>
+        <div class="col-10">
+            <p>
 
-      <span th:if="${club.closed}" class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="모임 종료">
-        <button class="btn btn-primary btn-sm" style="pointer-events: none;" type="button" disabled>CLOSED</button>
-      </span>
-
-      <span th:if="${!club.recruiting}" class="d-inline-block ml-1" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="모임원 차단">
-        <button class="btn btn-primary btn-sm" style="pointer-events: none;" type="button" disabled>OFF</button>
-      </span>
-
-      <span sec:authorize="isAuthenticated()" th:if="${club.isJoinable(#authentication.principal)}"
-            class="btn-group" role="group" aria-label="Basic example">
-        <a class="btn btn-primary" th:href="@{'/club/' + ${club.clubPath} + '/join'}">
-          모임 가입</a>
-
-        <a class="btn btn-outline-primary" th:href="@{'/club/' + ${club.clubPath} + '/members'}"
-           th:text="${club.members.size()}"></a>
-      </span>
-
-      <span sec:authorize="isAuthenticated()" th:if="${!club.closed && club.isMember(#authentication.principal)}" class="btn-group" role="group">
-        <a class="btn btn-outline-warning" th:href="@{'/club/' + ${club.clubPath} + '/leave'}">
-          스터디 탈퇴 </a>
-        <a class="btn btn-outline-primary" th:href="@{'/club/' + ${club.clubPath} + '/members'}" th:text="${club.members.size()}">
-        </a>
-      </span>
-
-      <span sec:authorize="isAuthenticated()" th:if="${club.published && !club.closed && club.isManager(#authentication.principal)}">
-        <a class="btn btn-outline-primary" th:href="@{'/club/' + ${club.clubPath} + '/new-event'}">
-          <i class="fa fa-plus"></i> 모임 만들기
-        </a>
-      </span>
+                지역: <span th:each="city: ${club.city}" class="font-weight-light text-monospace badge badge-primary mr-3">
+                    <a th:href="@{'/search/city/' + ${city.id}}" class="text-decoration-none text-white">
+                        <i class="fa fa-street-view"></i> <span th:text="${city.krCity}">City</span>
+                    </a>
+                </span>
+            </p>
+        </div>
     </div>
-  </div>
-
-  <div class="row justify-content-center bg-light">
-    <div class="col-10">
-      <p class="lead" th:text="${club.shortDescription}"></p>
-    </div>
-  </div>
-
-  <div class="row justify-content-center bg-light">
-    <div class="col-10">
-      <p>
-        <span th:each="hobby: ${club.hobby}" class="font-weight-light text-monospace badge badge-pill badge-info mr-3">
-          <a th:href="@{'/search/hobby/' + ${hobby.title}}" class="text-decoration-none text-white">
-            <i class="fa fa-tag"></i> <span th:text="${hobby.title}">Tag</span>
-          </a>
-        </span>
-
-        <span th:each="city: ${club.city}" class="font-weight-light text-monospace badge badge-primary mr-3">
-          <a th:href="@{'/search/city/' + ${city.id}}" class="text-decoration-none text-white">
-            <i class="fa fa-globe"></i> <span th:text="${city.krCity}">City</span>
-          </a>
-        </span>
-      </p>
-    </div>
-  </div>
 </div>
 
 <div th:fragment="member-list (members, isManager)" class="row px-3 justify-content-center">
@@ -107,17 +108,52 @@
   </ul>
 </div>
 
-<div th:fragment="club_settings_menu (currentMenu)" class="list-group">
-  <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'description'}? active"
-     href="#" th:href="@{'/club/' + ${club.clubPath} + '/settings/description'}">소개</a>
-  <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'banner'}? active"
-     href="#" th:href="@{'/club/' + ${club.clubPath} + '/settings/banner'}">배너 이미지</a>
-  <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'hobby'}? active"
-     href="#" th:href="@{'/club/' + ${club.clubPath} + '/settings/hobby'}">스터디 주제</a>
-  <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'city'}? active"
-     href="#" th:href="@{'/club/' + ${club.clubPath} + '/settings/city'}">활동 지역</a>
-  <a class="list-group-item list-group-item-action list-group-item-danger" th:classappend="${currentMenu == 'club'}? active"
-     href="#" th:href="@{'/club/' + ${club.clubPath} + '/settings/club'}">모임 관리</a>
+<div th:fragment="club_settings_menu (Menu)" class="list-group">
+    <div class="card">
+        <div class="card-body">
+            <nav class="nav flex-column nav-pills nav-gap-y-1">
+
+                <a class="nav-item nav-link has-icon nav-link-faded"  th:classappend="${Menu == 'description'}? active"
+                   th:href="@{'/club/' + ${club.clubPath} + '/settings/description'}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user mr-2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle></svg>모임 소개
+                </a>
+
+                <a class="nav-item nav-link has-icon nav-link-faded"  th:classappend="${Menu == 'hobby'}? active"
+                   th:href="'/club/' + ${club.clubPath} + '/settings/hobby'">
+                    <i style="font-size: 24px" class="fa fa-briefcase fa-2x"></i>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="0" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-credit-card mr-2">
+                    </svg>취미 설정
+                </a>
+
+                <a class="nav-item nav-link has-icon nav-link-faded"  th:classappend="${Menu == 'city'}? active"
+                   th:href="@{'/club/' + ${club.clubPath} + '/settings/city'}">
+                    <i style="font-size: 24px" class="fa fa-street-view fa-2x"></i>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="0" height="2" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-credit-card mr-2">
+                    </svg>지역 설정
+                </a>
+
+                <a class="nav-item nav-link has-icon nav-link-faded"  th:classappend="${Menu == 'banner'}? active"
+                   th:href="@{'/club/' + ${club.clubPath} + '/settings/banner'}">
+                    <i style="font-size: 24px" class="fa fa-camera fa-2x" aria-hidden="true"></i>
+                    &nbsp;배너 이미지
+                </a>
+
+                <a class="nav-item nav-link has-icon nav-link-faded" style="background-color: salmon;" th:classappend="${Menu == 'club'}? active"
+                   th:href="@{'/club/' + ${club.clubPath} + '/settings/club'}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white"
+                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-settings mr-2">
+                        <circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg><span style="color: white">모임 관리</span>
+                </a>
+            </nav>
+        </div>
+    </div>
 </div>
+<!-- 여기까지 테스트-->
 
 </html>

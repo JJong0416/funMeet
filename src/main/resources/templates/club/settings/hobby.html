@@ -19,18 +19,22 @@
             <div th:replace="fragments/club :: club_settings_menu(hobby)"></div>
         </div>
         <div class="col-8">
-            <div class="row">
-                <h2 class="col-sm-12">취미 관심주제</h2>
-            </div>
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="alert alert-info" role="alert">
-                        모임에서 주로 다루는 주제를 취미를 등록하세요. 태그를 입력하고 콤마(,) 또는 엔터를 입력하세요.
+            <div class="card">
+                <div class="card-body tab-content">
+                    <div class="row">
+                        <h5 class="col-sm-12">모임 취미 설정</h5>
                     </div>
-                    <div id="whitelist" th:text="${whitelist}" hidden>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="alert alert-info" role="alert">
+                                해당 모임에서 하실 취미를 설정해주세요. 취미를 입력하시고 엔터를 누르면 해당 취미가 설정됩니다.
+                            </div>
+                            <div id="whitelist" th:text="${whitelist}" hidden>
+                            </div>
+                            <input id="tags" type="text" name="tags" th:value="${#strings.listJoin(hobby, ',')}"
+                                   class="input-body" aria-describedby="tagHelp">
+                        </div>
                     </div>
-                    <input id="tags" type="text" name="tags" th:value="${#strings.listJoin(hobby, ',')}"
-                           class="input-body" aria-describedby="tagHelp">
                 </div>
             </div>
         </div>

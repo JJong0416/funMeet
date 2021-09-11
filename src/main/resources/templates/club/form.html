@@ -39,9 +39,9 @@
                     <div class="form-group">
                         <label for="shortDescription" class="text-info"><strong>짧은 소개</strong></label>
                         <textarea id="shortDescription" type="textarea" th:field="*{shortDescription}" class="form-control"
-                                  placeholder="취미에 대한 짧게 소개해 주세요." required maxlength="100"></textarea>
+                                  placeholder="취미에 대한 짧게 소개해 주세요." required maxlength="25"></textarea>
                         <small id="shortDescriptionHelp" class="form-text text-muted">
-                            100자 이내로 짧은 소개를 작성해주세요.
+                            25자 이내로 짧은 소개를 작성해주세요.
                         </small>
                         <small class="invalid-feedback">짧은 소개를 입력하세요.</small>
                         <small class="form-text text-danger" th:if="${#fields.hasErrors('shortDescription')}" th:errors="*{shortDescription}">짧은 소개 오류</small>

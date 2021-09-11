@@ -124,7 +124,7 @@ public class ClubService {
 
     public void close(Club club) {
         club.close();
-        applicationEventPublisher.publishEvent(new ClubUpdateEvent(club,"모임을 종료합니다."));
+        applicationEventPublisher.publishEvent(new ClubUpdateEvent(club,"모임을 종료합니다.."));
     }
 
     public void startRecruit(Club club) {

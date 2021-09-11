@@ -23,7 +23,7 @@ public class ClubForm {
 
 
     @NotBlank
-    @Length(max = 100)
+    @Length(max = 25)
     private String shortDescription;
 
     @NotBlank

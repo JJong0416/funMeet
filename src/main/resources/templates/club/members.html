@@ -15,10 +15,9 @@
 
     <div th:replace="fragments/club :: member-list(members=${club.managers},isManager=${true})"></div>
     <div th:replace="fragments/club :: member-list(members=${club.members},isManager=${false})"></div>
-</div>
-<script th:replace="fragments/script:: formValidation"></script>
-<script th:replace="fragments/script :: tooltip"></script>
-<div th:replace="fragments/footer :: footer"></div>
 
+</div>
+
+<div th:replace="fragments/footer :: footer"></div>
 </body>
 </html>

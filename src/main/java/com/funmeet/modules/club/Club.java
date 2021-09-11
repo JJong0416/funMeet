@@ -75,7 +75,7 @@ public class Club {
 
     public boolean isJoinable(AdaptAccount adaptAccount) {
         Account account = adaptAccount.getAccount();
-        return this.isPublished() && this.isRecruiting() && !this.members.contains(account) && !this.managers.contains(account);
+        return this.isPublished() && !this.members.contains(account) && !this.managers.contains(account);
     }
 
     public boolean isMember(AdaptAccount userAccount) {

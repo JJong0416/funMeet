@@ -60,15 +60,6 @@ public class MeetingController {
         return "redirect:/club/" + club.getEncodedPath() + "/meeting/" + meeting.getId();
     }
 
-    @GetMapping("/meeting/{id}")
-    public String viewMeet(@CurrentAccount Account account, @PathVariable String path, @PathVariable Long id,
-                           Model model) {
-        model.addAttribute(account);
-        model.addAttribute(clubService.getClub(path));
-        model.addAttribute(meetingRepository.findById(id).orElseThrow());
-        return "meeting/page";
-    }
-
     @GetMapping("/meeting")
     public String viewClubMain(@CurrentAccount Account account, @PathVariable String path, Model model) {
         Club club = clubService.getClub(path);
@@ -92,6 +83,17 @@ public class MeetingController {
 
         return "club/meeting";
     }
+
+    @GetMapping("/meeting/{id}")
+    public String viewMeet(@CurrentAccount Account account, @PathVariable String path, @PathVariable Long id,
+                           Model model) {
+        model.addAttribute(account);
+        model.addAttribute(clubService.getClub(path));
+        model.addAttribute(meetingRepository.findById(id).orElseThrow());
+        return "meeting/page";
+    }
+
+
     @GetMapping("/meeting/{id}/edit")
     public String updateMeetingForm(@CurrentAccount Account account,
                                   @PathVariable String path, @PathVariable Long id, Model model) {
