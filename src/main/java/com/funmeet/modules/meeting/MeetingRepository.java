@@ -10,4 +10,6 @@ import java.util.List;
 public interface MeetingRepository extends JpaRepository<Meeting, Long> {
 
     List<Meeting> findByClubOrderByStartDateTime(Club club);
+
+    List<Meeting> findByClub(Club club);
 }

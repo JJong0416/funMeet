@@ -14,6 +14,19 @@
     <div th:replace="fragments/club :: club_stat"></div>
     <div th:replace="fragments/club :: club_menu (settings)"></div>
 
+    <div th:if="${message} == 'success_clubPublish'">
+        <div th:replace="fragments/script :: success_clubPublish"></div>
+    </div>
+
+    <div th:if="${message} == 'fail_clubPublish'">
+        <div th:replace="fragments/script :: fail_clubPublish "></div>
+    </div>
+
+    <div th:if="${message} == 'fail_clubRemove'">
+        <div th:replace="fragments/script :: fail_clubRemove "></div>
+    </div>
+
+
     <div class="row mt-3 justify-content-center">
         <div class="col-2">
             <div th:replace="fragments/club :: club_settings_menu(club)"></div>
@@ -22,19 +35,22 @@
         <div class="col-8">
             <div class="card">
                 <div class="card-body tab-content">
+
                     <div class="row">
                         <form th:if="${!club.published && !club.closed}" class="col-sm-12" action="#" th:action="@{'/club/' + ${club.getClubPath()} + '/settings/club/publish'}" method="post" novalidate>
                             <h5 class="col-sm-12">모임 공개</h5>
-                            <div class="alert alert-info" role="alert">
+                            <div class="alert alert-primary" role="alert">
                                 모임을 다른 사용자에게 공개할 준비가 되었다면 버튼을 클릭하세요.<br/>
                                 소개, 배너 이미지, 스터디 주제 및 활동 지역을 등록했는지 확인하세요.<br/>
-                                취미과 지역을 하나라도 등록하지 않으셨다면, 스터디가 공개되지 않습니다.
+                                공개 하신 후엔, 다시 닫으실 수 없습니다.
+                            </div>
+                            <div class="alert alert-secondary" role="alert">
+                                모임을 공개하시기 전에, 반드시 취미와 지역을 설정해주셔야 합니다.
                             </div>
                             <div class="form-group">
                                 <button class="btn btn-outline-primary" type="submit" aria-describedby="submitHelp">모임 공개</button>
                             </div>
                         </form>
-
                     </div>
 
                     <hr th:if="${!club.closed}"/>
@@ -84,28 +100,16 @@
                         </form>
                     </div>
 
-                    <hr/>
-
-                    <div class="row" th:if="${club.isRemovable()}">
+                    <hr />
+                    <div class="row">
                         <h5 class="col-sm-12 text-danger">모임 삭제</h5>
                         <form class="col-sm-12" action="#" th:action="@{'/club/' + ${club.getClubPath()} + '/settings/club/remove'}" method="post" novalidate>
                             <div class="alert alert-danger" role="alert">
-                                <b>모임을 삭제하면 스터디 관련 모든 기록을 삭제하며 복구할 수 없습니다.</b> <br/>
+                                <b>모임을 삭제하면 스터디 관련 모든 기록을 삭제하며 복구할 수 없습니다. <br/>
+                                    모임을 삭제하시고 싶으시면, 남은 미팅들을 종료해주시길 바랍니다.</b> <br/>
                             </div>
                             <div class="form-group">
                                 <button class="btn btn-outline-danger" type="submit" aria-describedby="submitHelp">모임 삭제</button>
-                            </div>
-                        </form>
-                    </div>
-
-                    <div class="row" th:if="${!club.isRemovable()}">
-                        <h5 class="col-sm-12 text-danger">스터디 삭제</h5>
-                        <form class="col-sm-12" th:action="@{'/club/' + ${club.getClubPath()} + '/settings/club/remove'}" method="post" novalidate>
-                            <div class="alert alert-danger" role="alert">
-                                공개 중이고 모임을 했던 클럽는 삭제할 수 없습니다.
-                            </div>
-                            <div class="form-group">
-                                <button class="btn btn-outline-danger" type="submit" aria-describedby="submitHelp" disabled>클럽 삭제</button>
                             </div>
                         </form>
                     </div>
@@ -115,6 +119,7 @@
         </div>
     </div>
 </div>
+
 <script th:replace="fragments/script :: tooltip"></script>
 <div th:replace="fragments/footer :: footer"></div>
 <script th:replace="fragments/script:: formValidation"></script>

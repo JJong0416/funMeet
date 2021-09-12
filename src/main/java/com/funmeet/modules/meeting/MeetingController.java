@@ -3,6 +3,7 @@ package com.funmeet.modules.meeting;
 import com.funmeet.modules.account.Account;
 import com.funmeet.modules.account.CurrentAccount;
 import com.funmeet.modules.club.Club;
+import com.funmeet.modules.club.ClubRepository;
 import com.funmeet.modules.club.ClubService;
 import com.funmeet.modules.meeting.form.MeetingForm;
 import com.funmeet.modules.meeting.validator.MeetingFormValidator;
@@ -180,5 +181,24 @@ public class MeetingController {
         meetingService.rejectEnrollment(meeting,enrollment);
 
         return "redirect:/club/" + club.getEncodedPath() + "/meeting/" + meeting.getId();
+    }
+
+    /* 순환참조 규칙때문에 어쩔수없이 ClubSettingsControl에 작업해야하지만, Meeting컨트롤러에서 작업 */
+    /* 이렇게 나온 이유는 설계를 못한 잘못이 아닌 trade-off를 극복하기 위한 한가지 방법. */
+    /* 또한, 그냥 종료시키면 Meeting도 다 종료시켜버릴 수 있지만, 중요한 데이터 남아있을 수 있기 때문에, 미팅이 남아있다고 알람만 때린다.*/
+    @PostMapping("/settings/club/remove")
+    public String removeClub(@CurrentAccount Account account, @PathVariable String path, Model model){
+
+        Club club = clubService.getClubUpdateStatus(account,path);
+        List<Meeting> meetings = meetingRepository.findByClub(club);
+
+        if (meetings.size() != 0){
+            model.addAttribute(account);
+            model.addAttribute(club);
+            model.addAttribute("message", "fail_clubRemove");
+            return "club/settings/club";
+        }
+        clubService.remove(club);
+        return "redirect:/";
     }
 }

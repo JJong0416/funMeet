@@ -53,6 +53,32 @@
     })
 </script>
 
+<script th:fragment="success_clubPublish">
+    swal({
+        title: "성공",
+        text: "모임 공개가 되었습니다.",
+        icon: "success"
+    })
+</script>
+
+<script th:fragment="fail_clubPublish">
+    swal({
+        title: "실패",
+        text: "모임 공개가 실패했습니다.",
+        icon: "error"
+    })
+</script>
+
+<script th:fragment="fail_clubRemove">
+    swal({
+        title: "실패",
+        text: "미팅이 존재합니다. 진행중인 미팅을 종료시켜주십시오.",
+        icon: "error"
+    })
+</script>
+
+
+
 <script th:fragment="failUpdateProfile">
     swal({
         title: "실패",

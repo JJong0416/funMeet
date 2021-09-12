@@ -8,6 +8,8 @@ import com.funmeet.modules.club.form.ClubDescriptionForm;
 import com.funmeet.modules.hobby.Hobby;
 import com.funmeet.modules.hobby.HobbyRepository;
 import com.funmeet.modules.hobby.HobbyService;
+import com.funmeet.modules.meeting.MeetingRepository;
+import com.funmeet.modules.meeting.MeetingService;
 import lombok.RequiredArgsConstructor;
 import net.bytebuddy.utility.RandomString;
 import org.modelmapper.ModelMapper;
@@ -27,7 +29,6 @@ public class ClubService {
     private final ModelMapper modelMapper;
     private final ApplicationEventPublisher applicationEventPublisher;
     private final HobbyService hobbyService;
-
 
     public Club createNewClub(Club club, Account account){
         Club createClub = clubRepository.save(club);
@@ -127,18 +128,6 @@ public class ClubService {
         applicationEventPublisher.publishEvent(new ClubUpdateEvent(club,"모임을 종료합니다.."));
     }
 
-    public void startRecruit(Club club) {
-        club.startRecruit();
-        applicationEventPublisher.publishEvent(new ClubUpdateEvent(club,"모임원 모집을 시작합니다."));
-
-    }
-
-    public void stopRecruit(Club club) {
-        club.stopRecruit();
-        applicationEventPublisher.publishEvent(new ClubUpdateEvent(club,"모임원 모집을 종료합니다."));
-
-    }
-
     public boolean isValidPath(String newPath) {
         if (!newPath.matches("^[ㄱ-ㅎ가-힣a-z0-9_-]{2,20}$")) {
             return false;
@@ -146,6 +135,8 @@ public class ClubService {
 
         return !clubRepository.existsByClubPath(newPath);
     }
+
+
 
     public void updateClubPath(Club club, String newPath) {
         club.setClubPath(newPath);
@@ -160,11 +151,7 @@ public class ClubService {
     }
 
     public void remove(Club club) {
-        if (club.isRemovable()) {
-            clubRepository.delete(club);
-        } else {
-            throw new IllegalArgumentException("클럽을 삭제할 수 없습니다.");
-        }
+        clubRepository.delete(club);
     }
     public void addMember(Club club, Account account) {
         club.addMember(account);
@@ -201,3 +188,8 @@ public class ClubService {
         }
     }
 }
+
+/*         if (club.isRemovable()) {
+        } else {
+            throw new IllegalArgumentException("클럽을 삭제할 수 없습니다.");
+* */

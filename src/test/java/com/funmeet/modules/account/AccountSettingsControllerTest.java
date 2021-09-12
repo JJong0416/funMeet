@@ -114,16 +114,6 @@ class AccountSettingsControllerTest {
 
 
     @WithUserDetails(value="jongchan",setupBefore = TestExecutionEvent.TEST_EXECUTION)
-    @DisplayName("보안 폼")
-    @Test
-    void updatePassword() throws Exception{
-        mockMvc.perform(get("/settings/security"))
-                .andExpect(status().isOk())
-                .andExpect(model().attributeExists("account"))
-                .andExpect(model().attributeExists("passwordForm"));
-    }
-
-    @WithUserDetails(value="jongchan",setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @DisplayName("패스워드 수정 - 입력값 정상")
     @Test
     void updatePassword_right() throws Exception {

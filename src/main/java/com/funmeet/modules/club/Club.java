@@ -4,6 +4,7 @@ import com.funmeet.modules.account.Account;
 import com.funmeet.modules.account.AdaptAccount;
 import com.funmeet.modules.city.City;
 import com.funmeet.modules.hobby.Hobby;
+import com.funmeet.modules.meeting.Meeting;
 import lombok.*;
 
 import javax.persistence.*;
@@ -108,32 +109,9 @@ public class Club {
         }
     }
 
-    public void startRecruit() {
-        if (canUpdateRecruiting()) {
-            this.recruiting = true;
-            this.recruitingTime = LocalDateTime.now();
-        } else {
-            throw new RuntimeException("인원 모집을 시작할 수 없습니다. 모임을 공개하거나 30분 후 다시 시도해보십시오.");
-        }
+    public boolean isPublish() {
+        return (this.getHobby().size() != 0  && this.getCity().size() != 0);
     }
-
-    public void stopRecruit() {
-        if (canUpdateRecruiting()) {
-            this.recruiting = false;
-            this.recruitingTime = LocalDateTime.now();
-        } else {
-            throw new RuntimeException("인원 모집을 멈출 수 없습니다. 모임을 공개하거나 30분 후 다시 시도해보십시오.");
-        }
-    }
-
-    public boolean canUpdateRecruiting() {
-        return this.published && this.recruitingTime == null || this.recruitingTime.isBefore(LocalDateTime.now().minusMinutes(30));
-    }
-
-    public boolean isRemovable() {
-        return !this.published;
-    }
-
 
     public void removeMember(Account account) {
         this.getMembers().remove(account);

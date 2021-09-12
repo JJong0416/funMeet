@@ -19,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class HomeController {
 
-    private final ClubRepository clubRepository;
+//    private final ClubRepository clubRepository;
 
     @GetMapping({"","/"})
     public String home(@CurrentAccount Account account, Model model){
@@ -34,15 +34,15 @@ public class HomeController {
         return "login";
     }
 
-    @GetMapping("/search")
-    public String searchClub(String keyword, Model model,
-                             @PageableDefault(size = 6, sort = "publishDateTime", direction = Sort.Direction.DESC)
-                                     Pageable pageable)  {
-        Page<Club> clubList = clubRepository.findByKeyword(keyword, pageable);
-        model.addAttribute("clubList",clubList);
-        model.addAttribute("keyword", keyword);
-        model.addAttribute("sortProperty",
-                pageable.getSort().toString().contains("publishDateTime") ? "publishDateTime" : "memberCount");
-        return "search";
-    }
+//    @GetMapping("/search")
+//    public String searchClub(String keyword, Model model,
+//                             @PageableDefault(size = 6, sort = "publishDateTime", direction = Sort.Direction.DESC)
+//                                     Pageable pageable)  {
+//        Page<Club> clubList = clubRepository.findByKeyword(keyword, pageable);
+//        model.addAttribute("clubList",clubList);
+//        model.addAttribute("keyword", keyword);
+//        model.addAttribute("sortProperty",
+//                pageable.getSort().toString().contains("publishDateTime") ? "publishDateTime" : "memberCount");
+//        return "search";
+//    }
 }

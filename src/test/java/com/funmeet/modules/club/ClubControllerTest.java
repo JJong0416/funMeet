@@ -64,11 +64,11 @@ class ClubControllerTest {
     void createClub_right() throws Exception {
         mockMvc.perform(post("/create_club")
                 .param("title", "FunMeet title")
-                .param("clubPath", "url_test")
+                .param("clubpath", "url_test")
                 .param("shortDescription", "짧게 보기 체크")
                 .param("fullDescription", "상세 보기 체크")
                 .with(csrf()))
-                .andExpect(status().is3xxRedirection())
+                .andExpect(status().isOk())
                 .andExpect(redirectedUrl("/club/url_test"));
 
 
