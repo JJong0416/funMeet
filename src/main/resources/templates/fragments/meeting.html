@@ -14,7 +14,7 @@
     </div>
 
     <div class="row justify-content-center">
-      <form class="formValidation col-sm-10" th:action="@{'/club/' + ${club.clubPath} + '/create_meeting'}"
+      <form class="formValidation col-sm-10" th:action="@{${action}}"
             th:object="${meetingForm}" method="post" novalidate>
 
         <div class="form-group">
@@ -87,7 +87,6 @@
   </div>
   <script th:replace="fragments/script:: formValidation"></script>
   <script th:replace="fragments/script :: editor_script"></script>
-  <div th:replace="fragments/footer :: footer"></div>
 </div>
 
 </html>

@@ -3,7 +3,6 @@ package com.funmeet.modules.meeting;
 import com.funmeet.modules.account.Account;
 import com.funmeet.modules.account.CurrentAccount;
 import com.funmeet.modules.club.Club;
-import com.funmeet.modules.club.ClubRepository;
 import com.funmeet.modules.club.ClubService;
 import com.funmeet.modules.meeting.form.MeetingForm;
 import com.funmeet.modules.meeting.validator.MeetingFormValidator;
@@ -110,11 +109,9 @@ public class MeetingController {
 
     @PostMapping("/meeting/{id}/edit")
     public String updateMeetingSubmit(@CurrentAccount Account account, @PathVariable String path,
-                                    @PathVariable Long id, @Valid MeetingForm meetingForm, Errors errors,
+                                    @PathVariable("id") Meeting meeting, @Valid MeetingForm meetingForm, Errors errors,
                                     Model model) {
         Club club = clubService.getClubUpdate(account, path);
-
-        Meeting meeting = meetingRepository.findById(id).orElseThrow();
         meetingForm.setMeetingType(meeting.getMeetingType());
         meetingFormValidator.validateUpdateForm(meetingForm, meeting, errors);
 
@@ -126,7 +123,7 @@ public class MeetingController {
         }
 
         meetingService.updateMeeting(meeting, meetingForm);
-        return "redirect:/club/" + club.getEncodedPath() +  "/club/" + meeting.getId();
+        return "redirect:/club/" + club.getEncodedPath() +  "/meeting/" + meeting.getId();
     }
 
     @PostMapping("/meeting/{id}/delete")
@@ -187,7 +184,7 @@ public class MeetingController {
     /* 이렇게 나온 이유는 설계를 못한 잘못이 아닌 trade-off를 극복하기 위한 한가지 방법. */
     /* 또한, 그냥 종료시키면 Meeting도 다 종료시켜버릴 수 있지만, 중요한 데이터 남아있을 수 있기 때문에, 미팅이 남아있다고 알람만 때린다.*/
     @PostMapping("/settings/club/remove")
-    public String removeClub(@CurrentAccount Account account, @PathVariable String path, Model model){
+    public String checkMeetingWithClubRemove(@CurrentAccount Account account, @PathVariable String path, Model model){
 
         Club club = clubService.getClubUpdateStatus(account,path);
         List<Meeting> meetings = meetingRepository.findByClub(club);
@@ -198,6 +195,7 @@ public class MeetingController {
             model.addAttribute("message", "fail_clubRemove");
             return "club/settings/club";
         }
+        clubService.close(club);
         clubService.remove(club);
         return "redirect:/";
     }

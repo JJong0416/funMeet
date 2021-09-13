@@ -13,11 +13,8 @@ import com.funmeet.modules.hobby.Hobby;
 import com.funmeet.modules.hobby.HobbyForm;
 import com.funmeet.modules.hobby.HobbyRepository;
 import com.funmeet.modules.hobby.HobbyService;
-import com.funmeet.modules.meeting.Meeting;
-import com.funmeet.modules.meeting.MeetingRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -246,18 +242,4 @@ public class ClubSettingsController {
         attributes.addFlashAttribute("message", "모임 이름을 수정했습니다.");
         return "redirect:/club/" + club.getEncodedPath() + "/settings/club";
     }
-
-    @PostMapping("/club/close")
-    public String closeClub(@CurrentAccount Account account, @PathVariable String path,
-                            RedirectAttributes attributes) {
-        Club club = clubService.getClubUpdateStatus(account, path);
-        clubService.close(club);
-        attributes.addFlashAttribute("message", "스터디를 종료했습니다.");
-        return "redirect:/club/" + club.getEncodedPath() + "/settings/club";
-    }
 }
-
-
-//            model.addAttribute(account);
-//                    model.addAttribute(club);
-//                    model.addAttribute("ClubTitleError", "스터디 이름을 다시 입력하세요.");

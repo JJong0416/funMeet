@@ -5,36 +5,63 @@
 <body class="bg-light">
 <div th:replace="fragments/header :: main_nav"></div>
 
-<div class="halfContainer">
-    <div class="py-4 text-center justify-content-center bg-light">
-        <strong class="h3">모임 이름: </strong>
-        <span class="h3" th:text="${club.title}"></span>
-        <hr>
-        <strong class="h3" >미팅 이름: </strong>
-        <span class="h3" th:text="${meeting.title}"></span>
+<div class="container">
+    <div class="py-5 text-center justify-content-center bg-light">
+        <!-- 미팅 헤더 시작 -->
+        <a th:href="@{'/club/' + ${club.clubPath} + '/meeting/' + ${meeting.id}}" class="h3" th:text="${meeting.title}"></a>
+
+        <br/>
+
 
         <span sec:authorize="isAuthenticated()">
-            <button th:if="${meeting.isEnrollable(#authentication.principal)}" class="btn btn-outline-primary" data-toggle="modal" data-target="#enroll">
-                <i class="fa fa-plus-circle"></i> 참가 신청
+            <button th:if="${meeting.isEnrollable(#authentication.principal)}" class="btn btn-outline-info" data-toggle="modal" data-target="#enroll">
+                <i class="fa fa-user-plus" aria-hidden="true"></i>참가 신청
             </button>
 
-            <button th:if="${meeting.isDisEnrollable(#authentication.principal)}" class="btn btn-outline-primary" data-toggle="modal" data-target="#disenroll">
-                <i class="fa fa-minus-circle"></i> 참가 신청 취소
+            <button th:if="${meeting.isDisEnrollable(#authentication.principal)}" class="btn btn-outline-warning" data-toggle="modal" data-target="#disenroll">
+                <i class="fa fa-user-times" aria-hidden="true"></i>참가 신청 취소
             </button>
 
             <span class="text-success" th:if="${meeting.isAttended(#authentication.principal)}" disabled>
-                <i class="fa fa-check-circle"></i> 참석 완료
+                <i class="fa fa-check-square" aria-hidden="true"></i>참석 완료
             </span>
         </span>
+
+        <div class="modal fade" id="enroll" tabindex="-1" role="dialog" aria-labelledby="enrollmentTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" style="text-align: center" id="joinTitle" th:text="${meeting.title}"></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>해당 미팅에 참석하시겠습니까?</p>
+                        <p><strong>확인</strong> 버튼을 클릭하면 모임 참가 신청을 합니다.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                        <form th:action="@{'/club/' + ${club.clubPath} + '/meeting/' + ${meeting.id} + '/enroll'}" method="post">
+                            <button class="btn btn-primary" type="submit" aria-describedby="submitHelp">확인</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="modal fade" id="disenroll" tabindex="-1" role="dialog" aria-labelledby="leaveTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="leaveTitle" th:text="${meeting.title}"></h5>
+                        <h5 class="modal-title" style="text-align: center" id="leaveTitle" th:text="${meeting.title}"></h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>해당 미팅에 취소하시겠습니까?</p>
+                        <p><strong>확인</strong>을 누르시면, 해당 미팅을 취소합니다.</p>
                     </div>
 
                     <div class="modal-footer">
@@ -47,13 +74,10 @@
             </div>
         </div>
 
+        <!-- 미팅 헤더 끝 -->
 
-        <!-- -->
-        <div class="col-7 pt-3">
-            <dt class="font-weight-light">상세 모임 설명</dt>
-            <dd th:utext="${meeting.description}"></dd>
-
-            <dt class="font-weight-light">모임 참가 신청 (<span th:text="${meeting.enrollments.size()}"></span>)</dt>
+        <!-- 미팅 표 시작-->
+        <div class="halfContainer col-12 pt-4">
             <dd>
                 <table class="table table-borderless table-sm" th:if="${meeting.enrollments.size() > 0}">
                     <thead>
@@ -99,91 +123,98 @@
                 </table>
             </dd>
         </div>
-        <!-- -->
+        <!-- 미팅 표 끝 -->
 
-        <div class="modal fade" id="enroll" tabindex="-1" role="dialog" aria-labelledby="enrollmentTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="enrollmentTitle" th:text="${meeting.title}"></h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-                        <form th:action="@{'/club/' + ${club.clubPath} + '/meeting/' + ${meeting.id} + '/enroll'}" method="post">
-                            <button class="btn btn-primary" type="submit" aria-describedby="submitHelp">확인</button>
-                        </form>
-                    </div>
+        <!-- 미팅 바디 시작 -->
+        <dl class="row pt-3 pl-5 text-center">
+            <div class="col-9 card">
+                <div class="card-body tab-content">
+                    <dt class="h4">미팅 상세 설명</dt>
+                    <hr/>
+                    <dd class="text-left" th:utext="${meeting.description}"></dd>
                 </div>
             </div>
-        </div>
+            <div class="col-3">
+                <dt>미팅 방법</dt>
+                <dd>
+                    <span th:if="${meeting.meetingType == T(com.funmeet.modules.meeting.MeetingType).FCFSB}">선착순</span>
+                    <span th:if="${meeting.meetingType == T(com.funmeet.modules.meeting.MeetingType).CONFIRM}">관리자 확인</span>
+                </dd>
 
-        <dl class="col-3 pt-3 text-right">
-            <dt class="font-weight-light">모집 방법</dt>
-            <dd>
-                <span th:if="${meeting.meetingType == T(com.funmeet.modules.meeting.MeetingType).FCFSB}">선착순</span>
-                <span th:if="${meeting.meetingType == T(com.funmeet.modules.meeting.MeetingType).CONFIRM}">관리자 확인</span>
-            </dd>
+                <dt class="">미팅 인원</dt>
+                <dd>
+                    <span th:text="${meeting.limitOfEnrollments}"></span>명
+                </dd>
+                <dt class="">참여비</dt>
+                <dd>
+                    <span th:text="${meeting.meetingPrice}"></span>원
+                </dd>
 
-            <dt class="font-weight-light">모집 인원</dt>
-            <dd>
-                <span th:text="${meeting.limitOfEnrollments}"></span>명
-            </dd>
+                <dt>모임장</dt>
+                <dd>
+                    <a th:href="@{'/profile/' + ${meeting.createdAccount?.nickname}}" class="text-decoration-none">
+                        <svg th:if="${#strings.isEmpty(meeting.createdAccount?.profileImage)}"
+                             th:data-jdenticon-value="${meeting.createdAccount?.nickname}" width="24" height="24" class="rounded border bg-light"></svg>
+                        <img th:if="${!#strings.isEmpty(meeting.createdAccount?.profileImage)}"
+                             th:src="${meeting.createdAccount?.profileImage}" width="24" height="24" class="rounded border"/>
+                        <span th:text="${meeting.createdAccount?.nickname}"></span>
+                    </a>
+                </dd>
 
-            <dt class="font-weight-light">모임 일시</dt>
-            <dd>
-                <span class="date" th:text="${meeting.startDateTime}"></span>
-                <span class="weekday" th:text="${meeting.startDateTime}"></span><br/>
-                <span class="time" th:text="${meeting.startDateTime}"></span> -
-                <span class="time" th:text="${meeting.endDateTime}"></span>
-            </dd>
+                <dt class="">모임 일시</dt>
+                <dd>
+                    <span class="font-weight-light">시작:</span><br/>
+                    <span class="date" th:text="${meeting.startDateTime}"></span>
+                    <span class="weekday" th:text="${meeting.startDateTime}"></span>
+                    <span class="time" th:text="${meeting.startDateTime}"></span><br/>
+                    <span class="font-weight-light">종료:</span><br/>
+                    <span class="date" th:text="${meeting.endDateTime}"></span>
+                    <span class="weekday" th:text="${meeting.endDateTime}"></span>
+                    <span class="time" th:text="${meeting.endDateTime}"></span>
+                </dd>
 
-            <dt class="font-weight-light">모임장</dt>
-            <dd>
-                <a th:href="@{'/profile/' + ${meeting.createdAccount?.nickname}}" class="text-decoration-none">
-                    <svg th:if="${#strings.isEmpty(meeting.createdAccount?.profileImage)}"
-                         th:data-jdenticon-value="${meeting.createdAccount?.nickname}" width="24" height="24" class="rounded border bg-light"></svg>
-                    <img th:if="${!#strings.isEmpty(meeting.createdAccount?.profileImage)}"
-                         th:src="${meeting.createdAccount?.profileImage}" width="24" height="24" class="rounded border"/>
-                    <span th:text="${meeting.createdAccount?.nickname}"></span>
-                </a>
-            </dd>
 
-            <dt th:if="${club.isManager(#authentication.principal)}" class="font-weight-light">모임 관리</dt>
-            <dd th:if="${club.isManager(#authentication.principal)}">
-                <a class="btn btn-outline-primary btn-sm my-1"
-                   th:href="@{'/club/' + ${club.clubPath} + '/meeting/' + ${meeting.id} + '/edit'}" >
-                    모임 수정
-                </a> <br/>
-                <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#cancel">
-                    모임 취소
-                </button>
-            </dd>
+                <form th:action="@{'/club/' + ${club.clubPath} + '/meeting/'}" method="get">
+                    <button class="btn btn-outline-secondary" type="submit" aria-describedby="submitHelp">뒤로 가기</button>
+                </form>
+
+                <br/>
+
+                <dt th:if="${club.isManager(#authentication.principal)}" >모임 관리</dt>
+                <dd th:if="${club.isManager(#authentication.principal)}">
+                    <a class="btn btn-outline-primary btn-sm my-1"
+                       th:href="@{'/club/' + ${club.clubPath} + '/meeting/' + ${meeting.id} + '/edit'}" >
+                        모임 수정
+                    </a> <br/>
+                    <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#cancel">
+                        모임 취소
+                    </button>
+                </dd>
+            </div>
         </dl>
+    </div>
 
-        <div class="modal fade" id="cancel" tabindex="-1" role="dialog" aria-labelledby="cancelTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="cancelTitle" th:text="${meeting.title}"></h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p>모임을 취소 하시겠습니까?</p>
-                        <p><strong>확인</strong>하시면 삭제됩니다.</p>
-                        <p>감사합니다.</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-                        <form th:action="@{'/club/' + ${club.clubPath} + '/meeting/' + ${meeting.id} + '/delete'}" th:method="post">
-                            <button class="btn btn-primary" type="submit" aria-describedby="submitHelp">확인</button>
-                        </form>
-                    </div>
+
+
+    <div class="modal fade" id="cancel" tabindex="-1" role="dialog" aria-labelledby="cancelTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cancelTitle" th:text="${meeting.title}"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>모임을 취소 하시겠습니까?</p>
+                    <p><strong>확인</strong>하시면 삭제됩니다.</p>
+                    <p>감사합니다.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                    <form th:action="@{'/club/' + ${club.clubPath} + '/meeting/' + ${meeting.id} + '/delete'}" th:method="post">
+                        <button class="btn btn-primary" type="submit" aria-describedby="submitHelp">확인</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -194,3 +225,5 @@
 <div th:replace="fragments/footer :: footer"></div>
 </body>
 </html>
+
+
