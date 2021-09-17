@@ -1,10 +1,13 @@
 package com.funmeet.modules.main;
 
+import com.funmeet.infra.config.AppProperties;
+import com.funmeet.infra.config.Appconfig;
 import com.funmeet.modules.account.Account;
 import com.funmeet.modules.account.CurrentAccount;
 import com.funmeet.modules.club.Club;
 import com.funmeet.modules.club.ClubRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -21,6 +24,14 @@ public class HomeController {
 
 //    private final ClubRepository clubRepository;
 
+    @Value("${authURL.client_id}")
+    private String client_id;
+
+    @Value("${authURL.redirect_uri}")
+    private String redirect_uri;
+
+    private final AppProperties appProperties;
+
     @GetMapping({"","/"})
     public String home(@CurrentAccount Account account, Model model){
         if (account != null){
@@ -28,9 +39,18 @@ public class HomeController {
         }
         return "index";
     }
+// 이거 redirect_uri 부분 컨트롤러 아직없는거? 이거
 
     @GetMapping("/login")
-    public String login(){
+    public String login(Model model){
+        StringBuilder oauth_link = new StringBuilder();
+        oauth_link.append("https://kauth.kakao.com/oauth/authorize?");
+        oauth_link.append("client_id=" + client_id);
+        oauth_link.append("&redirect_uri=" + redirect_uri);
+        oauth_link.append("&response_type=code");
+
+        model.addAttribute("link",oauth_link);
+
         return "login";
     }
 

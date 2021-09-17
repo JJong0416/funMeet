@@ -55,12 +55,11 @@
     <hr>
 
     <h4 class="text-center ">간편로그인</h4>
-    <form class="row justify-content-center" th:href="@{/kakao/login}">
-        <div class="form-group">
-            <button class="btn btn- btn-block" type="submit"
-                    aria-describedby="submitHelp"><img class="btn-image container" src="/images/kakao_login.png"> </button>
-        </div>
-    </form>
+
+    <div class="form-group">
+        <a class="text-center" th:href="${link}"><img style="size: 30px" src="/images/kakao_login.png"> </a>
+    </div>
+
 
 </div>
 <script th:replace="fragments/script :: formValidation"></script>

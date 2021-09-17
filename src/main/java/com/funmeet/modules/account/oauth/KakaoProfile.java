@@ -1,4 +1,4 @@
-package com.funmeet.modules.kakao;
+package com.funmeet.modules.account.oauth;
 
 import lombok.Data;
 

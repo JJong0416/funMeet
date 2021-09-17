@@ -26,6 +26,11 @@ public class Account {
 
     private String password;
 
+    /* OAuth Token Field */
+    private boolean kakaoTokenVerified;
+
+    private String kakaoEmail;
+
     private String short_bio;
 
     private String occupation;
@@ -35,10 +40,6 @@ public class Account {
     private String emailCheckToken;
 
     private LocalDateTime emailCheckTokenGeneratedAt;
-
-    private boolean kakaoVerified;
-
-    private String kakaoCheckToken;
 
     private LocalDateTime joinedAt;
 

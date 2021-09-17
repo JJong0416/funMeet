@@ -6,6 +6,7 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Transactional(readOnly = true)
 public interface AccountRepository extends JpaRepository<Account, Long> , QuerydslPredicateExecutor<Account> {
@@ -17,5 +18,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> , Queryd
     Account findByNickname(String id);
 
     Account findByEmail(String email);
+
+    Account findByKakaoEmail(String email);
 
 }

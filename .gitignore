@@ -40,7 +40,10 @@ out/
 src/main/resources/static/node_modules
 
 ### SMTP Email Setting ###
-src/main/resources/application-db.properties
+src/main/resources/application-db.yml
+
+### OAuth2.0 Social Login Key ###
+src/main/resources/application-oauth.yml
 
 ###package-json Setting ###
 src/main/resources/static/package-lock.json

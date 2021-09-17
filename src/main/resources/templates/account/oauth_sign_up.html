@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+
+<head th:replace="fragments/config :: config"></head>
+<div th:replace="fragments/header :: main_nav"></div>
+
+<div class="container col-sm-10">
+
+  <div class="py-5 text-center">
+    <h2>간편 로그인</h2>
+  </div>
+
+  <div class="row justify-content-center">
+    <form class="formValidation"
+          th:action="@{/oauth_sign_up}" th:object="${oauthForm}" method="post" novalidate> <!-- form 생성 -->
+
+      <input type="hidden" th:name="test" th:value="${kakaoEmail}"/>
+
+      <div class="form-group">
+        <label for="nickname">사용하실 닉네임</label>
+        <input id="nickname" type="text" th:field="*{nickname}" class="form-control"
+               placeholder="jjong0416" aria-describedby="help_nickname" required minlength="6" maxlength="20"> <!-- front validation check -->
+        <small id="help_nickname" class="form-text text-muted">
+          공백없이 문자와 숫자로만 6자 이상 20자 이내로 입력하세요.
+        </small>
+        <small class="invalid-feedback">형식에 맞게 닉네임을 입력하세요</small>
+        <small class="form-text text-danger" th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}">Nickname Error</small>
+      </div>
+
+      <div class="form-group">
+        <label for="password">사용하실 패스워드</label>
+        <input id="password" type="password" th:field="*{password}" class="form-control"
+               aria-describedby="passwordHelp" required minlength="6" maxlength="20">
+        <small id="help_password" class="form-text text-muted">
+          6자 이상 20자 이내로 입력하세요. 영문자, 숫자, 특수기호를 사용할 수 있으며 공백은 사용할 수 없습니다.
+        </small>
+        <small class="invalid-feedback">형식에 맞게 패스워드를 입력하세요.</small>
+        <small class="form-text text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</small>
+      </div>
+
+      <div class="form-group">
+        <button class="btn btn-primary btn-block" type="submit"
+                aria-describedby="submitHelp">회원가입</button>
+      </div>
+    </form>
+  </div>
+  <script th:replace="fragments/script :: formValidation"></script>
+</div>
+<div th:replace="fragments/footer :: footer"></div>
+</html>

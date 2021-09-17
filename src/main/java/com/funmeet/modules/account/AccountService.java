@@ -6,6 +6,7 @@ import com.funmeet.infra.mail.EmailService;
 import com.funmeet.modules.account.form.NotificationForm;
 import com.funmeet.modules.account.form.Profile;
 import com.funmeet.modules.account.form.SignUpForm;
+import com.funmeet.modules.account.oauth.OAuthForm;
 import com.funmeet.modules.city.City;
 import com.funmeet.modules.hobby.Hobby;
 import lombok.RequiredArgsConstructor;
@@ -50,6 +51,17 @@ public class AccountService implements UserDetailsService {
         account.setShort_bio("간략한 자기 소개를 추가하세요.");
         return accountRepository.save(account);
     }
+
+    public Account oauthSignUp(OAuthForm oAuthForm, String kakaoEmail) {
+        Account account = modelMapper.map(oAuthForm,Account.class);
+        account.setKakaoTokenVerified(true);
+        this.completeSignUp(account);
+        account.setKakaoEmail(kakaoEmail);
+        account.setShort_bio("간략한 자기 소개를 추가하세요.");
+
+        return accountRepository.save(account);
+    }
+
     // 써야 하는 것은 link, nickname, host
     public void sendSignUpConfirmEmail(Account addAccount) {
         Context context = new Context();
@@ -108,7 +120,7 @@ public class AccountService implements UserDetailsService {
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String EmailOrNickname) throws UsernameNotFoundException {
         Account account = accountRepository.findByEmail(EmailOrNickname);
-        if (account == null){
+        if (account != null){
             account = accountRepository.findByNickname(EmailOrNickname);
         }
 
@@ -172,7 +184,12 @@ public class AccountService implements UserDetailsService {
 
     public void deleteAccount(Account account) {
         accountRepository.delete(account);
-        //TODO 자기가 모임장 하나라도 있으면, 에러메시지 출력
     }
+
+    public void addOauthAccount(){
+
+    }
+
+
 }
 

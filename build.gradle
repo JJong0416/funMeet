@@ -43,6 +43,9 @@ dependencies {
     /* Arch Unit Test */
     testImplementation 'com.tngtech.archunit:archunit-junit5:0.21.0'
 
+    /* OAuth2.0 Setting */
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'com.h2database:h2'
@@ -51,6 +54,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+
     /* Docker TestContainer*/
     testImplementation "org.testcontainers:postgresql:1.13.0"
 
@@ -60,6 +64,7 @@ dependencies {
             "javax.persistence:javax.persistence-api",
             "javax.annotation:javax.annotation-api",
             "com.querydsl:querydsl-apt:${queryDslVersion}:jpa")
+
 
 }
 
