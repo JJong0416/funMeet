@@ -12,7 +12,9 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter @Setter @EqualsAndHashCode(of = "id")
@@ -30,10 +32,10 @@ public class Club {
     private String title;
 
     @ManyToMany
-    private List<Account> managers  = new ArrayList<>();
+    private Set<Account> managers  = new HashSet<>();
 
     @ManyToMany
-    private List<Account> members  = new ArrayList<>();
+    private Set<Account> members  = new HashSet<>();
 
     private String shortDescription;
 

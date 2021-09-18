@@ -1,7 +1,6 @@
 package com.funmeet.modules.main;
 
 import com.funmeet.infra.config.AppProperties;
-import com.funmeet.infra.config.Appconfig;
 import com.funmeet.modules.account.Account;
 import com.funmeet.modules.account.CurrentAccount;
 import com.funmeet.modules.club.Club;
@@ -16,13 +15,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.util.List;
-
 @Controller
 @RequiredArgsConstructor
 public class HomeController {
 
-//    private final ClubRepository clubRepository;
+    private final ClubRepository clubRepository;
 
     @Value("${authURL.client_id}")
     private String client_id;
@@ -39,7 +36,6 @@ public class HomeController {
         }
         return "index";
     }
-// 이거 redirect_uri 부분 컨트롤러 아직없는거? 이거
 
     @GetMapping("/login")
     public String login(Model model){
@@ -54,15 +50,15 @@ public class HomeController {
         return "login";
     }
 
-//    @GetMapping("/search")
-//    public String searchClub(String keyword, Model model,
-//                             @PageableDefault(size = 6, sort = "publishDateTime", direction = Sort.Direction.DESC)
-//                                     Pageable pageable)  {
-//        Page<Club> clubList = clubRepository.findByKeyword(keyword, pageable);
-//        model.addAttribute("clubList",clubList);
-//        model.addAttribute("keyword", keyword);
-//        model.addAttribute("sortProperty",
-//                pageable.getSort().toString().contains("publishDateTime") ? "publishDateTime" : "memberCount");
-//        return "search";
-//    }
+    @GetMapping("/search")
+    public String searchClub(String keyword, Model model,
+                             @PageableDefault(size = 6, sort = "publishDateTime", direction = Sort.Direction.DESC)
+                                     Pageable pageable)  {
+        Page<Club> clubList = clubRepository.findByKeyword(keyword, pageable);
+        model.addAttribute("clubList",clubList);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("sortProperty",
+                pageable.getSort().toString().contains("publishDateTime") ? "publishDateTime" : "memberCount");
+        return "search";
+    }
 }

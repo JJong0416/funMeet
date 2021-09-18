@@ -1,11 +1,8 @@
 package com.funmeet.modules.club;
 
-import com.funmeet.modules.account.Account;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Transactional(readOnly = true)
 public interface ClubRepository extends JpaRepository<Club,Long>, ClubRepositoryAnnexation {
@@ -14,19 +11,29 @@ public interface ClubRepository extends JpaRepository<Club,Long>, ClubRepository
 
     Club findByClubPath(String path);
 
-    boolean existsByTitle(String newTitle);
+    @EntityGraph(attributePaths = {"hobby","managers"}) // 시간이 더 걸리네..
+    Club findClubWithHobbyByClubPath(String path);
+
+//    @EntityGraph(attributePaths = {"city,managers"})
+    Club findClubWithCityByClubPath(String path);
+
+    @EntityGraph(attributePaths = "members")
+    Club findClubWithMembersByClubPath(String path);
+
+    @EntityGraph(attributePaths = "managers")
+    Club findClubWithManagersByClubPath(String path);
 
     Club findClubOnlyByClubPath(String path);
 
-    // @EntityGraph(value = "Club.withHobbyAndCity", type = EntityGraph.EntityGraphType.FETCH)
-    // TODO EntityGraph 공부. 가지고 오는 DB데이터들이 너무 많음.
     Club findClubWithHobbyAndCityById(Long id);
 
+    Club findClubWithMembersAndManagersById(Long id);
+
     Club findClubWithManagersAndMembersById(Long id);
-
-
-
-    List<Club> findClubsByMembers(Account account);
-
-    List<Club> findClubsByManagers(Account account);
 }
+
+
+/*
+*
+*
+*/

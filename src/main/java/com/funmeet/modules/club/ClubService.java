@@ -11,18 +11,23 @@ import com.funmeet.modules.hobby.HobbyService;
 import com.funmeet.modules.meeting.MeetingRepository;
 import com.funmeet.modules.meeting.MeetingService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.utility.RandomString;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StopWatch;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
+
 public class ClubService {
 
     private final ClubRepository clubRepository;
@@ -85,14 +90,15 @@ public class ClubService {
     }
 
     public Club getClubUpdateHobby(Account account, String path) {
-        Club club = clubRepository.findByClubPath(path); // 여기 부분 시간효율 추가
+        Club club = clubRepository.findClubWithHobbyByClubPath(path);
         checkIfExistingClub(path, club);
         checkIfManager(account, club);
+
         return club;
     }
 
     public Club getClubUpdateCity(Account account, String path) {
-        Club club = clubRepository.findByClubPath(path);
+        Club club = clubRepository.findClubWithCityByClubPath(path);
         checkIfExistingClub(path, club);
         checkIfManager(account, club);
         return club;
@@ -153,6 +159,7 @@ public class ClubService {
     public void remove(Club club) {
         clubRepository.delete(club);
     }
+
     public void addMember(Club club, Account account) {
         club.addMember(account);
     }
@@ -177,7 +184,7 @@ public class ClubService {
                     .shortDescription("테스트용 테스트입니다")
                     .fullDescription("test")
                     .hobby(new ArrayList<>())
-                    .managers(new ArrayList<>())
+                    .managers(new HashSet<>())
                     .build();
 
             club.publish();
@@ -188,8 +195,3 @@ public class ClubService {
         }
     }
 }
-
-/*         if (club.isRemovable()) {
-        } else {
-            throw new IllegalArgumentException("클럽을 삭제할 수 없습니다.");
-* */
