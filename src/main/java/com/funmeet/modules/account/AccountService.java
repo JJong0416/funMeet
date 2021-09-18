@@ -53,12 +53,10 @@ public class AccountService implements UserDetailsService {
     }
 
     public Account oauthSignUp(OAuthForm oAuthForm, String kakaoEmail) {
+        oAuthForm.setPassword(passwordEncoder.encode(oAuthForm.getPassword()));
         Account account = modelMapper.map(oAuthForm,Account.class);
-        account.setKakaoTokenVerified(true);
-        this.completeSignUp(account);
-        account.setKakaoEmail(kakaoEmail);
+        account.completeOAuthSignup(kakaoEmail);
         account.setShort_bio("간략한 자기 소개를 추가하세요.");
-
         return accountRepository.save(account);
     }
 

@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Getter @Setter @EqualsAndHashCode(of = "id") // id만 사용하는 이유는 연관관계 복잡해질때, 순환참조 막기 위해서
+@Getter @Setter @EqualsAndHashCode(of = "id")
 @Builder @AllArgsConstructor @NoArgsConstructor
 public class Account {
 
@@ -74,6 +74,14 @@ public class Account {
     public void completeSignUp() {
         this.emailVerified = true;
         this.joinedAt = LocalDateTime.now();
+    }
+
+    public void completeOAuthSignup(String kakaoEmail){
+        this.emailVerified = true;
+        this.joinedAt = LocalDateTime.now();
+        this.kakaoEmail = kakaoEmail;
+        this.kakaoTokenVerified = true;
+        this.emailCheckTokenGeneratedAt = LocalDateTime.now();
     }
 
     public boolean isValidToken(String token) {

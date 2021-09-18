@@ -19,6 +19,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> , Queryd
 
     Account findByEmail(String email);
 
-    Account findByKakaoEmail(String email);
+    Account findByKakaoEmailAndKakaoTokenVerifiedTrue(String kakaoEmail);
 
 }

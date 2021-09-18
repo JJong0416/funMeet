@@ -16,7 +16,7 @@
     <form class="formValidation"
           th:action="@{/oauth_sign_up}" th:object="${oauthForm}" method="post" novalidate> <!-- form 생성 -->
 
-      <input type="hidden" th:name="test" th:value="${kakaoEmail}"/>
+      <input type="hidden" th:name="kakaoEmail" th:value="${kakaoEmail}"/>
 
       <div class="form-group">
         <label for="nickname">사용하실 닉네임</label>
