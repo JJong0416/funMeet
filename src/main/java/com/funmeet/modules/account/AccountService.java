@@ -119,7 +119,7 @@ public class AccountService implements UserDetailsService {
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String EmailOrNickname) throws UsernameNotFoundException {
         Account account = accountRepository.findByEmail(EmailOrNickname);
-        if (account != null){
+        if (account == null){
             account = accountRepository.findByNickname(EmailOrNickname);
         }
 
@@ -184,11 +184,5 @@ public class AccountService implements UserDetailsService {
     public void deleteAccount(Account account) {
         accountRepository.delete(account);
     }
-
-    public void addOauthAccount(){
-
-    }
-
-
 }
 

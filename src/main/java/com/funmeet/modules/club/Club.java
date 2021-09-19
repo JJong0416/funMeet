@@ -69,6 +69,7 @@ public class Club {
 
     public void addManager(Account account) {
         this.managers.add(account);
+        this.memberCount++;
     }
 
     public void addMember(Account account) {

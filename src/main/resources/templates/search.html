@@ -52,7 +52,7 @@
 
                             <span th:each="city: ${club.city}" class="font-weight-light text-monospace badge badge-primary mr-3">
                                 <a th:href="@{'/search/zone/' + ${city.id}}" class="text-decoration-none text-white">
-                                    <i class="fa fa-globe"></i> <span th:text="${city.localNameOfCity}" class="text-white">City</span>
+                                    <i class="fa fa-globe"></i> <span th:text="${city.krCity}" class="text-white">City</span>
                                   </a>
                                 </span>
                             </p>
