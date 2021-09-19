@@ -6,12 +6,12 @@ import com.querydsl.core.types.Predicate;
 import com.funmeet.modules.account.QAccount;
 
 import java.util.List;
-
+import java.util.Set;
 
 
 public class AccountPredicates {
 
-    public static Predicate findByHobbyAndCity(List<Hobby> hobbies, List<City> cities) {
+    public static Predicate findByHobbyAndCity(Set<Hobby> hobbies, Set<City> cities) {
         QAccount account = QAccount.account;
         return account.city.any().in(cities).and(account.hobby.any().in(hobbies));
     }

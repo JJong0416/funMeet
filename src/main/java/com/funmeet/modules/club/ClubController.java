@@ -5,9 +5,11 @@ import com.funmeet.modules.account.CurrentAccount;
 import com.funmeet.modules.club.form.ClubForm;
 import com.funmeet.modules.club.validator.ClubFormValidator;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StopWatch;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +23,7 @@ import java.nio.charset.StandardCharsets;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class ClubController {
 
     private final ClubService clubService;
@@ -69,7 +72,11 @@ public class ClubController {
 
     @GetMapping("/club/{path}/join")
     public String joinClub(@CurrentAccount Account account, @PathVariable String path) {
-        Club club = clubRepository.findByClubPath(path);
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        Club club = clubRepository.findClubWithMembersByClubPath(path);
+        stopWatch.stop();
+        log.info("수행시간 >> {}", stopWatch.getTotalTimeSeconds());  // 수행시간 >> 5.866
         clubService.addMember(club, account);
 
         return "redirect:/club/" + club.getEncodedPath() + "/members";
@@ -77,7 +84,7 @@ public class ClubController {
 
     @GetMapping("/club/{path}/leave")
     public String leaveClub(@CurrentAccount Account account, @PathVariable String path) {
-        Club club = clubRepository.findByClubPath(path);
+        Club club = clubRepository.findClubWithMembersByClubPath(path);
         clubService.removeMember(club, account);
         return "redirect:/club/" + club.getEncodedPath() + "/members";
     }

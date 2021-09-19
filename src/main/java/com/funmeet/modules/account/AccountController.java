@@ -21,14 +21,12 @@ public class AccountController {
     private final AccountService accountService;
     private final AccountRepository accountRepository;
 
-
     @InitBinder("signUpForm")
     public void initBinder(WebDataBinder webDataBinder){
         webDataBinder.addValidators(signUpFormValidator);
     }
 
     /* sign_up */
-
 
     @GetMapping("/sign_up")
     public String signUpForm(Model model){

@@ -6,9 +6,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Getter @Setter @EqualsAndHashCode(of = "id")
@@ -44,10 +42,10 @@ public class Account {
     private LocalDateTime joinedAt;
 
     @ManyToMany
-    private List<Hobby> hobby = new ArrayList<>();
+    private Set<Hobby> hobby = new HashSet<>();
 
     @ManyToMany
-    private List<City> city = new ArrayList<>();
+    private Set<City> city = new HashSet<>();
 
     private String location;
 

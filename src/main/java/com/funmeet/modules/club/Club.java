@@ -48,10 +48,10 @@ public class Club {
     private int memberCount;
 
     @ManyToMany
-    private List<Hobby> hobby  = new ArrayList<>();
+    private Set<Hobby> hobby  = new HashSet<>();
 
     @ManyToMany
-    private List<City> city  = new ArrayList<>();
+    private Set<City> city  = new HashSet<>();
 
     private LocalDateTime publishDateTime;
 

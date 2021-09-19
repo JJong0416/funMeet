@@ -11,11 +11,11 @@ public interface ClubRepository extends JpaRepository<Club,Long>, ClubRepository
 
     Club findByClubPath(String path);
 
-    @EntityGraph(attributePaths = {"hobby","managers"}) // 시간이 더 걸리네..
+    @EntityGraph(attributePaths = {"hobby","managers"})
     Club findClubWithHobbyByClubPath(String path);
 
-//    @EntityGraph(attributePaths = {"city,managers"})
-    Club findClubWithCityByClubPath(String path);
+    @EntityGraph(attributePaths = {"managers","members"})
+    Club findClubWithManagersAndMembersById(Long id);
 
     @EntityGraph(attributePaths = "members")
     Club findClubWithMembersByClubPath(String path);
@@ -25,15 +25,8 @@ public interface ClubRepository extends JpaRepository<Club,Long>, ClubRepository
 
     Club findClubOnlyByClubPath(String path);
 
+    @EntityGraph(attributePaths = "managers")
     Club findClubWithHobbyAndCityById(Long id);
 
-    Club findClubWithMembersAndManagersById(Long id);
-
-    Club findClubWithManagersAndMembersById(Long id);
+    Club findClubWithCityByClubPath(String path);
 }
-
-
-/*
-*
-*
-*/

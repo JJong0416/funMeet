@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
@@ -86,7 +87,7 @@ public class AccountSettingsController {
     @GetMapping("/settings/hobby")
     public String updateHobby(@CurrentAccount Account account, Model model) throws JsonProcessingException {
         model.addAttribute(account);
-        List<Hobby> hobby = accountService.getHobby(account);
+        Set<Hobby> hobby = accountService.getHobby(account);
         model.addAttribute("hobby",hobby.stream().map(Hobby::getTitle).collect(Collectors.toList()));
 
         List<String> allHobby = hobbyRepository.findAll().stream().map(Hobby::getTitle).collect(Collectors.toList());
@@ -126,7 +127,7 @@ public class AccountSettingsController {
     public String updateHobbyForm(@CurrentAccount Account account, Model model) throws JsonProcessingException {
         model.addAttribute(account);
 
-        List<City> city = accountService.getCity(account);
+        Set<City> city = accountService.getCity(account);
         model.addAttribute("city", city.stream().map(City::toString).collect(Collectors.toList()));
 
         List<String> allCity = cityRepository.findAll().stream().map(City::toString).collect(Collectors.toList());

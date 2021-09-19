@@ -105,7 +105,7 @@ public class ClubService {
     }
 
     public Club getClubUpdateStatus(Account account, String path) {
-        Club club = clubRepository.findByClubPath(path);
+        Club club = clubRepository.findClubWithManagersByClubPath(path);
         checkIfExistingClub(path, club);
         checkIfManager(account, club);
         return club;
@@ -183,7 +183,7 @@ public class ClubService {
                     .clubPath("test" + randomValue)
                     .shortDescription("테스트용 테스트입니다")
                     .fullDescription("test")
-                    .hobby(new ArrayList<>())
+                    .hobby(new HashSet<>())
                     .managers(new HashSet<>())
                     .build();
 

@@ -25,6 +25,7 @@ import org.thymeleaf.context.Context;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -47,7 +48,7 @@ public class AccountService implements UserDetailsService {
     private Account saveSignUpAccount(SignUpForm signUpForm) {
         signUpForm.setPassword(passwordEncoder.encode(signUpForm.getPassword()));
         Account account = modelMapper.map(signUpForm,Account.class);
-        account.generateEmailCheckToken();;
+        account.generateEmailCheckToken();
         account.setShort_bio("간략한 자기 소개를 추가하세요.");
         return accountRepository.save(account);
     }
@@ -150,7 +151,7 @@ public class AccountService implements UserDetailsService {
         login(account);
     }
 
-    public List<Hobby> getHobby(Account account){
+    public Set<Hobby> getHobby(Account account){
         Optional<Account> getId = accountRepository.findById(account.getId());
         return getId.orElseThrow().getHobby();
     }
@@ -165,7 +166,7 @@ public class AccountService implements UserDetailsService {
         removeId.ifPresent(a -> a.getHobby().remove(hobby));
     }
 
-    public List<City> getCity(Account account) {
+    public Set<City> getCity(Account account) {
         Optional<Account> getId = accountRepository.findById(account.getId());
         return getId.orElseThrow().getCity();
     }
