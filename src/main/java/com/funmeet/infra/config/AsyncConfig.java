@@ -19,8 +19,8 @@ public class AsyncConfig implements AsyncConfigurer{
         int processors = Runtime.getRuntime().availableProcessors();
         executor.setCorePoolSize(processors);
         executor.setMaxPoolSize(processors * 2);
-        executor.setQueueCapacity(50); // 꽉 찼을 경우, 크기 45의 queue 생성
-        executor.setKeepAliveSeconds(60); // 새로 만든 쓰레드를 45초까지만 살리기
+        executor.setQueueCapacity(50);
+        executor.setKeepAliveSeconds(60);
         executor.setThreadNamePrefix("AsyncExecutor:");
         executor.initialize();
         return executor;

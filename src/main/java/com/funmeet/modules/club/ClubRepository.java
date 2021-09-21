@@ -4,6 +4,8 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Transactional(readOnly = true)
 public interface ClubRepository extends JpaRepository<Club,Long>, ClubRepositoryAnnexation {
 
@@ -29,4 +31,7 @@ public interface ClubRepository extends JpaRepository<Club,Long>, ClubRepository
     Club findClubWithHobbyAndCityById(Long id);
 
     Club findClubWithCityByClubPath(String path);
+
+    List<Club> findFirst9ByPublishedAndClosedOrderByPublishDateTimeDesc(boolean published, boolean closed);
+
 }

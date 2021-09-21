@@ -34,6 +34,7 @@ public class HomeController {
         if (account != null){
             model.addAttribute(account);
         }
+        model.addAttribute("clubList", clubRepository.findFirst9ByPublishedAndClosedOrderByPublishDateTimeDesc(true, false));
         return "index";
     }
 

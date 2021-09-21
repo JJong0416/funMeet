@@ -72,11 +72,7 @@ public class ClubController {
 
     @GetMapping("/club/{path}/join")
     public String joinClub(@CurrentAccount Account account, @PathVariable String path) {
-        StopWatch stopWatch = new StopWatch();
-        stopWatch.start();
         Club club = clubRepository.findClubWithMembersByClubPath(path);
-        stopWatch.stop();
-        log.info("수행시간 >> {}", stopWatch.getTotalTimeSeconds());  // 수행시간 >> 5.866
         clubService.addMember(club, account);
 
         return "redirect:/club/" + club.getEncodedPath() + "/members";

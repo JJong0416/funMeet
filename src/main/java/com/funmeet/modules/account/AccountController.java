@@ -85,8 +85,6 @@ public class AccountController {
         return view_url;
     }
 
-
-
     @GetMapping("/find_account")
     public String emailLoginForm() {
         return "email/find_account";
@@ -94,7 +92,9 @@ public class AccountController {
 
     @PostMapping("/find_account")
     public String sendEmailLoginLink(String email, Model model, RedirectAttributes attributes) {
+
         Account account = accountRepository.findByEmail(email);
+
         if (account == null) {
             model.addAttribute("error", "유효");
             return "email/find_account";

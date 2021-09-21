@@ -154,6 +154,40 @@
         </div>
     </div>
 </div>
-<!-- 여기까지 테스트-->
+
+<div th:fragment="club_list (clubList)" class="col-sm-10">
+    <div class="row">
+        <div class="col-md-4" th:each="club: ${clubList}">
+            <div class="card mb-4 shadow-sm">
+                <img th:src="${club.banner}" class="card-img-top" th:alt="${club.title}" >
+                <div class="card-body">
+                    <a th:href="@{'/club/' + ${club.clubPath}}" class="text-decoration-none">
+                        <h5 class="card-title context" th:text="${club.title}"></h5>
+                    </a>
+                    <p class="card-text" th:text="${club.shortDescription}">Short description</p>
+                    <p class="card-text context">
+                                <span th:each="hobby: ${club.hobby}" class="font-weight-light text-monospace badge badge-pill badge-info mr-3">
+                                    <a th:href="@{'/search/hobby/' + ${hobby.title}}" class="text-decoration-none text-white">
+                                        <i class="fa fa-tag"></i> <span th:text="${hobby.title}">Hobby</span>
+                                    </a>
+                                </span>
+                        <span th:each="city: ${club.city}" class="font-weight-light text-monospace badge badge-primary mr-3">
+                                    <a th:href="@{'/search/city/' + ${city.id}}" class="text-decoration-none text-white">
+                                        <i class="fa fa-globe"></i> <span th:text="${city.krCity}" class="text-white">City</span>
+                                    </a>
+                                </span>
+                    </p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted">
+                            <i class="fa fa-user-circle"></i>
+                            <span th:text="${club.memberCount}"></span>명
+                        </small>
+                        <small class="text-muted date" th:text="${club.publishDateTime}">9 mins</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 </html>

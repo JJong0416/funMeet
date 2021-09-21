@@ -1,17 +1,36 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/config :: config"></head>
-<div th:replace="fragments/header :: main_nav"></div>
-<div class="container">
+<head>
+    <span th:replace="fragments/config :: config"></span>
+</head>
 
-    <div class="alert alert-warning" role="alert" th:if="${account != null && !account.emailVerified}">
-        뻔모임을 이용하시기 위해서는 <a th:href="@{/certification_email}" class="alert-link">계정 인증 이메일을 확인</a>해주셔야 합니다.
-    </div>
-
-    <div class="py-5 text-center">
-        <h1>뻔(Fun)하면서, 뻔하지 않은 모임. 뻔모임</h1>
-    </div>
-
+<div th:if="${account == null}" >
+    <div th:replace="fragments/header :: index_nav"></div>
 </div>
+<div th:if="${account != null}">
+    <div th:replace="fragments/header :: main_nav"></div>
+</div>
+
+<body class="bg-light">
+
+    <section class="jumbotron text-center">
+        <div class="container">
+            <h1>뻔모임(FunMeet)</h1>
+            <p class="lead text-muted">
+                태그와 지역 기반으로 스터디를 찾고 참여하세요.<br/>
+                스터디 모임 관리 기능을 제공합니다.
+            </p>
+            <p>
+                <a th:href="@{/sign_up}" class="btn btn-primary my-2">회원 가입</a>
+            </p>
+        </div>
+    </section>
+
+    <div class="row justify-content-center pt-3">
+        <div th:replace="fragments/club :: club_list (clubList=${clubList})"></div>
+    </div>
+
+</body>
 <div th:replace="fragments/footer :: footer"></div>
+<div th:replace="fragments/script :: time_script"></div>
 </html>
