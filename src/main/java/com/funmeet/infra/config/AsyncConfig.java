@@ -12,7 +12,6 @@ import java.util.concurrent.Executor;
 @EnableAsync
 @Slf4j
 public class AsyncConfig implements AsyncConfigurer{
-
     @Override
     public Executor getAsyncExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
@@ -25,6 +24,5 @@ public class AsyncConfig implements AsyncConfigurer{
         executor.initialize();
         return executor;
     }
-
 }
 

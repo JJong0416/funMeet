@@ -12,5 +12,4 @@ public class EmailMessageForm {
     private String subject;
 
     private String text;
-
 }

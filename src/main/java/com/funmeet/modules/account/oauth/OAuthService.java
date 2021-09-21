@@ -2,6 +2,9 @@ package com.funmeet.modules.account.oauth;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.funmeet.modules.account.Account;
+import com.funmeet.modules.account.AccountRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -13,6 +16,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 @Service
+@RequiredArgsConstructor
 public class OAuthService {
 
     @Value("${authURL.redirect_uri}")
@@ -20,6 +24,8 @@ public class OAuthService {
 
     @Value("${authURL.client_id}")
     private String client_id;
+
+    private final AccountRepository accountRepository;
 
     public OAuthToken getAccessToken(String code) {
         RestTemplate rt = new RestTemplate();
@@ -72,7 +78,6 @@ public class OAuthService {
                 String.class
         );
 
-
         ObjectMapper objectMapper = new ObjectMapper();
         KakaoProfile kakaoProfile = null;
 
@@ -81,7 +86,10 @@ public class OAuthService {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-
         return kakaoProfile;
+    }
+
+    public Account findAccountByKakaoEmail(String kakaoEmail){
+        return accountRepository.findByKakaoEmailAndKakaoTokenVerifiedTrue(kakaoEmail);
     }
 }

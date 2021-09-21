@@ -37,7 +37,7 @@ public class OAuthController {
         KakaoProfile kakaoProfile = oAuthService.getProfile(oAuthToken);
 
         String kakaoEmail = kakaoProfile.kakao_account.email;
-        Account account = accountRepository.findByKakaoEmailAndKakaoTokenVerifiedTrue(kakaoEmail);
+        Account account = oAuthService.findAccountByKakaoEmail(kakaoEmail);
 
         if (account == null){
             model.addAttribute("oauthForm",new OAuthForm());

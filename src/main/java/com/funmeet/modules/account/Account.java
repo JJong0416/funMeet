@@ -6,7 +6,9 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Getter @Setter @EqualsAndHashCode(of = "id")
@@ -24,7 +26,6 @@ public class Account {
 
     private String password;
 
-    /* OAuth Token Field */
     private boolean kakaoTokenVerified;
 
     private String kakaoEmail;

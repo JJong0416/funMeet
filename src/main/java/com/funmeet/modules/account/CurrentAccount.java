@@ -12,5 +12,4 @@ import java.lang.annotation.Target;
 @Target(ElementType.PARAMETER)
 @AuthenticationPrincipal(expression = "#this == 'anonymousUser' ? null : account")
 public @interface CurrentAccount {
-
 }

@@ -19,14 +19,11 @@ public class AccountController {
 
     private final SignUpFormValidator signUpFormValidator;
     private final AccountService accountService;
-    private final AccountRepository accountRepository;
 
     @InitBinder("signUpForm")
     public void initBinder(WebDataBinder webDataBinder){
         webDataBinder.addValidators(signUpFormValidator);
     }
-
-    /* sign_up */
 
     @GetMapping("/sign_up")
     public String signUpForm(Model model){
@@ -43,8 +40,6 @@ public class AccountController {
         accountService.login(account);
         return "redirect:/";
     }
-
-    /* 이메일  시작 */
 
     @GetMapping("/certification_email")
     public String checkEmail(@CurrentAccount Account account, Model model) {
@@ -67,7 +62,7 @@ public class AccountController {
     @GetMapping("/check_email_token") // 이메일 토큰 눌렀을 때 뜨는
     public String checkEmailToken(String token, String email, Model model){
 
-        Account account = accountRepository.findByEmail(email);
+        Account account = accountService.findAccountByEmail(email);
         String view_url = "email/check_email";
 
         if (account == null){
@@ -93,14 +88,14 @@ public class AccountController {
     @PostMapping("/find_account")
     public String sendEmailLoginLink(String email, Model model, RedirectAttributes attributes) {
 
-        Account account = accountRepository.findByEmail(email);
+        Account account = accountService.findAccountByEmail(email);
 
-        if (account == null) {
-            model.addAttribute("error", "유효");
-            return "email/find_account";
-        }
+        if (account == null || !account.canSendConfirmEmail()) {
+            if (account == null) {
+                model.addAttribute("error", "유효");
+                return "email/find_account";
+            }
 
-        if (!account.canSendConfirmEmail()) {
             model.addAttribute("error", "시간");
             return "email/find_account";
         }
@@ -112,8 +107,10 @@ public class AccountController {
 
     @GetMapping("/auth_email")
     public String passByEmail(String token, String email, Model model) {
-        Account account = accountRepository.findByEmail(email);
+
+        Account account = accountService.findAccountByEmail(email);
         String view = "email/auth_email";
+
         if (account == null || !account.isValidToken(token)) {
             model.addAttribute("error", "로그인할 수 없습니다.");
             return view;
@@ -127,7 +124,7 @@ public class AccountController {
 
     @GetMapping("/profile/{nickname}")
     public String viewProfile(@PathVariable String nickname, Model model, @CurrentAccount Account account){
-        Account viewAccount = accountRepository.findByNickname(nickname);
+        Account viewAccount = accountService.findAccountByNickname(nickname);
 
         if (viewAccount == null){
             throw new IllegalArgumentException(nickname + "에 해당하는 사용자가 없습니다");

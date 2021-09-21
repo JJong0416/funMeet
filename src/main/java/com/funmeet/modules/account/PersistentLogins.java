@@ -26,5 +26,4 @@ public class PersistentLogins {
 
     @Column(name = "last_used", nullable = false, length = 64)
     private LocalDateTime lastUsed;
-
 }

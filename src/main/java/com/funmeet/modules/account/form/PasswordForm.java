@@ -11,5 +11,4 @@ public class PasswordForm {
 
     @Length(min = 6, max = 30)
     private String newPasswordConfirm;
-
 }
