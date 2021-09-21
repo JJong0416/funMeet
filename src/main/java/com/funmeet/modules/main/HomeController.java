@@ -3,7 +3,7 @@ package com.funmeet.modules.main;
 import com.funmeet.infra.config.AppProperties;
 import com.funmeet.modules.account.Account;
 import com.funmeet.modules.account.AccountRepository;
-import com.funmeet.modules.account.CurrentAccount;
+import com.funmeet.modules.account.security.CurrentAccount;
 import com.funmeet.modules.club.Club;
 import com.funmeet.modules.club.ClubRepository;
 import lombok.RequiredArgsConstructor;

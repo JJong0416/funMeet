@@ -1,7 +1,7 @@
 package com.funmeet.modules.alarm;
 
 import com.funmeet.modules.account.Account;
-import com.funmeet.modules.account.CurrentAccount;
+import com.funmeet.modules.account.security.CurrentAccount;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

@@ -1,7 +1,7 @@
 package com.funmeet.modules.main;
 
 import com.funmeet.modules.account.Account;
-import com.funmeet.modules.account.CurrentAccount;
+import com.funmeet.modules.account.security.CurrentAccount;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

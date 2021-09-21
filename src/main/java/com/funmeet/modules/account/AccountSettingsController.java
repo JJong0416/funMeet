@@ -7,6 +7,7 @@ import com.funmeet.modules.account.form.NicknameForm;
 import com.funmeet.modules.account.form.NotificationForm;
 import com.funmeet.modules.account.form.PasswordForm;
 import com.funmeet.modules.account.form.Profile;
+import com.funmeet.modules.account.security.CurrentAccount;
 import com.funmeet.modules.account.validator.NicknameValidator;
 import com.funmeet.modules.account.validator.PasswordFormValidation;
 import com.funmeet.modules.city.City;

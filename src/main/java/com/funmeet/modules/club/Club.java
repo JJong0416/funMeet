@@ -1,19 +1,16 @@
 package com.funmeet.modules.club;
 
 import com.funmeet.modules.account.Account;
-import com.funmeet.modules.account.AdaptAccount;
+import com.funmeet.modules.account.security.AdaptAccount;
 import com.funmeet.modules.city.City;
 import com.funmeet.modules.hobby.Hobby;
-import com.funmeet.modules.meeting.Meeting;
 import lombok.*;
 
 import javax.persistence.*;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity

@@ -3,7 +3,7 @@ package com.funmeet.modules.club;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.funmeet.modules.account.Account;
-import com.funmeet.modules.account.CurrentAccount;
+import com.funmeet.modules.account.security.CurrentAccount;
 import com.funmeet.modules.city.City;
 import com.funmeet.modules.city.CityForm;
 import com.funmeet.modules.city.CityRepository;

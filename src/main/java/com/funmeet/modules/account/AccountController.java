@@ -2,6 +2,7 @@ package com.funmeet.modules.account;
 
 
 import com.funmeet.modules.account.form.SignUpForm;
+import com.funmeet.modules.account.security.CurrentAccount;
 import com.funmeet.modules.account.validator.SignUpFormValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

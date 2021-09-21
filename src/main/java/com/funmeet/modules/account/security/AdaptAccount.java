@@ -1,5 +1,6 @@
-package com.funmeet.modules.account;
+package com.funmeet.modules.account.security;
 
+import com.funmeet.modules.account.Account;
 import lombok.Getter;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;

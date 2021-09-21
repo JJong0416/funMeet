@@ -1,7 +1,7 @@
 package com.funmeet.modules.alarm;
 
 import com.funmeet.modules.account.Account;
-import com.funmeet.modules.account.AdaptAccount;
+import com.funmeet.modules.account.security.AdaptAccount;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

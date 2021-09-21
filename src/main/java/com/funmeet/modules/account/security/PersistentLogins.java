@@ -1,4 +1,4 @@
-package com.funmeet.modules.account;
+package com.funmeet.modules.account.security;
 
 import lombok.Getter;
 import lombok.Setter;

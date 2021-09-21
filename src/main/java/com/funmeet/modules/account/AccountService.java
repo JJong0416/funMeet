@@ -7,6 +7,7 @@ import com.funmeet.modules.account.form.NotificationForm;
 import com.funmeet.modules.account.form.Profile;
 import com.funmeet.modules.account.form.SignUpForm;
 import com.funmeet.modules.account.oauth.OAuthForm;
+import com.funmeet.modules.account.security.AdaptAccount;
 import com.funmeet.modules.city.City;
 import com.funmeet.modules.city.CityRepository;
 import com.funmeet.modules.hobby.Hobby;

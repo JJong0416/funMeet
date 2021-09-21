@@ -1,7 +1,7 @@
 package com.funmeet.modules.club;
 
 import com.funmeet.modules.account.Account;
-import com.funmeet.modules.account.CurrentAccount;
+import com.funmeet.modules.account.security.CurrentAccount;
 import com.funmeet.modules.club.form.ClubForm;
 import com.funmeet.modules.club.validator.ClubFormValidator;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StopWatch;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
