@@ -2,6 +2,7 @@ package com.funmeet.modules.main;
 
 import com.funmeet.infra.config.AppProperties;
 import com.funmeet.modules.account.Account;
+import com.funmeet.modules.account.AccountRepository;
 import com.funmeet.modules.account.CurrentAccount;
 import com.funmeet.modules.club.Club;
 import com.funmeet.modules.club.ClubRepository;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class HomeController {
 
     private final ClubRepository clubRepository;
+    private final AccountRepository accountRepository;
 
     @Value("${authURL.client_id}")
     private String client_id;
