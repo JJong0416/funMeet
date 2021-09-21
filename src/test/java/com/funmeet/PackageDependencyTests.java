@@ -15,6 +15,8 @@ public class PackageDependencyTests {
     private static final String ACCOUNT = "..modules.account..";
     private static final String HOBBY = "..modules.hobby..";
     private static final String CITY = "..modules.city..";
+    private static final String MAIN = "..modules.main..";
+
 
     /* 어플리케이션의 아키텍처를 테스트 할 수 있는 오픈 소스 라이브러리로 패키지, 클래스, 레이어, 슬라이스 간 의존성을 확인할 수 있는 기능을 제공한다. */
     /* Ref : https://www.archunit.org/userguide/html/000_Index.html */
@@ -26,7 +28,7 @@ public class PackageDependencyTests {
     @ArchTest
     ArchRule clubPackageRule = classes().that().resideInAPackage("..modules.club..")
             .should().onlyBeAccessed().byClassesThat()
-            .resideInAnyPackage(MEETING, CLUB);
+            .resideInAnyPackage(MEETING, CLUB, MAIN);
 
 
     @ArchTest

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <span th:replace="fragments/config :: config"></span>
+</head>
+
+<div th:if="${account == null}" >
+    <div th:replace="fragments/header :: index_nav"></div>
+</div>
+<div th:if="${account != null}">
+    <div th:replace="fragments/header :: main_nav"></div>
+</div>
+
+<body class="bg-light">
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-2">
+            <h5 class="font-weight-light">관심 모임 주제</h5>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item" th:each="hobby: ${account.hobby}">
+                    <i class="fa fa-tag"></i> <span th:text="${hobby.title}"></span>
+                </li>
+                <li class="list-group-item" th:if="${account.hobby.size() == 0}">
+                    <a th:href="@{/settings/hobby}" class="btn-text">관심 모임 주제</a>를 등록하세요.
+                </li>
+            </ul>
+            <h5 class="mt-3 font-weight-light">주요 활동 지역</h5>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item" th:each="city: ${account.city}">
+                    <i class="fa fa-globe"></i> <span th:text="${city.getKrCity()}">City</span>
+                </li>
+                <li class="list-group-item" th:if="${account.city.size() == 0}">
+                    <a th:href="@{/settings/city}" class="btn-text">주요 활동 지역</a>을 등록하세요.
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-7">
+            <h5 class="font-weight-light mt-3" th:if="${#lists.isEmpty(clubList)}">관련 모임이 없습니다.</h5>
+            <h5 class="font-weight-light mt-3" th:if="${!#lists.isEmpty(clubList)}">주요 활동 지역의 관심 주제 모임</h5>
+            <div class="row justify-content-center">
+                <div th:replace="fragments/club :: club_list (clubList=${clubList})"></div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <h5 class="font-weight-light" th:if="${#lists.isEmpty(clubManagerOf)}">관리중인 모임 없습니다.</h5>
+            <h5 class="font-weight-light" th:if="${!#lists.isEmpty(clubManagerOf)}">관리중인 모임</h5>
+            <div class="list-group" th:if="${!#lists.isEmpty(clubManagerOf)}">
+                <a th:href="@{'/club/' + ${club.clubPath}}" th:text="${club.title}"
+                   class="list-group-item list-group-item-action" th:each="club: ${clubManagerOf}">
+                    모임 title
+                </a>
+            </div>
+
+            <h5 class="font-weight-light mt-3" th:if="${#lists.isEmpty(clubMemberOf)}">참여중인 모임 없습니다.</h5>
+            <h5 class="font-weight-light mt-3" th:if="${!#lists.isEmpty(clubMemberOf)}">참여중인 모임</h5>
+            <div class="list-group" th:if="${!#lists.isEmpty(clubMemberOf)}">
+                <a href="#" th:href="@{'/club/' + ${club.clubPath}}" th:text="${club.title}"
+                   class="list-group-item list-group-item-action" th:each="club: ${clubManagerOf}">
+                    모임 title
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<div th:replace="fragments/footer :: footer"></div>
+<div th:replace="fragments/script :: time_script"></div>
+</html>

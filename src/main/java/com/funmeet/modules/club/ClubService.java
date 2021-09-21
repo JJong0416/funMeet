@@ -138,11 +138,8 @@ public class ClubService {
         if (!newPath.matches("^[ㄱ-ㅎ가-힣a-z0-9_-]{2,20}$")) {
             return false;
         }
-
         return !clubRepository.existsByClubPath(newPath);
     }
-
-
 
     public void updateClubPath(Club club, String newPath) {
         club.setClubPath(newPath);
@@ -174,7 +171,6 @@ public class ClubService {
         return club;
     }
 
-    /* Club 만들기 위한 Test Service */
     public void generateTestClub(Account account) {
         for ( int i = 0; i < 15 ; i++){
             String randomValue = RandomString.make(5);

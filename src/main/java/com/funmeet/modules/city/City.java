@@ -20,9 +20,6 @@ public class City {
     @Column(nullable = false)
     private String krCity;
 
-//    @Column(nullable = true) TODO
-//    private String districtList;
-
     @Override
     public String toString() {
         return String.format("%s(%s)",enCity,krCity);

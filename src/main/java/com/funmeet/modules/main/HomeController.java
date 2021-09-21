@@ -34,7 +34,17 @@ public class HomeController {
     @GetMapping({"","/"})
     public String home(@CurrentAccount Account account, Model model){
         if (account != null){
-            model.addAttribute(account);
+            Account accountLoaded = accountRepository.findAccountWithHobbyAndCityById(account.getId());
+            model.addAttribute(accountLoaded);
+            model.addAttribute("clubList", clubRepository.findByAccount(
+                    accountLoaded.getHobby(),
+                    accountLoaded.getCity()));
+            model.addAttribute("clubManagerOf",
+                    clubRepository.findList5ByManagersContainingAndClosedOrderByPublishDateTimeDesc(account, false));
+            model.addAttribute("clubMemberOf",
+                    clubRepository.findList5ByMembersContainingAndClosedOrderByPublishDateTimeDesc(account, false));
+
+            return "index_with_login";
         }
         model.addAttribute("clubList", clubRepository.findFirst9ByPublishedAndClosedOrderByPublishDateTimeDesc(true, false));
         return "index";
@@ -62,6 +72,7 @@ public class HomeController {
         model.addAttribute("keyword", keyword);
         model.addAttribute("sortProperty",
                 pageable.getSort().toString().contains("publishDateTime") ? "publishDateTime" : "memberCount");
+
         return "search";
     }
 }
