@@ -6,7 +6,7 @@
     <a class="navbar-brand" th:href="@{/}">
         <img src="/images/logo_fun.png" width="35" height="35">
     </a>
-    <a class="navbar-brand" th:href="@{/}">
+    <a class="navbar-brand animation" th:href="@{/}">
         뻔모임
     </a>
 
@@ -70,7 +70,7 @@
     <a class="navbar-brand" th:href="@{/}">
         <img src="/images/logo_fun.png" width="35" height="35">
     </a>
-    <a class="navbar-brand" th:href="@{/}">
+    <a class="navbar-brand animation" th:href="@{/}">
         뻔모임
     </a>
 
@@ -122,7 +122,24 @@
     </div>
 </nav>
 
-</html>
+<div th:fragment="mainHeader">
+    <div th:if="${account == null}" >
+        <div th:replace="fragments/header :: index_nav"></div>
+    </div>
+    <div th:if="${account != null}">
+        <div th:replace="fragments/header :: main_nav"></div>
+    </div>
 
-<!--                     <div class="dropdown-divider"></div>
--->
+    <div class="indexContainer">
+        <img src="/images/index.jpg" width="100%" height="100%">
+
+        <form th:action="@{/search}" class="form-inline" method="get">
+            <div class="centered">
+                <h3>뻔모임은 여러분의 취미를 응원합니다.</h3>
+                <a>찾고자 하는 취미 혹은 지역을 검색하세요</a><br/><br/>
+                <input class="form-control form-control-lg text-center" name = "keyword" type="search" placeholder="취미를 입력하세요."/>
+            </div>
+        </form>
+    </div>
+</div>
+</html>

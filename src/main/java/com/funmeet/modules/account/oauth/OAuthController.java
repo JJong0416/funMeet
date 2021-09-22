@@ -46,7 +46,7 @@ public class OAuthController {
         }
 
         accountService.login(account);
-        return "index";
+        return "redirect:/";
     }
 
     @PostMapping("/oauth_sign_up")
@@ -56,6 +56,6 @@ public class OAuthController {
         }
         Account account = accountService.oauthSignUp(oAuthForm,kakaoEmail);
         accountService.login(account);
-        return "index";
+        return "redirect:/";
     }
 }

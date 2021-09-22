@@ -16,6 +16,10 @@
   <script src="/node_modules/jdenticon/dist/jdenticon.min.js"></script>
   <script src="/node_modules/sweetalert/dist/sweetalert.min.js"></script>
   <style>
+
+    html{
+    }
+
     .container{
       max-width: 100%;
       background-color:#f8f9fa;
@@ -83,10 +87,22 @@
       color: #000;
     }
 
-    .backgroundImg{
-      height: 120px;
-      width: 120px;
-      background-image:url('../../static/images/index_img.png'), url('../../static/images/index_img.png');
+
+    .animation {
+      color: #f35626;
+      background-image: -webkit-linear-gradient(92deg, #f35626, #feab3a);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      -webkit-animation: hue 10s infinite linear;
+    }
+
+    @-webkit-keyframes hue {
+      from {
+        -webkit-filter: hue-rotate(0deg);
+      }
+      to {
+        -webkit-filter: hue-rotate(-360deg);
+      }
     }
 
   </style>

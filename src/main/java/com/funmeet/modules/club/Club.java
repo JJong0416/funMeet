@@ -54,10 +54,6 @@ public class Club {
 
     private LocalDateTime closedDateTime;
 
-    private LocalDateTime recruitingTime;
-
-    private boolean recruiting;
-
     private boolean published;
 
     private boolean closed;

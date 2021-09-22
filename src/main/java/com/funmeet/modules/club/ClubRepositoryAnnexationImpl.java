@@ -37,11 +37,10 @@ public class ClubRepositoryAnnexationImpl extends QuerydslRepositorySupport impl
         JPQLQuery<Club> pageableQuery = Objects.requireNonNull(getQuerydsl()).applyPagination(pageable, query);
         QueryResults<Club> fetchResults = pageableQuery.fetchResults();
         return new PageImpl<>(fetchResults.getResults(), pageable, fetchResults.getTotal());
-
     }
 
     @Override
-    public List<Club> findByAccount(Set<Hobby> hobby, Set<City> city) {
+    public List<Club> findClubByAccount(Set<Hobby> hobby, Set<City> city) {
         QClub club = QClub.club;
         JPQLQuery<Club> query = from(club).where(club.published.isTrue()
                 .and(club.closed.isFalse())
@@ -52,6 +51,7 @@ public class ClubRepositoryAnnexationImpl extends QuerydslRepositorySupport impl
                 .orderBy(club.publishDateTime.desc())
                 .distinct()
                 .limit(9);
-        return null;
+        return query.fetch();
     }
 }
+

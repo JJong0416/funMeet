@@ -15,5 +15,5 @@ public interface ClubRepositoryAnnexation {
 
     Page<Club> findByKeyword(String keyword, Pageable pageable);
 
-    List<Club> findByAccount(Set<Hobby> hobbies, Set<City> cities);
+    List<Club> findClubByAccount(Set<Hobby> hobbies, Set<City> cities);
 }

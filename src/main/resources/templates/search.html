@@ -63,30 +63,5 @@
 </div>
 <div th:replace="fragments/footer :: footer"></div>
 <script src="/node_modules/mark.js/dist/jquery.mark.min.js"></script>
-<script type="application/javascript">
-    $(function(){
-        var mark = function() {
-            // Read the keyword
-            var keyword = $("#keyword").text();
-
-            // Determine selected options
-            var options = {
-                "each": function(element) {
-                    setTimeout(function() {
-                        $(element).addClass("animate");
-                    }, 150);
-                }
-            };
-
-            // Mark the keyword inside the context
-            $(".context").unmark({
-                done: function() {
-                    $(".context").mark(keyword, options);
-                }
-            });
-        };
-
-        mark();
-    });
-</script>
+<script th:replace="fragments/script :: textmark"></script>
 </html>

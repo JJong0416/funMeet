@@ -25,7 +25,7 @@ public class HomeController {
         if (account != null){
             Account accountLoaded = homeService.findAccountWithHobbyAndCityById(account.getId());
             model.addAttribute(accountLoaded);
-            model.addAttribute("clubList", clubRepository.findByAccount(
+            model.addAttribute("interestedClubList", clubRepository.findClubByAccount(
                     accountLoaded.getHobby(),
                     accountLoaded.getCity()));
             model.addAttribute("clubManagerOf",
@@ -42,7 +42,6 @@ public class HomeController {
     public String login(Model model){
         StringBuilder oauth_link = homeService.getOAuthLink();
         model.addAttribute("link",oauth_link);
-
         return "login";
     }
 

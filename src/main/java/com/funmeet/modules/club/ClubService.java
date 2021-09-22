@@ -139,7 +139,7 @@ public class ClubService {
 
     public void publish(Club club) {
         club.publish();
-        applicationEventPublisher.publishEvent(new ClubCreatedEvent(club)); // Async
+        applicationEventPublisher.publishEvent(new ClubCreatedEvent(club));
 
     }
 

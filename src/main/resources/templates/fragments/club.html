@@ -168,12 +168,12 @@
                     <p class="card-text context">
                                 <span th:each="hobby: ${club.hobby}" class="font-weight-light text-monospace badge badge-pill badge-info mr-3">
                                     <a th:href="@{'/search/hobby/' + ${hobby.title}}" class="text-decoration-none text-white">
-                                        <i class="fa fa-tag"></i> <span th:text="${hobby.title}">Hobby</span>
+                                        <i class="fa fa-hashtag"></i> <span th:text="${hobby.title}">Hobby</span>
                                     </a>
                                 </span>
-                        <span th:each="city: ${club.city}" class="font-weight-light text-monospace badge badge-primary mr-3">
+                        <span th:each="city: ${club.city}" class="font-weight-light text-monospace badge badge-secondary mr-3">
                                     <a th:href="@{'/search/city/' + ${city.id}}" class="text-decoration-none text-white">
-                                        <i class="fa fa-globe"></i> <span th:text="${city.krCity}" class="text-white">City</span>
+                                        <i class="fa fa-map-marker"></i> <span th:text="${city.krCity}" class="text-white">City</span>
                                     </a>
                                 </span>
                     </p>

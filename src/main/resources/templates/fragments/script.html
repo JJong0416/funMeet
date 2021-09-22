@@ -452,6 +452,32 @@
     </script>
 </div>
 
+<script th:fragment="textmark" type="application/javascript">
+    $(function(){
+        var mark = function() {
+            // Read the keyword
+            var keyword = $("#keyword").text();
+
+            // Determine selected options
+            var options = {
+                "each": function(element) {
+                    setTimeout(function() {
+                        $(element).addClass("animate");
+                    }, 150);
+                }
+            };
+
+            // Mark the keyword inside the context
+            $(".context").unmark({
+                done: function() {
+                    $(".context").mark(keyword, options);
+                }
+            });
+        };
+
+        mark();
+    });
+</script>
 
 
 

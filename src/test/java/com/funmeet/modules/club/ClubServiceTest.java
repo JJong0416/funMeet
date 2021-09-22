@@ -29,8 +29,6 @@ class ClubServiceTest {
     @Test
     void isJoinable() {
         club.setPublished(true);
-        club.setRecruiting(true);
-
         assertTrue(club.isJoinable(adaptAccount));
     }
 
@@ -38,7 +36,6 @@ class ClubServiceTest {
     @Test
     void isJoinable_false_manager() {
         club.setPublished(true);
-        club.setRecruiting(true);
         club.addManager(account);
 
         assertFalse(club.isJoinable(adaptAccount));
@@ -48,7 +45,6 @@ class ClubServiceTest {
     @Test
     void isJoinable_false_member() {
         club.setPublished(true);
-        club.setRecruiting(true);
         club.addMember(account);
         assertFalse(club.isJoinable(adaptAccount));
     }
