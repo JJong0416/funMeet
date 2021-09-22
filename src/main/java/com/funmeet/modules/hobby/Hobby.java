@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-@Entity @Getter @Setter @EqualsAndHashCode(of = "id")
+@Entity @Getter @EqualsAndHashCode(of = "id")
 @Builder @NoArgsConstructor @AllArgsConstructor
 public class Hobby {
 
@@ -17,7 +17,4 @@ public class Hobby {
 
     @Column(unique = true, nullable = false)
     private String title;
-
-//    @ManyToMany
-//    private List<Reply> replyList; // TODO 회원대화방
 }

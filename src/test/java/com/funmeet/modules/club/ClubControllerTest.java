@@ -128,7 +128,7 @@ class ClubControllerTest {
         Account jongchan = accountRepository.findByNickname("jongchan");
 
         Club club = createNewClub("url",managerAccount);
-        clubService.addMember(club, jongchan);
+        clubService.addMember(jongchan,"url");
 
         mockMvc.perform(get("/club/" + club.getClubPath() + "/join"))
                 .andExpect(status().is3xxRedirection())
@@ -146,7 +146,7 @@ class ClubControllerTest {
         Account jongchan = accountRepository.findByNickname("jongchan");
 
         Club club = createNewClub("url",managerAccount);
-        clubService.addMember(club, jongchan);
+        clubService.addMember(jongchan,"url");
 
         mockMvc.perform(get("/club/" + club.getClubPath() + "/leave"))
                 .andExpect(status().is3xxRedirection())

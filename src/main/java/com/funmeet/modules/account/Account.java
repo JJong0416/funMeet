@@ -10,8 +10,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@Entity
-@Getter @Setter @EqualsAndHashCode(of = "id")
+@Entity @Setter
+@Getter @EqualsAndHashCode(of = "id")
 @Builder @AllArgsConstructor @NoArgsConstructor
 public class Account {
 

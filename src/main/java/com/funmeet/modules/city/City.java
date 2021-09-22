@@ -6,7 +6,7 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity @Getter
-@Setter @EqualsAndHashCode(of = "id")
+@EqualsAndHashCode(of = "id")
 @Builder @AllArgsConstructor @NoArgsConstructor
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"enCity", "krCity"}))
 public class City {

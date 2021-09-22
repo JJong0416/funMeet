@@ -55,7 +55,7 @@ public class ClubController {
 
     @GetMapping("/club/{path}")
     public String viewClub(@CurrentAccount Account account, @PathVariable String path, Model model) {
-        Club club = clubRepository.findByClubPath(path);
+        Club club = clubService.getClubOnlyByPath(path);
         model.addAttribute(account);
         model.addAttribute(club);
         return "club/page";
@@ -63,7 +63,7 @@ public class ClubController {
 
     @GetMapping("/club/{path}/members")
     public String viewClubMembers(@CurrentAccount Account account, @PathVariable String path, Model model) {
-        Club club = clubRepository.findByClubPath(path);
+        Club club = clubService.getClubOnlyByPath(path);
         model.addAttribute(account);
         model.addAttribute(club);
         return "club/members";
@@ -71,16 +71,13 @@ public class ClubController {
 
     @GetMapping("/club/{path}/join")
     public String joinClub(@CurrentAccount Account account, @PathVariable String path) {
-        Club club = clubRepository.findClubWithMembersByClubPath(path);
-        clubService.addMember(club, account);
-
+        Club club = clubService.addMember(account,path);
         return "redirect:/club/" + club.getEncodedPath() + "/members";
     }
 
     @GetMapping("/club/{path}/leave")
     public String leaveClub(@CurrentAccount Account account, @PathVariable String path) {
-        Club club = clubRepository.findClubWithMembersByClubPath(path);
-        clubService.removeMember(club, account);
+        Club club = clubService.removeMember(account,path);
         return "redirect:/club/" + club.getEncodedPath() + "/members";
     }
 

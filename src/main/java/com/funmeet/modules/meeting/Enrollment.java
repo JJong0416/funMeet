@@ -9,8 +9,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Getter
-@Setter
+@Getter @Setter
 @EqualsAndHashCode(of = "id")
 public class Enrollment {
 
@@ -32,5 +31,4 @@ public class Enrollment {
     private boolean accepted;
 
     private boolean attended;
-
 }

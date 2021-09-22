@@ -6,12 +6,10 @@ import com.funmeet.modules.account.Account;
 import com.funmeet.modules.account.security.CurrentAccount;
 import com.funmeet.modules.city.City;
 import com.funmeet.modules.city.CityForm;
-import com.funmeet.modules.city.CityRepository;
 import com.funmeet.modules.city.CityService;
 import com.funmeet.modules.club.form.ClubDescriptionForm;
 import com.funmeet.modules.hobby.Hobby;
 import com.funmeet.modules.hobby.HobbyForm;
-import com.funmeet.modules.hobby.HobbyRepository;
 import com.funmeet.modules.hobby.HobbyService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -34,10 +32,6 @@ public class ClubSettingsController {
     private final ClubService clubService;
     private final HobbyService hobbyService;
     private final CityService cityService;
-
-    private final HobbyRepository hobbyRepository;
-    private final CityRepository cityRepository;
-    private final ClubRepository clubRepository;
 
     private final ObjectMapper objectMapper;
     private final ModelMapper modelMapper;
@@ -109,8 +103,7 @@ public class ClubSettingsController {
 
         model.addAttribute("hobby", club.getHobby().stream()
                 .map(Hobby::getTitle).collect(Collectors.toList()));
-        List<String> allHobbyTitles = hobbyRepository.findAll().stream()
-                .map(Hobby::getTitle).collect(Collectors.toList());
+        List<String> allHobbyTitles = clubService.getAllHobbyTitles();
         model.addAttribute("whitelist", objectMapper.writeValueAsString(allHobbyTitles));
         return "club/settings/hobby";
     }
@@ -131,12 +124,11 @@ public class ClubSettingsController {
     public ResponseEntity removeHobby(@CurrentAccount Account account, @PathVariable String path,
                                       @RequestBody HobbyForm hobbyForm) {
         Club club = clubService.getClubUpdateHobby(account, path);
-        Hobby hobby = hobbyRepository.findByTitle(hobbyForm.getHobbyTitle()).orElseThrow();
+        Hobby hobby = clubService.findHobbyByTitle(hobbyForm.getHobbyTitle());
 
         if (hobby == null) {
             return ResponseEntity.badRequest().build();
         }
-
         clubService.removeHobby(club, hobby);
         return ResponseEntity.ok().build();
     }
@@ -144,12 +136,14 @@ public class ClubSettingsController {
     @GetMapping("/city")
     public String clubCityForm(@CurrentAccount Account account, @PathVariable String path, Model model)
             throws JsonProcessingException {
+
         Club club = clubService.getClubUpdate(account, path);
         model.addAttribute(account);
         model.addAttribute(club);
         model.addAttribute("city", club.getCity().stream()
                 .map(City::toString).collect(Collectors.toList()));
-        List<String> allCity = cityRepository.findAll().stream().map(City::toString).collect(Collectors.toList());
+
+        List<String> allCity = cityService.getAllCity();
         model.addAttribute("whitelist", objectMapper.writeValueAsString(allCity));
         return "club/settings/city";
     }
@@ -160,7 +154,7 @@ public class ClubSettingsController {
                                   @RequestBody CityForm cityForm) {
 
         Club club = clubService.getClubUpdateCity(account, path);
-        City city = cityRepository.findByKrCity(cityForm.getKrCity());
+        City city = cityService.getCityByKrCity(cityForm.getKrCity());
 
         if (city == null) {
             return ResponseEntity.badRequest().build();
@@ -175,7 +169,8 @@ public class ClubSettingsController {
     public ResponseEntity removeCity(@CurrentAccount Account account, @PathVariable String path,
                                      @RequestBody CityForm cityForm) {
         Club club = clubService.getClubUpdateCity(account, path);
-        City city = cityRepository.findByKrCity(cityForm.getKrCity());
+        City city = cityService.getCityByKrCity(cityForm.getKrCity());
+
         if (city == null) {
             return ResponseEntity.badRequest().build();
         }

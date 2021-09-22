@@ -22,15 +22,17 @@ import org.springframework.util.StopWatch;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 @Slf4j
-
 public class ClubService {
 
     private final ClubRepository clubRepository;
+    private final HobbyRepository hobbyRepository;
     private final ModelMapper modelMapper;
     private final ApplicationEventPublisher applicationEventPublisher;
     private final HobbyService hobbyService;
@@ -53,10 +55,23 @@ public class ClubService {
         return club;
     }
 
+    public Club getClubOnlyByPath(String path){
+        return clubRepository.findByClubPath(path);
+    }
+
     public void updateClubDescription(Club club, ClubDescriptionForm clubDescriptionForm) {
         modelMapper.map(clubDescriptionForm, club);
         applicationEventPublisher.publishEvent(new ClubUpdateEvent(club,"모임 소개를 수정했습니다."));
 
+    }
+
+    public Hobby findHobbyByTitle(String title){
+        return hobbyRepository.findByTitle(title).orElseThrow();
+    }
+
+    public List<String> getAllHobbyTitles(){
+        return hobbyRepository.findAll().stream()
+                .map(Hobby::getTitle).collect(Collectors.toList());
     }
 
     public void updateClubImage(Club club, String image) {
@@ -70,7 +85,6 @@ public class ClubService {
     public void disableClubBanner(Club club) {
         club.setUseBanner(false);
     }
-
 
     public void addHobby(Club club, Hobby hobby) {
         club.getHobby().add(hobby);
@@ -157,12 +171,16 @@ public class ClubService {
         clubRepository.delete(club);
     }
 
-    public void addMember(Club club, Account account) {
+    public Club addMember(Account account, String path) {
+        Club club = clubRepository.findClubWithMembersByClubPath(path);
         club.addMember(account);
+        return club;
     }
 
-    public void removeMember(Club club, Account account) {
+    public Club removeMember(Account account,String path) {
+        Club club = clubRepository.findClubWithMembersByClubPath(path);
         club.removeMember(account);
+        return club;
     }
 
     public Club getClubToEnroll(String path){

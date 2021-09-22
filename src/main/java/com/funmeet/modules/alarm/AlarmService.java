@@ -1,5 +1,6 @@
 package com.funmeet.modules.alarm;
 
+import com.funmeet.modules.account.Account;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,9 +14,20 @@ public class AlarmService {
 
     private final AlarmRepository alarmRepository;
 
-    /* 설계: 안읽은 메일을 확인했을 경우, 모든 알림들을 별도의 로직으로 빼는 것이 아닌, 단번에 일괄 읽음 처리. */
     public void markAsRead(List<Alarm> alarmList){
         alarmList.forEach(n -> n.setChecked(true));
         alarmRepository.saveAll(alarmList);
+    }
+
+    public void deleteAlarm(Account account, boolean check){
+        alarmRepository.deleteByAccountAndChecked(account, true);
+    }
+
+    public List<Alarm> findByAccountAndChecked(Account account, boolean check){
+        return alarmRepository.findByAccountAndCheckedOrderByCreatedDateTimeDesc(account, check);
+    }
+
+    public Long CountCheckedAndNotChecked(Account account, boolean check){
+        return alarmRepository.countByAccountAndChecked(account, check);
     }
 }

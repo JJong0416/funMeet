@@ -22,8 +22,9 @@ public class AlarmController {
     @GetMapping("/alarm")
     public String getAlarm(@CurrentAccount Account account, Model model) {
 
-        List<Alarm> alarmList = alarmRepository.findByAccountAndCheckedOrderByCreatedDateTimeDesc(account, false);
-        long numberOfChecked = alarmRepository.countByAccountAndChecked(account, true);
+        List<Alarm> alarmList = alarmService.findByAccountAndChecked(account,false);
+        long numberOfChecked = alarmService.CountCheckedAndNotChecked(account,true);
+
         showDividedAlarm(model, alarmList, numberOfChecked, alarmList.size());
         model.addAttribute("isNew", true);
         alarmService.markAsRead(alarmList);
@@ -32,8 +33,9 @@ public class AlarmController {
 
     @GetMapping("/alarm/old")
     public String getOldAlarm(@CurrentAccount Account account, Model model) {
-        List<Alarm> alarmList = alarmRepository.findByAccountAndCheckedOrderByCreatedDateTimeDesc(account, true);
-        long numberOfNotChecked = alarmRepository.countByAccountAndChecked(account, false);
+        List<Alarm> alarmList = alarmService.findByAccountAndChecked(account,true);
+        long numberOfNotChecked = alarmService.CountCheckedAndNotChecked(account,false);
+
         showDividedAlarm(model, alarmList, alarmList.size(), numberOfNotChecked);
         model.addAttribute("isNew", false);
         return "alarm/list";
@@ -41,7 +43,7 @@ public class AlarmController {
 
     @PostMapping("/alarm/delete")
     public String deleteAlarm(@CurrentAccount Account account) {
-        alarmRepository.deleteByAccountAndChecked(account, true);
+        alarmService.deleteAlarm(account,true);
         return "redirect:/alarm";
     }
 

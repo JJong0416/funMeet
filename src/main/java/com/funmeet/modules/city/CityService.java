@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,5 +31,13 @@ public class CityService {
                     }).collect(Collectors.toList());
             cityRepository.saveAll(cityList);
         }
+    }
+
+    public City getCityByKrCity(String krCity){
+        return cityRepository.findByKrCity(krCity);
+    }
+
+    public List<String> getAllCity(){
+        return cityRepository.findAll().stream().map(City::toString).collect(Collectors.toList());
     }
 }
