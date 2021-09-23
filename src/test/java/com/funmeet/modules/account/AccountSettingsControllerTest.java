@@ -1,6 +1,7 @@
 package com.funmeet.modules.account;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.funmeet.infra.AbstractContainerBaseTest;
 import com.funmeet.infra.MockMvcTest;
 import com.funmeet.modules.account.form.SignUpForm;
 import com.funmeet.modules.city.City;
@@ -29,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @MockMvcTest
-class AccountSettingsControllerTest {
+class AccountSettingsControllerTest extends AbstractContainerBaseTest {
 
     @Autowired MockMvc mockMvc;
 
@@ -121,7 +122,7 @@ class AccountSettingsControllerTest {
                 .param("newPassword", "asasasas")
                 .param("newPasswordConfirm", "asasasas")
                 .with(csrf()))
-                .andExpect(redirectedUrl("/settings/security"))
+                .andExpect(redirectedUrl("/settings/account"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(flash().attributeExists("message"));
 
@@ -163,21 +164,6 @@ class AccountSettingsControllerTest {
                 .andExpect(flash().attributeExists("message"));
 
         assertNotNull(accountRepository.findByNickname("jongchans"));
-    }
-
-    @WithUserDetails(value="jongchan",setupBefore = TestExecutionEvent.TEST_EXECUTION)
-    @DisplayName("닉네임 수정하기 - 입력값 에러")
-    @Test
-    void updateAccount_failure() throws Exception {
-        String newNickname = "¯\\_(ツ)_/¯";
-        mockMvc.perform(post("/settings/account")
-                .param("nickname", newNickname)
-                .with(csrf()))
-                .andExpect(status().isOk())
-                .andExpect(view().name("settings/account"))
-                .andExpect(model().hasErrors())
-                .andExpect(model().attributeExists("account"))
-                .andExpect(model().attributeExists("nicknameForm"));
     }
 
     @WithUserDetails(value="jongchan",setupBefore = TestExecutionEvent.TEST_EXECUTION)

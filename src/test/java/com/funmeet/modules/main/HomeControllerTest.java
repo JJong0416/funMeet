@@ -1,5 +1,6 @@
 package com.funmeet.modules.main;
 
+import com.funmeet.infra.AbstractContainerBaseTest;
 import com.funmeet.infra.MockMvcTest;
 import com.funmeet.modules.account.AccountRepository;
 import com.funmeet.modules.account.AccountService;
@@ -19,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @MockMvcTest
-class HomeControllerTest {
+class HomeControllerTest extends AbstractContainerBaseTest{
 
     @Autowired MockMvc mockMvc;
     @Autowired

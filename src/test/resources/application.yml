@@ -1,0 +1,11 @@
+spring:
+  profiles:
+    include:
+      - db
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+
+datasource:
+  url: jdbc:tc:postgresql:///funmeettest
+  driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver

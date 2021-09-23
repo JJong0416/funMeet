@@ -3,10 +3,8 @@ package com.funmeet.modules.main;
 import com.funmeet.infra.config.AppProperties;
 import com.funmeet.modules.account.Account;
 import com.funmeet.modules.account.AccountRepository;
-import com.funmeet.modules.city.City;
 import com.funmeet.modules.club.Club;
 import com.funmeet.modules.club.ClubRepository;
-import com.funmeet.modules.hobby.Hobby;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -15,17 +13,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Set;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class HomeService {
 
-    @Value("${authURL.client_id}")
+    @Value("${spring.authURL.client_id}")
     private String client_id;
 
-    @Value("${authURL.redirect_uri}")
+    @Value("${spring.authURL.redirect_uri}")
     private String redirect_uri;
 
     private final ClubRepository clubRepository;

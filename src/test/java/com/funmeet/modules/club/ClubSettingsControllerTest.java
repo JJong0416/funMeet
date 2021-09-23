@@ -1,5 +1,6 @@
 package com.funmeet.modules.club;
 
+import com.funmeet.infra.AbstractContainerBaseTest;
 import com.funmeet.infra.MockMvcTest;
 import com.funmeet.modules.account.Account;
 import com.funmeet.modules.account.AccountFactory;
@@ -21,7 +22,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @MockMvcTest
-class ClubSettingsControllerTest{
+class ClubSettingsControllerTest extends AbstractContainerBaseTest {
 
 
     @Autowired private AccountFactory accountFactory;
@@ -53,7 +54,8 @@ class ClubSettingsControllerTest{
         Club club = clubFactory.createNewClub("url",joinAccount);
 
         mockMvc.perform(get("/club/" + club.getClubPath() + "/settings/description"))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isOk())
+                .andExpect(view().name("error"));
     }
 
     @Test

@@ -188,24 +188,4 @@ public class ClubService {
         checkIfExistingClub(path,club);
         return club;
     }
-
-    public void generateTestClub(Account account) {
-        for ( int i = 0; i < 15 ; i++){
-            String randomValue = RandomString.make(5);
-            Club club = Club.builder()
-                    .title("테스트 스터디" + randomValue)
-                    .clubPath("test" + randomValue)
-                    .shortDescription("테스트용 테스트입니다")
-                    .fullDescription("test")
-                    .hobby(new HashSet<>())
-                    .managers(new HashSet<>())
-                    .build();
-
-            club.publish();
-            Club newClub = this.createNewClub(club, account);
-
-            Hobby hobby = hobbyService.findOrCreateHobby("JPA");
-            newClub.getHobby().add(hobby);
-        }
-    }
 }

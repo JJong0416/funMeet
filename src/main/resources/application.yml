@@ -9,11 +9,11 @@ logging:
               BasicBinder: TRACE
 server:
   tomcat:
-    max-http-form-post-size: 4MB
+    max-http-form-post-size: 6MB
 spring:
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
@@ -23,3 +23,4 @@ spring:
         enabled: true
   profiles:
     active: local
+

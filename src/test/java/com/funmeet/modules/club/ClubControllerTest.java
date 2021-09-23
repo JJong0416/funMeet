@@ -1,5 +1,6 @@
 package com.funmeet.modules.club;
 
+import com.funmeet.infra.AbstractContainerBaseTest;
 import com.funmeet.infra.MockMvcTest;
 import com.funmeet.modules.account.Account;
 import com.funmeet.modules.account.AccountRepository;
@@ -21,7 +22,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @MockMvcTest
-class ClubControllerTest {
+class ClubControllerTest extends AbstractContainerBaseTest {
     @Autowired private MockMvc mockMvc;
     @Autowired private ClubService clubService;
     @Autowired private ClubRepository clubRepository;
@@ -64,15 +65,14 @@ class ClubControllerTest {
     void createClub_right() throws Exception {
         mockMvc.perform(post("/create_club")
                 .param("title", "FunMeet title")
-                .param("clubpath", "url_test")
+                .param("clubPath", "url1")
                 .param("shortDescription", "짧게 보기 체크")
                 .param("fullDescription", "상세 보기 체크")
                 .with(csrf()))
-                .andExpect(status().isOk())
-                .andExpect(redirectedUrl("/club/url_test"));
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/club/url1"));
 
-
-        Club club = clubRepository.findByClubPath("url_test");
+        Club club = clubRepository.findByClubPath("url1");
         assertNotNull(club);
         Account account = accountRepository.findByNickname("jongchan");
         assertTrue(club.getManagers().contains(account));

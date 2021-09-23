@@ -1,5 +1,6 @@
 package com.funmeet.modules.account;
 
+import com.funmeet.infra.AbstractContainerBaseTest;
 import com.funmeet.infra.MockMvcTest;
 import com.funmeet.infra.mail.EmailMessageForm;
 import com.funmeet.infra.mail.EmailService;
@@ -20,10 +21,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @MockMvcTest
-public class AccountControllerTest {
+class AccountControllerTest extends AbstractContainerBaseTest {
 
-    @Autowired private MockMvc mockMvc;
-    @Autowired private AccountRepository accountRepository;
+    @Autowired MockMvc mockMvc;
+    @Autowired AccountRepository accountRepository;
     @MockBean
     EmailService emailService;
 

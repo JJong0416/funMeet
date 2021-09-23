@@ -19,10 +19,10 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class OAuthService {
 
-    @Value("${authURL.redirect_uri}")
+    @Value("${spring.authURL.redirect_uri}")
     private String redirect_uri;
 
-    @Value("${authURL.client_id}")
+    @Value("${spring.authURL.client_id}")
     private String client_id;
 
     private final AccountRepository accountRepository;
