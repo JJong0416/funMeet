@@ -13,7 +13,7 @@ import javax.validation.constraints.Pattern;
 public class NicknameForm {
     @NotBlank
     @Length(min = 6, max = 20)
-    @Pattern(regexp = "^[ㄱ-ㅎ가-힣a-z0-9_-]{6,20}$")
+    @Pattern(regexp = "^[ㄱ-ㅎ가-힣a-zA-Z0-9_-]{6,20}$")
     private String nickname;
 
     public NicknameForm(Account account){

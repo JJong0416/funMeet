@@ -5,11 +5,16 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.FileCopyUtils;
 
 import javax.annotation.PostConstruct;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,12 +28,15 @@ public class CityService {
     @PostConstruct
     public void initLocationInsert() throws IOException {
         if (cityRepository.count() == 0) {
-            Resource resource = new ClassPathResource("list_district_kr.csv");
-            List<City> cityList = Files.readAllLines(resource.getFile().toPath(), StandardCharsets.UTF_8).stream()
-                    .map(line -> {
-                        String[] split = line.split(",");
-                        return City.builder().enCity(split[0]).krCity(split[1]).build();
-                    }).collect(Collectors.toList());
+            ClassPathResource resource = new ClassPathResource("list_district_kr.csv");
+            byte[] bytes = resource.getInputStream().readAllBytes();
+            String data = new String(bytes, StandardCharsets.UTF_8);
+
+            List<City> cityList = Arrays.stream(data.split("\n")).map(line -> {
+                String[] split = line.split(",");
+                return City.builder().enCity(split[0]).krCity(split[1].strip()).build();
+            }).collect(Collectors.toList());
+
             cityRepository.saveAll(cityList);
         }
     }

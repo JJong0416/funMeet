@@ -60,20 +60,20 @@ class AccountControllerTest extends AbstractContainerBaseTest {
     @Test
     void signUpSubmit_right_input() throws Exception{
         mockMvc.perform(post("/sign_up")
-                .param("nickname","jjong0416")
+                .param("nickname","jjong0123")
                 .param("email","checkemal@naver.com")
                 .param("password","assddsssaa")
                 .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/"))
-                .andExpect(authenticated().withUsername("jjong0416"));
+                .andExpect(authenticated().withUsername("jjong0123"));
 
-        Account account = accountRepository.findByNickname("jjong0416");
+        Account account = accountRepository.findByNickname("jjong0123");
         assertNotNull(account);
 
         assertNotEquals(account.getPassword(),"assddsssaa");
 
-        assertTrue(accountRepository.existsByNickname("jjong0416"));
+        assertTrue(accountRepository.existsByNickname("jjong0123"));
         assertTrue(accountRepository.existsByEmail("checkemal@naver.com"));
         then(emailService).should().send(any(EmailMessageForm.class)); // 메일을 보냈는지 체크해주는 것
     }
