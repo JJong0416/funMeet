@@ -3,9 +3,7 @@ package com.funmeet.modules.account;
 import com.funmeet.modules.city.City;
 import com.funmeet.modules.hobby.Hobby;
 import com.querydsl.core.types.Predicate;
-import com.funmeet.modules.account.QAccount;
 
-import java.util.List;
 import java.util.Set;
 
 

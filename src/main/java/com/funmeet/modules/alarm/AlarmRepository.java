@@ -11,7 +11,6 @@ public interface AlarmRepository extends JpaRepository<Alarm, Long> {
 
     long countByAccountAndChecked(Account account, boolean check);
 
-    @Transactional
     List<Alarm> findByAccountAndCheckedOrderByCreatedDateTimeDesc(Account account, boolean checked);
 
     @Transactional

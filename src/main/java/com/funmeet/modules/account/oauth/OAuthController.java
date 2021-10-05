@@ -16,7 +16,6 @@ import javax.validation.Valid;
 
 @Controller
 @RequiredArgsConstructor
-@Slf4j
 public class OAuthController {
 
     private final AccountRepository accountRepository;
