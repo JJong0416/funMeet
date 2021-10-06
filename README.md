@@ -124,8 +124,8 @@
 ### 3. Query Performance
 
 ```java
-@EntityGraph(attributePaths = {"hobby","managers"})
-    Club findClubWithHobbyByClubPath(String path);
+@EntityGraph(attributePaths = {"hobby","city"})
+    Account findAccountWithHobbyAndCityById(Long id);
 
 @EntityGraph(attributePaths = {"managers","members"})
     Club findClubWithManagersAndMembersById(Long id);
