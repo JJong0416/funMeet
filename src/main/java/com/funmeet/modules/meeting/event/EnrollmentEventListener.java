@@ -56,7 +56,7 @@ public class EnrollmentEventListener {
         context.setVariable("host",appProperties.getHost());
 
 
-        String message = templateEngine.process("email/html_email_link",context);
+        String message = templateEngine.process("email/html-email-link",context);
 
         EmailMessageForm emailMessageForm = EmailMessageForm.builder()
                 .subject("뻔모임 '" + meeting.getTitle() + " 미팅 참가 신청 결과입니다.")

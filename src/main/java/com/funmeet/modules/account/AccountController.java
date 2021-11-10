@@ -26,45 +26,45 @@ public class AccountController {
         webDataBinder.addValidators(signUpFormValidator);
     }
 
-    @GetMapping("/sign_up")
+    @GetMapping("/sign-up")
     public String signUpForm(Model model){
         model.addAttribute("signUpForm",new SignUpForm());
-        return "account/sign_up";
+        return "account/sign-up";
     }
 
-    @PostMapping("/sign_up")
+    @PostMapping("/sign-up")
     public String signUpSubmit(@Valid @ModelAttribute SignUpForm signUpForm, Errors errors){
         if (errors.hasErrors()){
-            return "account/sign_up";
+            return "account/sign-up";
         }
         Account account = accountService.processSignUpAccount(signUpForm);
         accountService.login(account);
         return "redirect:/";
     }
 
-    @GetMapping("/certification_email")
+    @GetMapping("/certification-email")
     public String checkEmail(@CurrentAccount Account account, Model model) {
         model.addAttribute("email", account.getEmail());
-        return "email/certification_email";
+        return "email/certification-email";
     }
 
-    @GetMapping("/resend_email")
+    @GetMapping("/resend-email")
     public String resendConfirmEmail(@CurrentAccount Account account, Model model) {
         if (!account.canSendConfirmEmail()) {
             model.addAttribute("error", "인증 이메일은 30분에 한번만 전송할 수 있습니다.");
             model.addAttribute("email", account.getEmail());
-            return "email/certification_email";
+            return "email/certification-email";
         }
 
         accountService.sendSignUpConfirmEmail(account);
         return "redirect:/";
     }
 
-    @GetMapping("/check_email_token") // 이메일 토큰 눌렀을 때 뜨는
+    @GetMapping("/check-email-token") // 이메일 토큰 눌렀을 때 뜨는
     public String checkEmailToken(String token, String email, Model model){
 
         Account account = accountService.findAccountByEmail(email);
-        String view_url = "email/check_email";
+        String view_url = "email/check-email";
 
         if (account == null){
             model.addAttribute("error","wrong.email");
@@ -81,12 +81,12 @@ public class AccountController {
         return view_url;
     }
 
-    @GetMapping("/find_account")
+    @GetMapping("/find-account")
     public String emailLoginForm() {
-        return "email/find_account";
+        return "email/find-account";
     }
 
-    @PostMapping("/find_account")
+    @PostMapping("/find-account")
     public String sendEmailLoginLink(String email, Model model, RedirectAttributes attributes) {
 
         Account account = accountService.findAccountByEmail(email);
@@ -94,23 +94,23 @@ public class AccountController {
         if (account == null || !account.canSendConfirmEmail()) {
             if (account == null) {
                 model.addAttribute("error", "유효");
-                return "email/find_account";
+                return "email/find-account";
             }
 
             model.addAttribute("error", "시간");
-            return "email/find_account";
+            return "email/find-account";
         }
 
         accountService.sendLoginLink(account);
         attributes.addFlashAttribute("message", "성공");
-        return "redirect:/find_account";
+        return "redirect:/find-account";
     }
 
-    @GetMapping("/auth_email")
+    @GetMapping("/auth-email")
     public String passByEmail(String token, String email, Model model) {
 
         Account account = accountService.findAccountByEmail(email);
-        String view = "email/auth_email";
+        String view = "email/auth-email";
 
         if (account == null || !account.isValidToken(token)) {
             model.addAttribute("error", "로그인할 수 없습니다.");

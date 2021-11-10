@@ -14,7 +14,7 @@
 
   <div class="row justify-content-center">
     <form class="formValidation"
-          th:action="@{/oauth_sign_up}" th:object="${oauthForm}" method="post" novalidate> <!-- form 생성 -->
+          th:action="@{/oauth-sign-up}" th:object="${oauthForm}" method="post" novalidate> <!-- form 생성 -->
 
       <input type="hidden" th:name="kakaoEmail" th:value="${kakaoEmail}"/>
 

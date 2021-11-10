@@ -95,7 +95,7 @@ public class ClubEventListener {
         context.setVariable("linkName",club.getTitle());
         context.setVariable("host",appProperties.getHost());
 
-        String message = templateEngine.process("email/html_email_link",context);
+        String message = templateEngine.process("email/html-email-link",context);
 
         EmailMessageForm emailMessageForm = EmailMessageForm.builder()
                 .subject(emailSubject)

@@ -32,9 +32,9 @@ class AccountControllerTest extends AbstractContainerBaseTest {
     @Test
     void signUpForm() {
         try {
-            mockMvc.perform(get("/sign_up"))
+            mockMvc.perform(get("/sign-up"))
                     .andExpect(status().isOk())
-                    .andExpect(view().name("account/sign_up"))
+                    .andExpect(view().name("account/sign-up"))
                     .andExpect(model().attributeExists("signUpForm"))
                     .andExpect(unauthenticated());
 
@@ -46,20 +46,20 @@ class AccountControllerTest extends AbstractContainerBaseTest {
     @DisplayName("회원가입 - 잘못된 입력값")
     @Test
     void signUpSubmit_wrong_input() throws Exception{
-        mockMvc.perform(post("/sign_up")
+        mockMvc.perform(post("/sign-up")
                 .param("nickname","jjong")
                 .param("email","checkemal....@")
                 .param("password","123")
                 .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(unauthenticated())
-                .andExpect(view().name("account/sign_up"));
+                .andExpect(view().name("account/sign-up"));
     }
 
     @DisplayName("회원가입 - 정상적인 입력값")
     @Test
     void signUpSubmit_right_input() throws Exception{
-        mockMvc.perform(post("/sign_up")
+        mockMvc.perform(post("/sign-up")
                 .param("nickname","jjong0123")
                 .param("email","checkemal@naver.com")
                 .param("password","assddsssaa")
@@ -81,12 +81,12 @@ class AccountControllerTest extends AbstractContainerBaseTest {
     @DisplayName("인증 메일 확인 - 입력값 오류")
     @Test
     void checked_Email_wrong_input() throws Exception{
-        mockMvc.perform(get("/check_email_token")
+        mockMvc.perform(get("/check-email-token")
                 .param("token","sgdspsf")
                 .param("email","email@email.com"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("error"))
-                .andExpect(view().name("email/check_email"))
+                .andExpect(view().name("email/check-email"))
                 .andExpect(unauthenticated());
     }
 
@@ -102,13 +102,13 @@ class AccountControllerTest extends AbstractContainerBaseTest {
         Account newAccount = accountRepository.save(account);
         newAccount.generateEmailCheckToken();
 
-        mockMvc.perform(get("/check_email_token")
+        mockMvc.perform(get("/check-email-token")
                 .param("token",newAccount.getEmailCheckToken())
                 .param("email",newAccount.getEmail()))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeDoesNotExist("error"))
                 .andExpect(model().attributeExists("nickname"))
-                .andExpect(view().name("email/check_email"))
+                .andExpect(view().name("email/check-email"))
                 .andExpect(authenticated());
     }
 }

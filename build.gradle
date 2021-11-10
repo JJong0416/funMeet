@@ -58,6 +58,11 @@ dependencies {
     /* Docker TestContainer*/
     testImplementation "org.testcontainers:postgresql:1.13.0"
 
+    /*  Hamcrest & Mockito */
+    testImplementation 'org.hamcrest:hamcrest-library:2.2'
+    testImplementation 'org.mockito:mockito-core:3.11.2'
+    testImplementation 'org.mockito:mockito-junit-jupiter:3.11.2'
+
     /* QueryDSL */
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
     annotationProcessor(

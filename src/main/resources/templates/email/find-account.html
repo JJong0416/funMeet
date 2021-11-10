@@ -23,7 +23,7 @@
             <div th:replace="fragments/script :: successEmailLogin"></div>
         </div>
 
-        <form class="formValidation col-sm-6" action="#" th:action="@{/find_account}" method="post" novalidate>
+        <form class="formValidation col-sm-6" action="#" th:action="@{/find-account}" method="post" novalidate>
             <div class="form-group">
                 <label for="email">가입 할 때 등록한 이메일</label>
                 <input id="email" type="email" name="email" class="form-control"
@@ -38,7 +38,7 @@
                     패스워드 링크 보내기
                 </button>
                 <small id="submitHelp" class="form-text text-muted">
-                    처음 오신 회원분은 <a href="#" th:href="@{/sign_up}">계정을 먼저 만드세요.</a>
+                    처음 오신 회원분은 <a href="#" th:href="@{/sign-up}">계정을 먼저 만드세요.</a>
                 </small>
             </div>
         </form>

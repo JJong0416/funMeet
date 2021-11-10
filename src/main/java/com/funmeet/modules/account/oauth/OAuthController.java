@@ -4,7 +4,6 @@ import com.funmeet.modules.account.Account;
 import com.funmeet.modules.account.AccountRepository;
 import com.funmeet.modules.account.AccountService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -41,17 +40,17 @@ public class OAuthController {
         if (account == null){
             model.addAttribute("oauthForm",new OAuthForm());
             model.addAttribute("kakaoEmail",kakaoEmail);
-            return "account/oauth_sign_up";
+            return "account/oauth-sign-up";
         }
 
         accountService.login(account);
         return "redirect:/";
     }
 
-    @PostMapping("/oauth_sign_up")
+    @PostMapping("/oauth-sign-up")
     public String signUpSubmit(@Valid @ModelAttribute OAuthForm oAuthForm, Errors errors,String kakaoEmail){
         if (errors.hasErrors()){
-            return "account/oauth_sign_up";
+            return "account/oauth-sign-up";
         }
         Account account = accountService.oauthSignUp(oAuthForm,kakaoEmail);
         accountService.login(account);

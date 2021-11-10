@@ -32,7 +32,7 @@ public class HomeController {
                     homeService.findIndexManagers(account,false));
             model.addAttribute("clubMemberOf",
                     homeService.findIndexMembers(account,false));
-            return "index_with_login";
+            return "index-with-login";
         }
         model.addAttribute("clubList", homeService.findListContainAccount(true,false));
         return "index";

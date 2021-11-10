@@ -70,14 +70,14 @@ public class AccountService implements UserDetailsService {
     // 써야 하는 것은 link, nickname, host
     public void sendSignUpConfirmEmail(Account addAccount) {
         Context context = new Context();
-        context.setVariable("link","/check_email_token?token=" + addAccount.getEmailCheckToken() +
+        context.setVariable("link","/check-email-token?token=" + addAccount.getEmailCheckToken() +
                 "&email=" + addAccount.getEmail());
         context.setVariable("nickname",addAccount.getNickname());
         context.setVariable("message","뻔모임 서비스를 이용하시려면 링크를 클릭하세요.");
         context.setVariable("linkName","이메일 인증하기");
         context.setVariable("host",appProperties.getHost());
 
-        String message = templateEngine.process("email/html_email_link",context);
+        String message = templateEngine.process("email/html-email-link",context);
 
         EmailMessageForm emailMessageForm = EmailMessageForm.builder()
                 .to(addAccount.getEmail())
@@ -95,14 +95,14 @@ public class AccountService implements UserDetailsService {
 
     public void sendLoginLink(Account account) {
         Context context = new Context();
-        context.setVariable("link","/auth_email?token=" + account.getEmailCheckToken() +
+        context.setVariable("link","/auth-email?token=" + account.getEmailCheckToken() +
                 "&email=" + account.getEmail());
         context.setVariable("nickname",account.getNickname());
         context.setVariable("message","뻔모임 서비스를 이용하시려면 링크를 클릭하세요.");
         context.setVariable("linkName","로그인하기");
         context.setVariable("host",appProperties.getHost());
 
-        String message = templateEngine.process("email/html_email_link",context);
+        String message = templateEngine.process("email/html-email-link",context);
 
         EmailMessageForm emailMessageForm = EmailMessageForm.builder()
                 .to(account.getEmail())
