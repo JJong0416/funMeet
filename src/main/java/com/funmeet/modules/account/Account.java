@@ -30,7 +30,7 @@ public class Account {
 
     private String kakaoEmail;
 
-    private String short_bio;
+    private String shortBio;
 
     private String occupation;
 

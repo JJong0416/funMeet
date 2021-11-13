@@ -36,7 +36,7 @@ public class MeetingController {
         webDataBinder.addValidators(meetingFormValidator);
     }
 
-    @GetMapping("/create_meeting")
+    @GetMapping("/create-meeting")
     public String newMeetForm(@CurrentAccount Account account, @PathVariable String path, Model model) {
         Club club = clubService.getClubUpdateStatus(account, path);
         model.addAttribute(club);
@@ -45,7 +45,7 @@ public class MeetingController {
         return "meeting/form";
     }
 
-    @PostMapping("/create_meeting")
+    @PostMapping("/create-meeting")
     public String newMeetSubmit(@CurrentAccount Account account, @PathVariable String path,
                                  @Valid MeetingForm meetingForm, Errors errors, Model model) {
         Club club = clubService.getClubUpdateStatus(account, path);

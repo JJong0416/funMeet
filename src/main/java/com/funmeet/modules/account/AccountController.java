@@ -64,21 +64,21 @@ public class AccountController {
     public String checkEmailToken(String token, String email, Model model){
 
         Account account = accountService.findAccountByEmail(email);
-        String view_url = "email/check-email";
+        String viewUrl = "email/check-email";
 
         if (account == null){
             model.addAttribute("error","wrong.email");
-            return view_url;
+            return viewUrl;
         }
 
         if(!account.isValidToken(token)){
             model.addAttribute("error","wrong.token");
-            return view_url;
+            return viewUrl;
         }
 
         accountService.completeSignUp(account);
         model.addAttribute("nickname",account.getNickname());
-        return view_url;
+        return viewUrl;
     }
 
     @GetMapping("/find-account")

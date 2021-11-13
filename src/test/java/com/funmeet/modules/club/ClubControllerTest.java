@@ -52,7 +52,7 @@ class ClubControllerTest extends AbstractContainerBaseTest {
     @WithUserDetails(value="jongchan",setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @DisplayName("모임 등록 폼")
     void createClubForm() throws Exception {
-        mockMvc.perform(get("/create_club"))
+        mockMvc.perform(get("/create-club"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("club/form"))
                 .andExpect(model().attributeExists("account"))
@@ -63,7 +63,7 @@ class ClubControllerTest extends AbstractContainerBaseTest {
     @WithUserDetails(value="jongchan",setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @DisplayName("모임 등록 - 완료")
     void createClub_right() throws Exception {
-        mockMvc.perform(post("/create_club")
+        mockMvc.perform(post("/create-club")
                 .param("title", "FunMeet title")
                 .param("clubPath", "url1")
                 .param("shortDescription", "짧게 보기 체크")
@@ -82,7 +82,7 @@ class ClubControllerTest extends AbstractContainerBaseTest {
     @WithUserDetails(value="jongchan",setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @DisplayName("모임 등록 - 실패")
     void createClub_wrong() throws Exception {
-        mockMvc.perform(post("/create_club")
+        mockMvc.perform(post("/create-club")
                 .param("title", "FunMeet title")
                 .param("clubPath", "Wrong Path")
                 .param("shortDescription", "짧게 보기 체크")

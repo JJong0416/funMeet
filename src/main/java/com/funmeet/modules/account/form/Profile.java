@@ -12,7 +12,7 @@ public class Profile {
     private String nickname;
 
     @Length(min=1,max=25)
-    private String short_bio;
+    private String shortBio;
 
     @Length(max=10)
     private String occupation;
@@ -21,7 +21,7 @@ public class Profile {
 
     public Profile(Account account){
         this.nickname = account.getNickname();
-        this.short_bio = account.getShort_bio();
+        this.shortBio = account.getShortBio();
         this.occupation = account.getOccupation();
         this.profileImage = account.getProfileImage();
     }

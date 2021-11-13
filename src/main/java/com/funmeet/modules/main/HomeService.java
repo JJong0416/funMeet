@@ -20,10 +20,10 @@ import java.util.List;
 public class HomeService {
 
     @Value("${spring.authURL.client_id}")
-    private String client_id;
+    private String clientId;
 
     @Value("${spring.authURL.redirect_uri}")
-    private String redirect_uri;
+    private String redirectUri;
 
     private final ClubRepository clubRepository;
     private final AccountRepository accountRepository;
@@ -32,8 +32,8 @@ public class HomeService {
     public StringBuilder getOAuthLink(){
         StringBuilder oauth_link = new StringBuilder();
         oauth_link.append("https://kauth.kakao.com/oauth/authorize?");
-        oauth_link.append("client_id=" + client_id);
-        oauth_link.append("&redirect_uri=" + redirect_uri);
+        oauth_link.append("client_id=" + clientId);
+        oauth_link.append("&redirect_uri=" + redirectUri);
         oauth_link.append("&response_type=code");
 
         return oauth_link;

@@ -55,7 +55,7 @@ public class AccountService implements UserDetailsService {
         signUpForm.setPassword(passwordEncoder.encode(signUpForm.getPassword()));
         Account account = modelMapper.map(signUpForm,Account.class);
         account.generateEmailCheckToken();
-        account.setShort_bio("간략한 자기 소개를 추가하세요.");
+        account.setShortBio("간략한 자기 소개를 추가하세요.");
         return accountRepository.save(account);
     }
 
@@ -63,7 +63,7 @@ public class AccountService implements UserDetailsService {
         oAuthForm.setPassword(passwordEncoder.encode(oAuthForm.getPassword()));
         Account account = modelMapper.map(oAuthForm,Account.class);
         account.completeOAuthSignup(kakaoEmail);
-        account.setShort_bio("간략한 자기 소개를 추가하세요.");
+        account.setShortBio("간략한 자기 소개를 추가하세요.");
         return accountRepository.save(account);
     }
 
@@ -144,7 +144,7 @@ public class AccountService implements UserDetailsService {
     }
 
     public void updateProfile(Account account, Profile profile) {
-        account.setShort_bio(profile.getShort_bio());
+        account.setShortBio(profile.getShortBio());
         account.setProfileImage(profile.getProfileImage());
         accountRepository.save(account);
     }

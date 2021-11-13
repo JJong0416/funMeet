@@ -72,12 +72,12 @@
 
                             <div class="form-group">
                                 <label for="bio">한 줄 소개</label>
-                                <input id="bio" type="text" th:field="*{short_bio}" class="form-control"
+                                <input id="bio" type="text" th:field="*{shortBio}" class="form-control"
                                        placeholder="간략한 소개를 부탁합니다." aria-describedby="bioHelp" required>
                                 <small id="bioHelp" class="form-text text-muted">
                                     25자 이하의 짧은 글을 작성해주시길 바랍니다.
                                 </small>
-                                <small class="form-text text-danger" th:if="${#fields.hasErrors('short_bio')}" th:errors="*{short_bio}">
+                                <small class="form-text text-danger" th:if="${#fields.hasErrors('shortBio')}" th:errors="*{shortBio}">
                                     1~25자 사이의 글만 써주시길 바랍니다.
                                 </small>
                             </div>

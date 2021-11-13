@@ -15,6 +15,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Stack;
+
 @Service
 @RequiredArgsConstructor
 public class OAuthService {
@@ -61,7 +63,6 @@ public class OAuthService {
     }
 
     public KakaoProfile getProfile(OAuthToken oAuthToken) {
-
         RestTemplate rt = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();

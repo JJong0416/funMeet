@@ -35,14 +35,14 @@ public class ClubController {
         webDataBinder.addValidators(clubFormValidator);
     }
 
-    @GetMapping("/create_club")
+    @GetMapping("/create-club")
     public String createClub(@CurrentAccount Account account, Model model){
         model.addAttribute(account);
         model.addAttribute("clubForm",new ClubForm());
         return "club/form";
     }
 
-    @PostMapping("/create_club")
+    @PostMapping("/create-club")
     public String createClubForm(@CurrentAccount Account account, @Valid ClubForm clubForm, Errors errors,Model model){
         if (errors.hasErrors()){
             model.addAttribute(account);

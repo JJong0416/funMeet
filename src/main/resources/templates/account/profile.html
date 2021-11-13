@@ -26,7 +26,7 @@
                 <div class="profile-name">
                     <h2 th:text="${account.nickname}"></h2>
                     <div class="lead">
-                        <a class="short-bio" th:text="${account.short_bio}"></a>
+                        <a class="short-bio" th:text="${account.shortBio}"></a>
                         <span th:if="${isOwner}">
                             <a class="btn btn-secondary"  th:href="@{/settings/profile}">관리</a>
                         </span>

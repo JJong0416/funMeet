@@ -81,17 +81,17 @@ class AccountSettingsControllerTest extends AbstractContainerBaseTest {
     @Test
     void updateProfile_right() throws Exception{
 
-        String short_bio = "짧은 소개 수정";
+        String shortBio = "짧은 소개 수정";
 
         mockMvc.perform(post("/settings/profile")
-                .param("short_bio",short_bio)
+                .param("shortBio",shortBio)
                 .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/settings/profile"))
                 .andExpect(flash().attribute("message","성공"));
 
         Account jongchan = accountRepository.findByNickname("jongchan");
-        assertEquals(short_bio,jongchan.getShort_bio());
+        assertEquals(shortBio,jongchan.getShortBio());
     }
 
     @WithUserDetails(value="jongchan",setupBefore = TestExecutionEvent.TEST_EXECUTION)
@@ -99,10 +99,10 @@ class AccountSettingsControllerTest extends AbstractContainerBaseTest {
     @Test
     void updateProfile_wrong() throws Exception{
 
-        String short_bio = "길게 소개를 수정하는 경우.길게 소개를 수정하는 경우길게 소개를 수정하는 경우길게 소개를 수정하는 경우길게 소개를 수정하는 경우길게 소개를 수정하는 경우";
+        String shortBio = "길게 소개를 수정하는 경우.길게 소개를 수정하는 경우길게 소개를 수정하는 경우길게 소개를 수정하는 경우길게 소개를 수정하는 경우길게 소개를 수정하는 경우";
 
         mockMvc.perform(post("/settings/profile")
-                .param("short_bio",short_bio)
+                .param("shortBio",shortBio)
                 .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("account"))
@@ -110,7 +110,7 @@ class AccountSettingsControllerTest extends AbstractContainerBaseTest {
                 .andExpect(model().hasErrors());
 
         Account jongchan = accountRepository.findByNickname("jongchan");
-        assertEquals("간략한 자기 소개를 추가하세요.",jongchan.getShort_bio());
+        assertEquals("간략한 자기 소개를 추가하세요.",jongchan.getShortBio());
     }
 
 
