@@ -1,8 +1,15 @@
 package com.funmeet.modules.hobby;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+import java.util.ArrayList;
+
+@Getter @Setter @NoArgsConstructor
+@AllArgsConstructor
 public class HobbyForm {
     private String hobbyTitle;
+    ArrayList ar = new ArrayList();
 }

@@ -25,8 +25,7 @@ class AccountControllerTest extends AbstractContainerBaseTest {
 
     @Autowired MockMvc mockMvc;
     @Autowired AccountRepository accountRepository;
-    @MockBean
-    EmailService emailService;
+    @MockBean EmailService emailService;
 
     @DisplayName("회원 가입 화면 보이는지")
     @Test

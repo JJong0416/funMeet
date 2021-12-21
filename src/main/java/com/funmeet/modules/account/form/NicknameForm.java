@@ -1,15 +1,16 @@
 package com.funmeet.modules.account.form;
 
 import com.funmeet.modules.account.Account;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
-@Data
-@NoArgsConstructor
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class NicknameForm {
     @NotBlank
     @Length(min = 6, max = 20)

@@ -1,7 +1,10 @@
 package com.funmeet.modules.meeting.form;
 
 import com.funmeet.modules.meeting.MeetingType;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -9,7 +12,8 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
-@Data
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
 public class MeetingForm {
 
     @NotBlank

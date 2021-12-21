@@ -24,11 +24,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
-@Transactional
-@Slf4j
-@Async
-@RequiredArgsConstructor
+@Component @Transactional
+@Async @RequiredArgsConstructor
 public class ClubEventListener {
 
     private final ClubRepository clubRepository;

@@ -215,4 +215,3 @@ public class AccountService implements UserDetailsService {
         accountRepository.delete(account);
     }
 }
-

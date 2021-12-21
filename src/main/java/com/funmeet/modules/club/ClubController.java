@@ -22,7 +22,6 @@ import java.nio.charset.StandardCharsets;
 
 @Controller
 @RequiredArgsConstructor
-@Slf4j
 public class ClubController {
 
     private final ClubService clubService;

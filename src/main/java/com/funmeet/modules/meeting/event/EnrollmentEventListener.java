@@ -22,7 +22,7 @@ import org.thymeleaf.context.Context;
 import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
-@Async @Slf4j
+@Async
 @Component @Transactional
 public class EnrollmentEventListener {
     private final AlarmRepository alarmRepository;

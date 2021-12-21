@@ -23,7 +23,9 @@ public class AccountController {
 
     @InitBinder("signUpForm")
     public void initBinder(WebDataBinder webDataBinder){
+        System.out.println("hello1");
         webDataBinder.addValidators(signUpFormValidator);
+        System.out.println("hello2");
     }
 
     @GetMapping("/sign-up")
@@ -38,7 +40,10 @@ public class AccountController {
             return "account/sign-up";
         }
         Account account = accountService.processSignUpAccount(signUpForm);
+        System.out.println("heelo234");
+        System.out.println(account);
         accountService.login(account);
+        System.out.println("345");
         return "redirect:/";
     }
 

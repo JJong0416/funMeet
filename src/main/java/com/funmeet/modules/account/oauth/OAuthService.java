@@ -29,10 +29,11 @@ public class OAuthService {
 
     private final AccountRepository accountRepository;
 
-    public OAuthToken getAccessToken(String code) {
-        RestTemplate rt = new RestTemplate();
+    private final ObjectMapper objectMapper = new ObjectMapper(); // 생산 비용 절감, objectMapper는 생산 비용이 상당히 비쌈
+    private final RestTemplate rt = new RestTemplate();
+    private final HttpHeaders headers = new HttpHeaders();
 
-        HttpHeaders headers = new HttpHeaders();
+    public OAuthToken getAccessToken(String code) {
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
@@ -51,7 +52,7 @@ public class OAuthService {
                 String.class
         );
 
-        ObjectMapper objectMapper = new ObjectMapper();
+
         OAuthToken oauthToken = null;
         try {
             oauthToken = objectMapper.readValue(response.getBody(), OAuthToken.class);
@@ -63,9 +64,6 @@ public class OAuthService {
     }
 
     public KakaoProfile getProfile(OAuthToken oAuthToken) {
-        RestTemplate rt = new RestTemplate();
-
-        HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer "+ oAuthToken.getAccess_token());
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
@@ -79,7 +77,6 @@ public class OAuthService {
                 String.class
         );
 
-        ObjectMapper objectMapper = new ObjectMapper();
         KakaoProfile kakaoProfile = null;
 
         try {
