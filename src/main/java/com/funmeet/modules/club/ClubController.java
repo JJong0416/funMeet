@@ -4,8 +4,8 @@ import com.funmeet.modules.account.Account;
 import com.funmeet.modules.account.security.CurrentAccount;
 import com.funmeet.modules.club.form.ClubForm;
 import com.funmeet.modules.club.validator.ClubFormValidator;
+import com.funmeet.modules.mapper.ClubMapper;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,7 +48,7 @@ public class ClubController {
             return "club/form";
         }
 
-        Club newClub = clubService.createNewClub(modelMapper.map(clubForm, Club.class),account);
+        Club newClub = clubService.createNewClub(ClubMapper.INSTANCE.clubFormToEntity(clubForm), account);
         return "redirect:/club/" + URLEncoder.encode(newClub.getClubPath(),StandardCharsets.UTF_8);
     }
 

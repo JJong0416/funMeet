@@ -1,9 +1,10 @@
 package com.funmeet.modules.city;
 
 
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
 public class CityForm {
 
     private String cityName;

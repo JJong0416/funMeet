@@ -15,7 +15,7 @@ public class AlarmService {
     private final AlarmRepository alarmRepository;
 
     public void markAsRead(List<Alarm> alarmList){
-        alarmList.forEach(n -> n.setChecked(true));
+        alarmList.forEach(n -> n.updateCheck(true));
         alarmRepository.saveAll(alarmList);
     }
 

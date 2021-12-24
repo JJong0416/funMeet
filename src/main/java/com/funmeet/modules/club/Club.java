@@ -13,10 +13,9 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
-@Getter @Setter @EqualsAndHashCode(of = "id")
-@Builder @AllArgsConstructor @NoArgsConstructor
-
+@Entity @Builder
+@Getter @EqualsAndHashCode(of = "id")
+@AllArgsConstructor @NoArgsConstructor @ToString
 public class Club {
 
     @Id
@@ -29,10 +28,10 @@ public class Club {
     private String title;
 
     @ManyToMany
-    private Set<Account> managers  = new HashSet<>();
+    private Set<Account> managers;
 
     @ManyToMany
-    private Set<Account> members  = new HashSet<>();
+    private Set<Account> members;
 
     private String shortDescription;
 
@@ -45,10 +44,10 @@ public class Club {
     private int memberCount;
 
     @ManyToMany
-    private Set<Hobby> hobby  = new HashSet<>();
+    private Set<Hobby> hobby;
 
     @ManyToMany
-    private Set<City> city  = new HashSet<>();
+    private Set<City> city;
 
     private LocalDateTime publishDateTime;
 
@@ -120,5 +119,26 @@ public class Club {
 
     public boolean isManagerOfBy(Account account) {
         return this.getManagers().contains(account);
+    }
+
+    /* @Setter를 포기하고 작성한 Method */
+
+    public void updateClubBanner(boolean check) { this.useBanner = check; }
+
+    public void updateBannerImage(String banner){
+        this.banner = banner;
+    }
+
+    public void updateClubPath(String clubPath){
+        this.clubPath = clubPath;
+    }
+
+    public void updateClubTitle(String title){
+        this.title = title;
+    }
+
+    public void updateClubIntroduce(String shortDescription, String fullDescription){
+        this.shortDescription = shortDescription;
+        this.fullDescription = fullDescription;
     }
 }

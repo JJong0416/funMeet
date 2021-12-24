@@ -24,6 +24,4 @@ public class City {
     public String toString() {
         return String.format("%s(%s)",enCity,krCity);
     }
-
-
 }

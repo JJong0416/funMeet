@@ -15,8 +15,8 @@ import com.funmeet.modules.city.CityForm;
 import com.funmeet.modules.hobby.Hobby;
 import com.funmeet.modules.hobby.HobbyForm;
 import com.funmeet.modules.hobby.HobbyService;
+import com.funmeet.modules.mapper.AccountMapper;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,7 +37,6 @@ import java.util.stream.Collectors;
 public class AccountSettingsController {
 
     private final AccountService accountService;
-    private final ModelMapper modelMapper;
     private final ObjectMapper objectMapper;
     private final HobbyService hobbyService;
     private final NicknameValidator nicknameValidator;
@@ -150,7 +149,7 @@ public class AccountSettingsController {
     @GetMapping("/settings/notification")
     public String updateNotificationsForm(@CurrentAccount Account account, Model model) {
         model.addAttribute(account);
-        model.addAttribute("notification",modelMapper.map(account, NotificationForm.class));
+        model.addAttribute("notification",AccountMapper.INSTANCE.AccountToNotificationForm(account));
         return "settings/notification";
     }
 

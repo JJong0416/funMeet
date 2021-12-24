@@ -8,20 +8,12 @@ import com.funmeet.modules.club.form.ClubDescriptionForm;
 import com.funmeet.modules.hobby.Hobby;
 import com.funmeet.modules.hobby.HobbyRepository;
 import com.funmeet.modules.hobby.HobbyService;
-import com.funmeet.modules.meeting.MeetingRepository;
-import com.funmeet.modules.meeting.MeetingService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import net.bytebuddy.utility.RandomString;
-import org.modelmapper.ModelMapper;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StopWatch;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,7 +24,6 @@ public class ClubService {
 
     private final ClubRepository clubRepository;
     private final HobbyRepository hobbyRepository;
-    private final ModelMapper modelMapper;
     private final ApplicationEventPublisher applicationEventPublisher;
     private final HobbyService hobbyService;
 
@@ -59,9 +50,8 @@ public class ClubService {
     }
 
     public void updateClubDescription(Club club, ClubDescriptionForm clubDescriptionForm) {
-        modelMapper.map(clubDescriptionForm, club);
+        club.updateClubIntroduce(clubDescriptionForm.getShortDescription(), clubDescriptionForm.getFullDescription());
         applicationEventPublisher.publishEvent(new ClubUpdateEvent(club,"모임 소개를 수정했습니다."));
-
     }
 
     public Hobby findHobbyByTitle(String title){
@@ -74,15 +64,15 @@ public class ClubService {
     }
 
     public void updateClubImage(Club club, String image) {
-        club.setBanner(image);
+        club.updateBannerImage(image);
     }
 
     public void enableClubBanner(Club club) {
-        club.setUseBanner(true);
+        club.updateClubBanner(true);
     }
 
     public void disableClubBanner(Club club) {
-        club.setUseBanner(false);
+        club.updateClubBanner(false);
     }
 
     public void addHobby(Club club, Hobby hobby) {
@@ -155,7 +145,7 @@ public class ClubService {
     }
 
     public void updateClubPath(Club club, String newPath) {
-        club.setClubPath(newPath);
+        club.updateClubPath(newPath);
     }
 
     public boolean isValidTitle(String newTitle) { // TODO validation new Title
@@ -163,7 +153,7 @@ public class ClubService {
     }
 
     public void updateClubTitle(Club club, String newTitle) {
-        club.setTitle(newTitle);
+        club.updateClubTitle(newTitle);
     }
 
     public void remove(Club club) {

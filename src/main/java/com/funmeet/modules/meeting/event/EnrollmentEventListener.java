@@ -68,14 +68,17 @@ public class EnrollmentEventListener {
     }
 
     private void sendAlarm(EnrollmentEvent enrollmentEvent, Meeting meeting, Club club, Account account){
-        Alarm alarm = new Alarm();
-        alarm.setTitle(club.getTitle() + "/" + meeting.getTitle());
-        alarm.setLink("/club/" + club.getEncodedPath() + "/meeting/" + meeting.getId());
-        alarm.setChecked(false);
-        alarm.setCreatedDateTime(LocalDateTime.now());
-        alarm.setMessage(enrollmentEvent.getMessage());
-        alarm.setAccount(account);
-        alarm.setAlarmType(AlarmType.ENROLLMENT);
+
+        Alarm alarm = Alarm.builder()
+                .title(club.getTitle() + "/" + meeting.getTitle())
+                .link("/club/" + club.getEncodedPath() + "/meeting/" + meeting.getId())
+                .checked(false)
+                .createdDateTime(LocalDateTime.now())
+                .message(enrollmentEvent.getMessage())
+                .account(account)
+                .AlarmType(AlarmType.ENROLLMENT)
+                .build();
+
         alarmRepository.save(alarm);
     }
 }

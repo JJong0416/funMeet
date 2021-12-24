@@ -54,7 +54,6 @@ public class AccountService implements UserDetailsService {
         signUpForm.setPassword(passwordEncoder.encode(signUpForm.getPassword()));
         Account account = AccountMapper.INSTANCE.signUpFormToEntity(signUpForm);
         account.generateEmailCheckToken();
-
         return accountRepository.save(account);
     }
 
@@ -90,14 +89,14 @@ public class AccountService implements UserDetailsService {
 
     @Override
     @Transactional(readOnly = true)
-    public UserDetails loadUserByUsername(String EmailOrNickname) throws UsernameNotFoundException {
-        Account account = accountRepository.findByEmail(EmailOrNickname);
+    public UserDetails loadUserByUsername(String findAccount) throws UsernameNotFoundException {
+        Account account = accountRepository.findByEmail(findAccount);
         if (account == null){
-            account = accountRepository.findByNickname(EmailOrNickname);
+            account = accountRepository.findByNickname(findAccount);
         }
 
         if (account == null){
-            throw new UsernameNotFoundException(EmailOrNickname);
+            throw new UsernameNotFoundException(findAccount);
         }
         return new AdaptAccount(account);
     }

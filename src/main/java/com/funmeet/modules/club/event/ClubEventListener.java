@@ -12,7 +12,6 @@ import com.funmeet.modules.alarm.AlarmType;
 import com.funmeet.modules.club.Club;
 import com.funmeet.modules.club.ClubRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -72,14 +71,16 @@ public class ClubEventListener {
 
 
     private void saveClubAlarmByWeb(Club club, Account account,String message, AlarmType alarmType) {
-        Alarm alarm = new Alarm();
-        alarm.setTitle(club.getTitle());
-        alarm.setLink("/club/" + club.getEncodedPath());
-        alarm.setChecked(false);
-        alarm.setCreatedDateTime(LocalDateTime.now());
-        alarm.setMessage(message);
-        alarm.setAccount(account);
-        alarm.setAlarmType(alarmType);
+
+        Alarm alarm = Alarm.builder()
+                .title(club.getTitle())
+                .link("/club/" + club.getEncodedPath())
+                .checked(false)
+                .createdDateTime(LocalDateTime.now())
+                .message(message)
+                .account(account)
+                .AlarmType(alarmType)
+                .build();
 
         alarmRepository.save(alarm);
     }

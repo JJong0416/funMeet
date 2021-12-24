@@ -4,7 +4,6 @@ import com.funmeet.modules.club.Club;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-
 @Getter
 @RequiredArgsConstructor
 public class ClubCreatedEvent {
