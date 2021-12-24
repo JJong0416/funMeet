@@ -12,8 +12,8 @@ import com.funmeet.modules.city.City;
 import com.funmeet.modules.city.CityRepository;
 import com.funmeet.modules.hobby.Hobby;
 import com.funmeet.modules.hobby.HobbyRepository;
+import com.funmeet.modules.mapper.AccountMapper;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -40,51 +40,38 @@ public class AccountService implements UserDetailsService {
     private final CityRepository cityRepository;
     private final HobbyRepository hobbyRepository;
     private final PasswordEncoder passwordEncoder;
-    private final ModelMapper modelMapper;
     private final EmailService emailService;
     private final TemplateEngine templateEngine;
     private final AppProperties appProperties;
 
     public Account processSignUpAccount(SignUpForm signUpForm) {
-        Account newAccount = saveSignUpAccount(signUpForm);
+        Account newAccount = saveSignUp(signUpForm);
         sendSignUpConfirmEmail(newAccount);
         return newAccount;
     }
 
-    private Account saveSignUpAccount(SignUpForm signUpForm) {
+    private Account saveSignUp(SignUpForm signUpForm) {
         signUpForm.setPassword(passwordEncoder.encode(signUpForm.getPassword()));
-        Account account = modelMapper.map(signUpForm,Account.class);
+        Account account = AccountMapper.INSTANCE.signUpFormToEntity(signUpForm);
         account.generateEmailCheckToken();
-        account.setShortBio("간략한 자기 소개를 추가하세요.");
+
         return accountRepository.save(account);
     }
 
-    public Account oauthSignUp(OAuthForm oAuthForm, String kakaoEmail) {
+    public Account saveOauthSignUp(OAuthForm oAuthForm, String kakaoEmail) {
         oAuthForm.setPassword(passwordEncoder.encode(oAuthForm.getPassword()));
-        Account account = modelMapper.map(oAuthForm,Account.class);
-        account.completeOAuthSignup(kakaoEmail);
-        account.setShortBio("간략한 자기 소개를 추가하세요.");
+        Account account = AccountMapper.INSTANCE.oauthFormToEntity(oAuthForm);
         return accountRepository.save(account);
     }
 
     // 써야 하는 것은 link, nickname, host
-    public void sendSignUpConfirmEmail(Account addAccount) {
-        Context context = new Context();
-        context.setVariable("link","/check-email-token?token=" + addAccount.getEmailCheckToken() +
-                "&email=" + addAccount.getEmail());
-        context.setVariable("nickname",addAccount.getNickname());
-        context.setVariable("message","뻔모임 서비스를 이용하시려면 링크를 클릭하세요.");
-        context.setVariable("linkName","이메일 인증하기");
-        context.setVariable("host",appProperties.getHost());
+    public void sendSignUpConfirmEmail(Account account) {
+        EmailMessageForm emailMessageForm = writeEmailMessage(account, "/check-email-token?token=", "이메일 인증하기");
+        emailService.send(emailMessageForm);
+    }
 
-        String message = templateEngine.process("email/html-email-link",context);
-
-        EmailMessageForm emailMessageForm = EmailMessageForm.builder()
-                .to(addAccount.getEmail())
-                .subject("뻔(Fun)하면서 뻔하지 않은 모임. 뻔모임 회원가입 인증")
-                .text(message)
-                .build();
-
+    public void sendLoginLink(Account account) {
+        EmailMessageForm emailMessageForm = writeEmailMessage(account, "/auth-email?token=", "로그인하기");
         emailService.send(emailMessageForm);
     }
 
@@ -93,31 +80,11 @@ public class AccountService implements UserDetailsService {
         login(account);
     }
 
-    public void sendLoginLink(Account account) {
-        Context context = new Context();
-        context.setVariable("link","/auth-email?token=" + account.getEmailCheckToken() +
-                "&email=" + account.getEmail());
-        context.setVariable("nickname",account.getNickname());
-        context.setVariable("message","뻔모임 서비스를 이용하시려면 링크를 클릭하세요.");
-        context.setVariable("linkName","로그인하기");
-        context.setVariable("host",appProperties.getHost());
-
-        String message = templateEngine.process("email/html-email-link",context);
-
-        EmailMessageForm emailMessageForm = EmailMessageForm.builder()
-                .to(account.getEmail())
-                .subject("뻔(Fun)하면서 뻔하지 않은 모임. 뻔모임 로그인 링크")
-                .text(message)
-                .build();
-        emailService.send(emailMessageForm);
-
-    }
-
     public void login(Account account) {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                 new AdaptAccount(account),
                 account.getPassword(),
-                List.of(new SimpleGrantedAuthority("RULE_USER")));
+                List.of(new SimpleGrantedAuthority("ROLE_USER")));
         SecurityContextHolder.getContext().setAuthentication(token);
     }
 
@@ -144,23 +111,21 @@ public class AccountService implements UserDetailsService {
     }
 
     public void updateProfile(Account account, Profile profile) {
-        account.setShortBio(profile.getShortBio());
-        account.setProfileImage(profile.getProfileImage());
-        accountRepository.save(account);
+        account.completeProfile(profile.getShortBio(), profile.getProfileImage());
     }
 
     public void updatePassword(Account account, String newPassword) {
-        account.setPassword(passwordEncoder.encode(newPassword));
+        account.updatePassword(passwordEncoder.encode(newPassword));
         accountRepository.save(account);
     }
 
     public void updateNotification(Account account, NotificationForm notificationForm){
-        modelMapper.map(notificationForm,account);
+        account.updateNotification(notificationForm);
         accountRepository.save(account);
     }
 
     public void updateNickname(Account account, String nickname) {
-        account.setNickname(nickname);
+        account.updateNickname(nickname);
         accountRepository.save(account);
         login(account);
     }
@@ -214,4 +179,25 @@ public class AccountService implements UserDetailsService {
     public void deleteAccount(Account account) {
         accountRepository.delete(account);
     }
+
+    /* Method 분할 */
+
+    private EmailMessageForm writeEmailMessage(Account account, String link, String linkName){
+        Context context = new Context();
+        context.setVariable("link",link + account.getEmailCheckToken() +
+                "&email=" + account.getEmail());
+        context.setVariable("nickname",account.getNickname());
+        context.setVariable("message","뻔모임 서비스를 이용하시려면 링크를 클릭하세요.");
+        context.setVariable("linkName",linkName);
+        context.setVariable("host",appProperties.getHost());
+
+        String message = templateEngine.process("email/html-email-link",context);
+
+        return EmailMessageForm.builder()
+                .to(account.getEmail())
+                .subject("뻔(Fun)하면서 뻔하지 않은 모임. 뻔모임 로그인 링크")
+                .text(message)
+                .build();
+    }
+
 }

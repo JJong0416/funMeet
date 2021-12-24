@@ -26,4 +26,6 @@ public class SignUpForm {
     @Email
     @NotBlank
     private String email;
+
+    private final String shortBio = "간략한 자기소개를 추가하세요";
 }

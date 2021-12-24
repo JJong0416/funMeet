@@ -1,6 +1,5 @@
 package com.funmeet.modules.account.form;
 
-import com.funmeet.modules.account.Account;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,8 +15,4 @@ public class NicknameForm {
     @Length(min = 6, max = 20)
     @Pattern(regexp = "^[ㄱ-ㅎ가-힣a-zA-Z0-9_-]{6,20}$")
     private String nickname;
-
-    public NicknameForm(Account account){
-        this.nickname = account.getNickname();
-    }
 }

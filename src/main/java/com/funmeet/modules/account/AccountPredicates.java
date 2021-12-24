@@ -6,7 +6,6 @@ import com.querydsl.core.types.Predicate;
 
 import java.util.Set;
 
-
 public class AccountPredicates {
 
     public static Predicate findByHobbyAndCity(Set<Hobby> hobbies, Set<City> cities) {

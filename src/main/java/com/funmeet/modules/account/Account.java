@@ -1,5 +1,6 @@
 package com.funmeet.modules.account;
 
+import com.funmeet.modules.account.form.NotificationForm;
 import com.funmeet.modules.city.City;
 import com.funmeet.modules.hobby.Hobby;
 import lombok.*;
@@ -10,9 +11,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@Entity @Setter
+@Entity
 @Getter @EqualsAndHashCode(of = "id")
-@Builder @AllArgsConstructor @NoArgsConstructor
+@NoArgsConstructor
 public class Account {
 
     @Id @GeneratedValue
@@ -75,19 +76,41 @@ public class Account {
         this.joinedAt = LocalDateTime.now();
     }
 
-    public void completeOAuthSignup(String kakaoEmail){
-        this.emailVerified = true;
-        this.joinedAt = LocalDateTime.now();
-        this.kakaoEmail = kakaoEmail;
-        this.kakaoTokenVerified = true;
-        this.emailCheckTokenGeneratedAt = LocalDateTime.now();
-    }
-
     public boolean isValidToken(String token) {
         return this.emailCheckToken.equals(token);
     }
 
     public boolean canSendConfirmEmail() {
         return this.emailCheckTokenGeneratedAt.isBefore(LocalDateTime.now().minusMinutes(30));
+    }
+
+    public void completeProfile(String bio, String image){
+        this.shortBio = bio;
+        this.profileImage = image;
+    }
+
+    public void updatePassword(String encodePassword){
+        this.password = encodePassword;
+    }
+
+    public void updateNickname(String nickname){
+        this.nickname = nickname;
+    }
+
+    public void updateNotification (NotificationForm notificationForm){
+        this.meetCreatedByEmail = notificationForm.isMeetCreatedByEmail();
+        this.meetCreatedByWeb = notificationForm.isMeetCreatedByWeb();
+        this.meetEnrollmentResultByEmail = notificationForm.isMeetEnrollmentResultByEmail();
+        this.meetEnrollmentResultByWeb = notificationForm.isMeetEnrollmentResultByWeb();
+        this.meetUpdateByEmail = notificationForm.isMeetUpdateByEmail();
+        this.meetUpdatedByWeb = notificationForm.isMeetUpdatedByWeb();
+    }
+
+    @Builder
+    public Account(String nickname, String password, String email, String shortBio){
+        this.nickname = nickname;
+        this.password = password;
+        this.email = email;
+        this.shortBio = shortBio;
     }
 }

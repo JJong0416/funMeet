@@ -1,12 +1,16 @@
 package com.funmeet.modules.account.oauth;
 
-import lombok.Data;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
-@Data
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Setter
 public class OAuthForm {
 
     @NotBlank
@@ -17,4 +21,10 @@ public class OAuthForm {
     @NotBlank
     @Length(min = 6, max = 20)
     private String password;
+
+    @Email
+    @NotBlank
+    private String email;
+
+    private final String shortBio = "간략한 자기소개를 추가하세요";
 }

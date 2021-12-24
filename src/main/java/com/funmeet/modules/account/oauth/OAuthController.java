@@ -52,7 +52,7 @@ public class OAuthController {
         if (errors.hasErrors()){
             return "account/oauth-sign-up";
         }
-        Account account = accountService.oauthSignUp(oAuthForm,kakaoEmail);
+        Account account = accountService.saveOauthSignUp(oAuthForm,kakaoEmail);
         accountService.login(account);
         return "redirect:/";
     }

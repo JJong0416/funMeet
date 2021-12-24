@@ -189,7 +189,6 @@ public class AccountSettingsController {
             model.addAttribute(account);
             return "settings/account";
         }
-
         accountService.updateNickname(account, nicknameForm.getNickname());
         attributes.addFlashAttribute("message", "성공");
         return "redirect:" + "/settings/account";
