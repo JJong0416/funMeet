@@ -62,7 +62,6 @@ public class AccountSettingsController {
     @PostMapping("/settings/profile")
     public String updateProfile(@CurrentAccount Account account, @Valid Profile profile, Errors errors,
                                 Model model, RedirectAttributes attributes) {
-
         if (errors.hasErrors()) {
             model.addAttribute(account);
             return "settings/profile";
@@ -105,7 +104,6 @@ public class AccountSettingsController {
         if (hobby == null){
             return ResponseEntity.badRequest().build();
         }
-
         accountService.removeHobby(account,hobby);
         return ResponseEntity.ok().build();
     }
@@ -130,7 +128,6 @@ public class AccountSettingsController {
         if (city == null){
             return ResponseEntity.badRequest().build();
         }
-
         accountService.addCity(account,city);
         return ResponseEntity.ok().build();
     }

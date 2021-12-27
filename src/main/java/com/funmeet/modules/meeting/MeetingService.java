@@ -4,6 +4,7 @@ package com.funmeet.modules.meeting;
 import com.funmeet.modules.account.Account;
 import com.funmeet.modules.club.Club;
 import com.funmeet.modules.club.event.ClubUpdateEvent;
+import com.funmeet.modules.mapper.MeetingMapper;
 import com.funmeet.modules.meeting.event.EnrollmentEventAccepted;
 import com.funmeet.modules.meeting.event.EnrollmentEventRejected;
 import com.funmeet.modules.meeting.form.MeetingForm;
@@ -37,7 +38,8 @@ public class MeetingService {
     }
 
     public void updateMeeting(Meeting meeting, MeetingForm meetingForm) {
-        modelMapper.map(meetingForm, meeting);
+        meetingForm.setMeetingType(meeting.getMeetingType());
+        MeetingMapper.INSTANCE.updateToExistingEntity(meeting, meetingForm);
         meeting.acceptWaitingList();
         applicationEventPublisher.publishEvent(new ClubUpdateEvent(meeting.getClub(),
                 "'" + meeting.getTitle() + "' 모임 정보가 변경되었습니다.."));

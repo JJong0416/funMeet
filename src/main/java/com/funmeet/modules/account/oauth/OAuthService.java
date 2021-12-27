@@ -10,6 +10,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -88,6 +89,8 @@ public class OAuthService {
     }
 
     public Account findAccountByKakaoEmail(String kakaoEmail){
-        return accountRepository.findByKakaoEmailAndKakaoTokenVerifiedTrue(kakaoEmail);
+        return accountRepository.findByKakaoEmailAndKakaoTokenVerifiedTrue(kakaoEmail)
+                .orElseThrow(() -> { throw new UsernameNotFoundException(kakaoEmail);});
+
     }
 }

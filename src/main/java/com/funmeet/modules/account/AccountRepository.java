@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Transactional(readOnly=true)
 public interface AccountRepository extends JpaRepository<Account, Long> , QuerydslPredicateExecutor<Account> {
 
@@ -12,11 +14,14 @@ public interface AccountRepository extends JpaRepository<Account, Long> , Queryd
 
     boolean existsByNickname(String nickname);
 
-    Account findByNickname(String id);
+    @Transactional
+    void removeAllHobbyAndCityByEmail(String email);
 
-    Account findByEmail(String email);
+    Optional<Account> findByNickname(String id);
 
-    Account findByKakaoEmailAndKakaoTokenVerifiedTrue(String kakaoEmail);
+    Optional<Account> findByEmail(String email);
+
+    Optional<Account> findByKakaoEmailAndKakaoTokenVerifiedTrue(String kakaoEmail);
 
     @EntityGraph(attributePaths = {"hobby","city"})
     Account findAccountWithHobbyAndCityById(Long id);

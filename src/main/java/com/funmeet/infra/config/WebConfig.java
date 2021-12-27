@@ -24,6 +24,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .collect(Collectors.toList());
         staticResourcesPath.add("/node_modules/**");
 
+        /* static 리소스에도 적용하지 않기. ex) css, js, image 등*/
         registry.addInterceptor(alarmInterceptor)
                 .excludePathPatterns(staticResourcesPath);
     }

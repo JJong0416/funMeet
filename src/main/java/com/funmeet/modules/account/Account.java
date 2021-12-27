@@ -113,6 +113,4 @@ public class Account {
         this.meetUpdateByEmail = notificationForm.isMeetUpdateByEmail();
         this.meetUpdatedByWeb = notificationForm.isMeetUpdatedByWeb();
     }
-
-
 }

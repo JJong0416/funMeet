@@ -35,10 +35,10 @@ public class Club {
 
     private String shortDescription;
 
-    @Lob @Basic(fetch = FetchType.EAGER)
+    @Lob
     private String fullDescription;
 
-    @Lob @Basic(fetch = FetchType.EAGER)
+    @Lob
     private String banner;
 
     private int memberCount;

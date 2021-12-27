@@ -1,6 +1,7 @@
 package com.funmeet.modules.account.oauth;
 
 import com.funmeet.modules.account.Account;
+import com.funmeet.modules.account.AccountDetailsService;
 import com.funmeet.modules.account.AccountRepository;
 import com.funmeet.modules.account.AccountService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ public class OAuthController {
     private final AccountRepository accountRepository;
     private final OAuthService oAuthService;
     private final AccountService accountService;
+    private final AccountDetailsService accountDetailsService;
     private final OAuthFormValidator oAuthFormValidator;
 
     @InitBinder("oAuthForm")
@@ -43,7 +45,7 @@ public class OAuthController {
             return "account/oauth-sign-up";
         }
 
-        accountService.login(account);
+        accountDetailsService.login(account);
         return "redirect:/";
     }
 
@@ -53,7 +55,7 @@ public class OAuthController {
             return "account/oauth-sign-up";
         }
         Account account = accountService.saveOauthSignUp(oAuthForm,kakaoEmail);
-        accountService.login(account);
+        accountDetailsService.login(account);
         return "redirect:/";
     }
 }

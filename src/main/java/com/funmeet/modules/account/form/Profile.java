@@ -1,12 +1,12 @@
 package com.funmeet.modules.account.form;
 
 import com.funmeet.modules.account.Account;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
-@Getter @Setter @AllArgsConstructor
+@Getter @Setter @NoArgsConstructor
 public class Profile {
 
     private String nickname;

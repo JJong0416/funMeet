@@ -21,6 +21,7 @@ public class AccountController {
 
     private final SignUpFormValidator signUpFormValidator;
     private final AccountService accountService;
+    private final AccountDetailsService accountDetailsService;
 
     @InitBinder("signUpForm")
     public void initBinder(WebDataBinder webDataBinder){
@@ -39,7 +40,7 @@ public class AccountController {
             return "account/sign-up";
         }
         Account account = accountService.processSignUpAccount(signUpForm);
-        accountService.login(account);
+        accountDetailsService.login(account);
         return "redirect:/";
     }
 
@@ -117,7 +118,7 @@ public class AccountController {
             return view;
         }
 
-        accountService.login(account);
+        accountDetailsService.login(account);
         return view;
     }
 

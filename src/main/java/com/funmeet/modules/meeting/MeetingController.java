@@ -4,10 +4,10 @@ import com.funmeet.modules.account.Account;
 import com.funmeet.modules.account.security.CurrentAccount;
 import com.funmeet.modules.club.Club;
 import com.funmeet.modules.club.ClubService;
+import com.funmeet.modules.mapper.MeetingMapper;
 import com.funmeet.modules.meeting.form.MeetingForm;
 import com.funmeet.modules.meeting.validator.MeetingFormValidator;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -26,7 +26,6 @@ public class MeetingController {
 
     private final ClubService clubService;
     private final MeetingService meetingService;
-    private final ModelMapper modelMapper;
     private final MeetingFormValidator meetingFormValidator;
     private final MeetingRepository meetingRepository;
     private final EnrollmentRepository enrollmentRepository;
@@ -55,8 +54,7 @@ public class MeetingController {
             model.addAttribute(club);
             return "meeting/form";
         }
-
-        Meeting meeting = meetingService.createMeeting(account, club, modelMapper.map(meetingForm, Meeting.class));
+        Meeting meeting = meetingService.createMeeting(account, club, MeetingMapper.INSTANCE.MeetingFormToEntity(meetingForm));
         return "redirect:/club/" + club.getEncodedPath() + "/meeting/" + meeting.getId();
     }
 
@@ -102,7 +100,7 @@ public class MeetingController {
         model.addAttribute(club);
         model.addAttribute(meeting);
         model.addAttribute(account);
-        model.addAttribute(modelMapper.map(meeting, MeetingForm.class));
+        model.addAttribute(MeetingMapper.INSTANCE.MeetingToMeetingForm(meeting));
         return "meeting/update";
     }
 
@@ -112,7 +110,6 @@ public class MeetingController {
                                     @PathVariable("id") Meeting meeting, @Valid MeetingForm meetingForm, Errors errors,
                                     Model model) {
         Club club = clubService.getClubUpdate(account, path);
-        meetingForm.setMeetingType(meeting.getMeetingType());
         meetingFormValidator.validateUpdateForm(meetingForm, meeting, errors);
 
         if (errors.hasErrors()) {
@@ -149,9 +146,7 @@ public class MeetingController {
                                    @PathVariable String path, @PathVariable Long id) {
         Club club = clubService.getClubToEnroll(path);
         Meeting meeting = meetingRepository.findById(id).orElseThrow();
-
         meetingService.cancelEnrollment(meeting,account);
-
         return "redirect:/club/" + club.getEncodedPath() +  "/meeting/" + id;
     }
 

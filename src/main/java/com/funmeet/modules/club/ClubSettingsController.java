@@ -11,8 +11,8 @@ import com.funmeet.modules.club.form.ClubDescriptionForm;
 import com.funmeet.modules.hobby.Hobby;
 import com.funmeet.modules.hobby.HobbyForm;
 import com.funmeet.modules.hobby.HobbyService;
+import com.funmeet.modules.mapper.ClubMapper;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,14 +34,13 @@ public class ClubSettingsController {
     private final CityService cityService;
 
     private final ObjectMapper objectMapper;
-    private final ModelMapper modelMapper;
 
     @GetMapping("/description")
     public String viewClubSetting(@CurrentAccount Account account, @PathVariable String path, Model model) {
         Club club = clubService.getClubUpdate(account, path);
         model.addAttribute(account);
         model.addAttribute(club);
-        model.addAttribute(modelMapper.map(club, ClubDescriptionForm.class));
+        model.addAttribute(ClubMapper.INSTANCE.ClubToDescriptionForm(club));
         return "club/settings/description";
     }
 

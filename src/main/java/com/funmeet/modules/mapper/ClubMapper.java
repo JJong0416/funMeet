@@ -1,13 +1,14 @@
 package com.funmeet.modules.mapper;
 
 import com.funmeet.modules.club.Club;
+import com.funmeet.modules.club.form.ClubDescriptionForm;
 import com.funmeet.modules.club.form.ClubForm;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 import java.util.HashSet;
 
-@Mapper(componentModel = "spring")
+@Mapper
 public interface ClubMapper {
 
     ClubMapper INSTANCE = Mappers.getMapper(ClubMapper.class);
@@ -24,4 +25,5 @@ public interface ClubMapper {
                 .fullDescription(clubForm.getFullDescription())
                 .build();
     };
+     ClubDescriptionForm ClubToDescriptionForm(Club club);
 }

@@ -19,11 +19,12 @@ public class AlarmInterceptor implements HandlerInterceptor {
 
     private final AlarmRepository alarmRepository;
 
+    /* afterCompletion은 뷰 렌더링 이후, postHandle은 뷰 렌더링 전, 핸들러 처리 이후*/
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws  Exception {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
+            /* modelAndView를 안쓰면서, Redirect 뷰타입이 아니면서 authentication이 null 아니며 AdaptAccountType만  */
         if (modelAndView != null && !isRedirectView(modelAndView) && authentication != null && authentication.getPrincipal() instanceof AdaptAccount) {
             Account account = ((AdaptAccount)authentication.getPrincipal()).getAccount();
             long count = alarmRepository.countByAccountAndChecked(account, false);

@@ -22,8 +22,8 @@ public class NicknameValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         NicknameForm nicknameForm = (NicknameForm) target;
-        Account getNickname = accountRepository.findByNickname(nicknameForm.getNickname());
-        if (getNickname != null) {
+        /* 기존 계정 유무 체크 */
+        if (accountRepository.findByNickname(nicknameForm.getNickname()).isPresent()){
             errors.rejectValue("nickname", "wrong-value", "입력하신 닉네임을 사용할 수 없습니다.");
         }
     }

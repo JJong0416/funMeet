@@ -7,18 +7,12 @@ import com.funmeet.modules.account.form.NotificationForm;
 import com.funmeet.modules.account.form.Profile;
 import com.funmeet.modules.account.form.SignUpForm;
 import com.funmeet.modules.account.oauth.OAuthForm;
-import com.funmeet.modules.account.security.AdaptAccount;
 import com.funmeet.modules.city.City;
 import com.funmeet.modules.city.CityRepository;
 import com.funmeet.modules.hobby.Hobby;
 import com.funmeet.modules.hobby.HobbyRepository;
 import com.funmeet.modules.mapper.AccountMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -34,13 +28,15 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class AccountService implements UserDetailsService {
+public class AccountService{
 
     private final AccountRepository accountRepository;
     private final CityRepository cityRepository;
     private final HobbyRepository hobbyRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
+    private final AccountDetailsService accountDetailsService;
+
     private final TemplateEngine templateEngine;
     private final AppProperties appProperties;
 
@@ -76,41 +72,20 @@ public class AccountService implements UserDetailsService {
 
     public void completeSignUp(Account account) {
         account.completeSignUp();
-        login(account);
-    }
-
-    public void login(Account account) {
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-                new AdaptAccount(account),
-                account.getPassword(),
-                List.of(new SimpleGrantedAuthority("ROLE_USER")));
-        SecurityContextHolder.getContext().setAuthentication(token);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public UserDetails loadUserByUsername(String findAccount) throws UsernameNotFoundException {
-        Account account = accountRepository.findByEmail(findAccount);
-        if (account == null){
-            account = accountRepository.findByNickname(findAccount);
-        }
-
-        if (account == null){
-            throw new UsernameNotFoundException(findAccount);
-        }
-        return new AdaptAccount(account);
+        accountDetailsService.login(account);
     }
 
     public Account findAccountByEmail(String email){
-        return accountRepository.findByEmail(email);
+        return accountRepository.findByEmail(email).orElseThrow(() -> { throw new UsernameNotFoundException(email);});
     }
 
     public Account findAccountByNickname(String nickname){
-        return accountRepository.findByNickname(nickname);
+        return accountRepository.findByNickname(nickname).orElseThrow( () -> { throw new UsernameNotFoundException(nickname);});
     }
 
     public void updateProfile(Account account, Profile profile) {
         account.completeProfile(profile.getShortBio(), profile.getProfileImage());
+        accountRepository.save(account);
     }
 
     public void updatePassword(Account account, String newPassword) {
@@ -126,7 +101,7 @@ public class AccountService implements UserDetailsService {
     public void updateNickname(Account account, String nickname) {
         account.updateNickname(nickname);
         accountRepository.save(account);
-        login(account);
+        accountDetailsService.login(account);
     }
 
     public Hobby findHobbyByTitle(String title){
@@ -176,6 +151,7 @@ public class AccountService implements UserDetailsService {
     }
 
     public void deleteAccount(Account account) {
+        accountRepository.removeAllHobbyAndCityByEmail(account.getEmail());
         accountRepository.delete(account);
     }
 

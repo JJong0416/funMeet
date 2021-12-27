@@ -6,7 +6,6 @@ import com.funmeet.modules.club.form.ClubForm;
 import com.funmeet.modules.club.validator.ClubFormValidator;
 import com.funmeet.modules.mapper.ClubMapper;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -27,7 +26,6 @@ public class ClubController {
     private final ClubService clubService;
     private final ClubFormValidator clubFormValidator;
     private final ClubRepository clubRepository;
-    private final ModelMapper modelMapper;
 
     @InitBinder("clubForm")
     public void clubFormInitBinder(WebDataBinder webDataBinder) {

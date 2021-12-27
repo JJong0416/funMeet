@@ -16,7 +16,6 @@ import java.util.List;
 public class AlarmController {
 
     private final AlarmRepository alarmRepository;
-
     private final AlarmService alarmService;
 
     @GetMapping("/alarm")

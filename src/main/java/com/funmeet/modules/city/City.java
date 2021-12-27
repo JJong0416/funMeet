@@ -8,7 +8,6 @@ import javax.persistence.*;
 @Entity @Getter
 @EqualsAndHashCode(of = "id")
 @Builder @AllArgsConstructor @NoArgsConstructor
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"enCity", "krCity"}))
 public class City {
 
     @Id @GeneratedValue
