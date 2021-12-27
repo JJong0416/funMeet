@@ -15,7 +15,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class AccountDetailsService implements UserDetailsService {
 
     private final AccountRepository accountRepository;

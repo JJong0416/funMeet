@@ -76,20 +76,19 @@ public class ClubService {
     }
 
     public void addHobby(Club club, Hobby hobby) {
-        club.getHobby().add(hobby);
+        club.addHobby(hobby);
     }
 
     public void removeHobby(Club club, Hobby hobby) {
-        club.getHobby().remove(hobby);
+        club.removeHobby(hobby);
     }
 
     public void addCity(Club club, City city) {
-        club.getCity().add(city);
-
+        club.addCity(city);
     }
 
     public void removeCity(Club club, City city) {
-        club.getCity().remove(city);
+        club.removeCity(city);
     }
 
     public Club getClubUpdateHobby(Account account, String path) {

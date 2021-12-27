@@ -9,7 +9,6 @@ import com.funmeet.modules.meeting.event.EnrollmentEventAccepted;
 import com.funmeet.modules.meeting.event.EnrollmentEventRejected;
 import com.funmeet.modules.meeting.form.MeetingForm;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +20,6 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class MeetingService {
 
-    private final ModelMapper modelMapper;
 
     private final MeetingRepository meetingRepository;
     private final EnrollmentRepository enrollmentRepository;
