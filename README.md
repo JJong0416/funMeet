@@ -62,7 +62,7 @@
    
 ## 부가 **기능 구현**
 - 카카오 로그인(OAuth 2.0)
-- 모임 홍보 알림 서비스(SMTP **asynchronous**)
+- 모임 홍보 알람 서비스(SMTP **asynchronous**)
 - 인증 이메일 서비스
 
 ## 📢프로젝트 Issue 및 해결책
