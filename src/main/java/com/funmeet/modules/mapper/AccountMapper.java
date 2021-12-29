@@ -13,8 +13,6 @@ public interface AccountMapper {
 
     AccountMapper INSTANCE = Mappers.getMapper(AccountMapper.class);
 
-    void updateNotificationFormToEntity(NotificationForm notificationForm, @MappingTarget Account account);
-
     Account signUpFormToEntity(SignUpForm signUpForm);
 
     Account oauthFormToEntity(OAuthForm oAuthForm);
