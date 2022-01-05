@@ -1,3 +1,4 @@
+/*
 package com.funmeet.modules.club;
 
 import com.funmeet.modules.account.Account;
@@ -48,4 +49,4 @@ class ClubServiceTest {
         club.addMember(account);
         assertFalse(club.isJoinable(adaptAccount));
     }
-}
+}*/

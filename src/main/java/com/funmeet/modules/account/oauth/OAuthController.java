@@ -45,7 +45,7 @@ public class OAuthController {
             return "account/oauth-sign-up";
         }
 
-        accountDetailsService.login(account);
+        accountDetailsService.loginByAccount(account);
         return "redirect:/";
     }
 
@@ -55,7 +55,7 @@ public class OAuthController {
             return "account/oauth-sign-up";
         }
         Account account = accountService.saveOauthSignUp(oAuthForm,kakaoEmail);
-        accountDetailsService.login(account);
+        accountDetailsService.loginByAccount(account);
         return "redirect:/";
     }
 }

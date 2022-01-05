@@ -4,7 +4,6 @@ import com.funmeet.modules.account.Account;
 import com.funmeet.modules.account.security.CurrentAccount;
 import com.funmeet.modules.club.form.ClubForm;
 import com.funmeet.modules.club.validator.ClubFormValidator;
-import com.funmeet.modules.mapper.ClubMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,9 +22,8 @@ import java.nio.charset.StandardCharsets;
 @RequiredArgsConstructor
 public class ClubController {
 
-    private final ClubService clubService;
     private final ClubFormValidator clubFormValidator;
-    private final ClubRepository clubRepository;
+    private final ClubService clubService;
 
     @InitBinder("clubForm")
     public void clubFormInitBinder(WebDataBinder webDataBinder) {
@@ -46,7 +44,7 @@ public class ClubController {
             return "club/form";
         }
 
-        Club newClub = clubService.createNewClub(ClubMapper.INSTANCE.clubFormToEntity(clubForm), account);
+        Club newClub = clubService.createNewClub(account,clubForm);
         return "redirect:/club/" + URLEncoder.encode(newClub.getClubPath(),StandardCharsets.UTF_8);
     }
 

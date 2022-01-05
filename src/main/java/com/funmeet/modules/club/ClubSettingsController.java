@@ -12,6 +12,7 @@ import com.funmeet.modules.hobby.Hobby;
 import com.funmeet.modules.hobby.HobbyForm;
 import com.funmeet.modules.hobby.HobbyService;
 import com.funmeet.modules.mapper.ClubMapper;
+import com.funmeet.modules.meeting.Meeting;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -33,14 +34,12 @@ public class ClubSettingsController {
     private final HobbyService hobbyService;
     private final CityService cityService;
 
-    private final ObjectMapper objectMapper;
-
     @GetMapping("/description")
     public String viewClubSetting(@CurrentAccount Account account, @PathVariable String path, Model model) {
         Club club = clubService.getClubUpdate(account, path);
         model.addAttribute(account);
         model.addAttribute(club);
-        model.addAttribute(ClubMapper.INSTANCE.ClubToDescriptionForm(club));
+        model.addAttribute(clubService.mappingDescriptionForm(club));
         return "club/settings/description";
     }
 
@@ -48,6 +47,7 @@ public class ClubSettingsController {
     public String updateClubInfo(@CurrentAccount Account account, @PathVariable String path,
                                  @Valid ClubDescriptionForm clubDescriptionForm, Errors errors,
                                  Model model, RedirectAttributes attributes) {
+
         Club club = clubService.getClubUpdate(account,path);
 
         if (errors.hasErrors()) {
@@ -63,6 +63,7 @@ public class ClubSettingsController {
 
     @GetMapping("/banner")
     public String clubBannerForm(@CurrentAccount Account account, @PathVariable String path, Model model){
+
         Club club = clubService.getClubUpdate(account,path);
         model.addAttribute(account);
         model.addAttribute(club);
@@ -72,8 +73,8 @@ public class ClubSettingsController {
     @PostMapping("/banner")
     public String clubImageSubmit(@CurrentAccount Account account, @PathVariable String path,
                                   String image, RedirectAttributes attributes) {
-        Club club = clubService.getClubUpdate(account, path);
-        clubService.updateClubImage(club, image);
+
+        Club club = clubService.updateClubImage(account, path, image);
         attributes.addFlashAttribute("message", "성공");
         return "redirect:/club/" + club.getEncodedPath() + "/settings/banner";
     }
@@ -81,29 +82,25 @@ public class ClubSettingsController {
 
     @PostMapping("/banner/enable")
     public String enableClubBanner(@CurrentAccount Account account, @PathVariable String path) {
-        Club club = clubService.getClubUpdate(account, path);
-        clubService.enableClubBanner(club);
+
+        Club club = clubService.checkUseClubBanner(account, path, true);
         return "redirect:/club/" + club.getEncodedPath() + "/settings/banner";
     }
 
     @PostMapping("/banner/disable")
     public String disableClubBanner(@CurrentAccount Account account, @PathVariable String path){
-        Club club = clubService.getClubUpdate(account,path);
-        clubService.disableClubBanner(club);
+        Club club = clubService.checkUseClubBanner(account, path, false);
         return "redirect:/club/" + club.getEncodedPath()+ "/settings/banner";
     }
 
     @GetMapping("/hobby")
-    public String clubHobbyForm(@CurrentAccount Account account, @PathVariable String path, Model model)
-            throws JsonProcessingException {
+    public String clubHobbyForm(@CurrentAccount Account account, @PathVariable String path, Model model) throws JsonProcessingException {
         Club club = clubService.getClubUpdate(account, path);
         model.addAttribute(account);
         model.addAttribute(club);
+        model.addAttribute("hobby", clubService.getClubHobby(account, path));
+        model.addAttribute("whitelist", clubService.getWhiteListHobby());
 
-        model.addAttribute("hobby", club.getHobby().stream()
-                .map(Hobby::getTitle).collect(Collectors.toList()));
-        List<String> allHobbyTitles = clubService.getAllHobbyTitles();
-        model.addAttribute("whitelist", objectMapper.writeValueAsString(allHobbyTitles));
         return "club/settings/hobby";
     }
 
@@ -111,10 +108,8 @@ public class ClubSettingsController {
     @ResponseBody
     public ResponseEntity addHobby(@CurrentAccount Account account, @PathVariable String path,
                                    @RequestBody HobbyForm hobbyForm) {
-
-        Club club = clubService.getClubUpdateHobby(account, path);
-        Hobby hobby = hobbyService.findOrCreateHobby(hobbyForm.getHobbyTitle());
-        clubService.addHobby(club, hobby);
+        clubService.addHobby(account, path,hobbyForm.getHobbyTitle());
+        Club club = clubService.getClub(path);
         return ResponseEntity.ok().build();
     }
 
@@ -122,28 +117,17 @@ public class ClubSettingsController {
     @ResponseBody
     public ResponseEntity removeHobby(@CurrentAccount Account account, @PathVariable String path,
                                       @RequestBody HobbyForm hobbyForm) {
-        Club club = clubService.getClubUpdateHobby(account, path);
-        Hobby hobby = clubService.findHobbyByTitle(hobbyForm.getHobbyTitle());
-
-        if (hobby == null) {
-            return ResponseEntity.badRequest().build();
-        }
-        clubService.removeHobby(club, hobby);
+        clubService.removeHobby(account, path, hobbyForm.getHobbyTitle());
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/city")
-    public String clubCityForm(@CurrentAccount Account account, @PathVariable String path, Model model)
-            throws JsonProcessingException {
-
+    public String clubCityForm(@CurrentAccount Account account, @PathVariable String path, Model model) throws JsonProcessingException {
         Club club = clubService.getClubUpdate(account, path);
         model.addAttribute(account);
         model.addAttribute(club);
-        model.addAttribute("city", club.getCity().stream()
-                .map(City::toString).collect(Collectors.toList()));
-
-        List<String> allCity = cityService.getAllCity();
-        model.addAttribute("whitelist", objectMapper.writeValueAsString(allCity));
+        model.addAttribute("city", clubService.getClubCity(account, path));
+        model.addAttribute("whitelist", clubService.getWhiteListCity());
         return "club/settings/city";
     }
 
@@ -152,14 +136,7 @@ public class ClubSettingsController {
     public ResponseEntity addCity(@CurrentAccount Account account, @PathVariable String path,
                                   @RequestBody CityForm cityForm) {
 
-        Club club = clubService.getClubUpdateCity(account, path);
-        City city = cityService.getCityByKrCity(cityForm.getKrCity());
-
-        if (city == null) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        clubService.addCity(club, city);
+        clubService.addCity(account, path, cityForm.getKrCity());
         return ResponseEntity.ok().build();
     }
 
@@ -167,18 +144,10 @@ public class ClubSettingsController {
     @ResponseBody
     public ResponseEntity removeCity(@CurrentAccount Account account, @PathVariable String path,
                                      @RequestBody CityForm cityForm) {
-        Club club = clubService.getClubUpdateCity(account, path);
-        City city = cityService.getCityByKrCity(cityForm.getKrCity());
-
-        if (city == null) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        clubService.removeCity(club, city);
+        clubService.removeCity(account, path, cityForm.getKrCity());
         return ResponseEntity.ok().build();
     }
 
-    /* 밑에는 모임 관리  */
 
     @GetMapping("/club")
     public String clubSettingForm(@CurrentAccount Account account, @PathVariable String path, Model model) {
@@ -193,7 +162,7 @@ public class ClubSettingsController {
 
         Club club = clubService.getClubUpdateStatus(account, path);
 
-        if (!club.isPublish()){
+        if (!clubService.isPublish(account, club)){
             model.addAttribute("message","fail_clubPublish");
             model.addAttribute(account);
             model.addAttribute(club);
@@ -209,6 +178,7 @@ public class ClubSettingsController {
     public String updateClubPath(@CurrentAccount Account account, @PathVariable String path, String newPath,
                                  Model model, RedirectAttributes attributes) {
         Club club = clubService.getClubUpdateStatus(account, path);
+
         if (!clubService.isValidPath(newPath)) {
             model.addAttribute(account);
             model.addAttribute(club);
@@ -225,6 +195,7 @@ public class ClubSettingsController {
     public String updateClubTitle(@CurrentAccount Account account, @PathVariable String path, String newTitle,
                                   Model model, RedirectAttributes attributes) {
         Club club = clubService.getClubUpdateStatus(account, path);
+        
         if (!clubService.isValidTitle(newTitle)) {
             model.addAttribute(account);
             model.addAttribute(club);
@@ -235,5 +206,21 @@ public class ClubSettingsController {
         clubService.updateClubTitle(club, newTitle);
         attributes.addFlashAttribute("message", "모임 이름을 수정했습니다.");
         return "redirect:/club/" + club.getEncodedPath() + "/settings/club";
+    }
+
+    @PostMapping("/club/remove")
+    public String checkMeetingWithClubRemove(@CurrentAccount Account account, @PathVariable String path, Model model){
+
+        Club club = clubService.getClubUpdateStatus(account,path);
+
+        if (clubService.isNotZeroMeetings(club)){
+            model.addAttribute(account);
+            model.addAttribute(club);
+            model.addAttribute("message", "fail_clubRemove");
+            return "club/settings/club";
+        }
+
+        clubService.removeClub(club);
+        return "redirect:/";
     }
 }

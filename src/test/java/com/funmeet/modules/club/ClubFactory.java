@@ -1,3 +1,4 @@
+/*
 package com.funmeet.modules.club;
 
 import com.funmeet.modules.account.Account;
@@ -16,4 +17,4 @@ public class ClubFactory {
         clubService.createNewClub(club, manager);
         return club;
     }
-}
+}*/

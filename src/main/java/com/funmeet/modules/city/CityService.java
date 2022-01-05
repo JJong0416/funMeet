@@ -36,10 +36,12 @@ public class CityService {
     }
 
     public City getCityByKrCity(String krCity){
-        return cityRepository.findByKrCity(krCity);
+        return cityRepository.findByKrCity(krCity).orElseThrow();
     }
 
     public List<String> getAllCity(){
-        return cityRepository.findAll().stream().map(City::toString).collect(Collectors.toList());
+        return cityRepository.findAll().stream()
+                .map(City::toString)
+                .collect(Collectors.toList());
     }
 }

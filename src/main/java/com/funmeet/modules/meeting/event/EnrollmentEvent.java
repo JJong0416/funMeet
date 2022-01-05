@@ -1,6 +1,6 @@
 package com.funmeet.modules.meeting.event;
 
-import com.funmeet.modules.meeting.Enrollment;
+import com.funmeet.modules.enrollment.Enrollment;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

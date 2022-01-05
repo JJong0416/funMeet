@@ -25,15 +25,12 @@ public class HomeController {
         if (account != null){
             Account accountLoaded = homeService.findAccountWithHobbyAndCityById(account.getId());
             model.addAttribute(accountLoaded);
-            model.addAttribute("interestedClubList", clubRepository.findClubByAccount(
-                    accountLoaded.getHobby(),
-                    accountLoaded.getCity()));
-            model.addAttribute("clubManagerOf",
-                    homeService.findIndexManagers(account,false));
-            model.addAttribute("clubMemberOf",
-                    homeService.findIndexMembers(account,false));
+            model.addAttribute("interestedClubList", clubRepository.findClubByAccount(accountLoaded.getHobby(), accountLoaded.getCity()));
+            model.addAttribute("clubManagerOf", homeService.findIndexManagers(account,false));
+            model.addAttribute("clubMemberOf", homeService.findIndexMembers(account,false));
             return "index-with-login";
         }
+        
         model.addAttribute("clubList", homeService.findListContainAccount(true,false));
         return "index";
     }

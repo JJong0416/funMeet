@@ -1,6 +1,8 @@
-package com.funmeet.modules.meeting;
+package com.funmeet.modules.enrollment;
 
 import com.funmeet.modules.account.Account;
+import com.funmeet.modules.enrollment.Enrollment;
+import com.funmeet.modules.meeting.Meeting;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 

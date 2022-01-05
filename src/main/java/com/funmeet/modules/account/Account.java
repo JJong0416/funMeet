@@ -3,7 +3,10 @@ package com.funmeet.modules.account;
 import com.funmeet.modules.account.form.NotificationForm;
 import com.funmeet.modules.city.City;
 import com.funmeet.modules.hobby.Hobby;
-import lombok.*;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -25,6 +28,7 @@ public class Account {
     @Column(unique = true)
     private String nickname;
 
+    @Column(nullable = false)
     private String password;
 
     private boolean kakaoTokenVerified;
@@ -51,7 +55,6 @@ public class Account {
 
     private String location;
 
-    @Lob
     private String profileImage;
 
     private boolean meetCreatedByEmail;

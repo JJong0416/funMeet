@@ -1,6 +1,6 @@
 package com.funmeet.modules.meeting.event;
 
-import com.funmeet.modules.meeting.Enrollment;
+import com.funmeet.modules.enrollment.Enrollment;
 
 public class EnrollmentEventRejected extends EnrollmentEvent{
     public EnrollmentEventRejected(Enrollment enrollment) {

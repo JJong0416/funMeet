@@ -121,8 +121,6 @@ public class Club {
         return this.getManagers().contains(account);
     }
 
-    /* 꺼내서 쓰는 것이 아니라 직접 접근하는 것이 더 좋은 설계방식 */
-    
     public void addHobby(Hobby hobby){
         this.hobby.add(hobby);
     }
@@ -139,9 +137,9 @@ public class Club {
         this.city.remove(city);
     }
 
-    /* @Setter를 포기하고 작성한 Method */
-
-    public void updateClubBanner(boolean check) { this.useBanner = check; }
+    public void updateClubBanner(boolean check) {
+        this.useBanner = check;
+    }
 
     public void updateBannerImage(String banner){
         this.banner = banner;

@@ -32,8 +32,8 @@ public class HomeService {
     public StringBuilder getOAuthLink(){
         StringBuilder oauth_link = new StringBuilder();
         oauth_link.append("https://kauth.kakao.com/oauth/authorize?");
-        oauth_link.append("client_id=" + clientId);
-        oauth_link.append("&redirect_uri=" + redirectUri);
+        oauth_link.append("client_id=").append(clientId);
+        oauth_link.append("&redirect_uri=").append(redirectUri);
         oauth_link.append("&response_type=code");
 
         return oauth_link;

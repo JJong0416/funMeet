@@ -1,3 +1,4 @@
+/*
 package com.funmeet.modules.club;
 
 import com.funmeet.infra.AbstractContainerBaseTest;
@@ -33,7 +34,9 @@ class ClubControllerTest extends AbstractContainerBaseTest {
 
     @BeforeEach
     void beforeEach(){
-        /* UserDetails Account 생성 */
+        */
+/* UserDetails Account 생성 *//*
+
         SignUpForm signUpForm = new SignUpForm();
         signUpForm.setNickname("jongchan");
         signUpForm.setPassword("12345678");
@@ -170,4 +173,4 @@ class ClubControllerTest extends AbstractContainerBaseTest {
         clubService.createNewClub(club,Manager);
         return club;
     }
-}
+}*/

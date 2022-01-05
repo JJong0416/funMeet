@@ -13,8 +13,10 @@ public class Alarm {
     @Id @GeneratedValue
     private Long id;
 
+    @Column(nullable = false)
     private String title;
 
+    @Column(nullable = false)
     private String message;
 
     private String link;

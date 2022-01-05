@@ -1,8 +1,7 @@
 package com.funmeet.modules.account;
 
-import com.funmeet.infra.config.AppProperties;
-import com.funmeet.infra.mail.EmailMessageForm;
-import com.funmeet.infra.mail.EmailService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.funmeet.modules.account.form.NotificationForm;
 import com.funmeet.modules.account.form.Profile;
 import com.funmeet.modules.account.form.SignUpForm;
@@ -11,18 +10,17 @@ import com.funmeet.modules.city.City;
 import com.funmeet.modules.city.CityRepository;
 import com.funmeet.modules.hobby.Hobby;
 import com.funmeet.modules.hobby.HobbyRepository;
+import com.funmeet.modules.hobby.HobbyService;
 import com.funmeet.modules.mapper.AccountMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,16 +32,19 @@ public class AccountService{
     private final CityRepository cityRepository;
     private final HobbyRepository hobbyRepository;
     private final PasswordEncoder passwordEncoder;
-    private final EmailService emailService;
     private final AccountDetailsService accountDetailsService;
+    private final HobbyService hobbyService;
+    private final ObjectMapper objectMapper;
 
-    private final TemplateEngine templateEngine;
-    private final AppProperties appProperties;
 
-    public Account processSignUpAccount(SignUpForm signUpForm) {
+    public void processSignUpAccount(SignUpForm signUpForm) {
         Account newAccount = saveSignUp(signUpForm);
-        sendSignUpConfirmEmail(newAccount);
-        return newAccount;
+        accountDetailsService.loginByAccount(newAccount);
+    }
+
+    public boolean isValidToken(String email, String token){
+        Account account = this.findAccountByEmail(email);
+        return account.isValidToken(token);
     }
 
     private Account saveSignUp(SignUpForm signUpForm) {
@@ -59,28 +60,79 @@ public class AccountService{
         return accountRepository.save(account);
     }
 
-    // 써야 하는 것은 link, nickname, host
-    public void sendSignUpConfirmEmail(Account account) {
-        EmailMessageForm emailMessageForm = writeEmailMessage(account, "/check-email-token?token=", "이메일 인증하기");
-        emailService.send(emailMessageForm);
-    }
+    public Account completeSignUp(String email) {
+        Account account = accountRepository.findByEmail(email).orElseThrow(() -> {
+            throw new UsernameNotFoundException(email);
+        });
 
-    public void sendLoginLink(Account account) {
-        EmailMessageForm emailMessageForm = writeEmailMessage(account, "/auth-email?token=", "로그인하기");
-        emailService.send(emailMessageForm);
-    }
-
-    public void completeSignUp(Account account) {
         account.completeSignUp();
-        accountDetailsService.login(account);
+        accountDetailsService.loginByAccount(account);
+        return account;
     }
 
     public Account findAccountByEmail(String email){
-        return accountRepository.findByEmail(email).orElseThrow(() -> { throw new UsernameNotFoundException(email);});
+        return accountRepository.findByEmail(email).orElseThrow(() -> {
+            throw new UsernameNotFoundException(email);
+        });
+    }
+
+    public boolean canSendConfirmEmail(String email){
+        Account account = this.findAccountByEmail(email);
+        return account.canSendConfirmEmail();
     }
 
     public Account findAccountByNickname(String nickname){
-        return accountRepository.findByNickname(nickname).orElseThrow( () -> { throw new UsernameNotFoundException(nickname);});
+        return accountRepository.findByNickname(nickname).orElseThrow( () -> {
+            throw new UsernameNotFoundException(nickname);
+        });
+    }
+
+    public List<String> getHobby(Account account){
+        Optional<Account> getId = accountRepository.findById(account.getId());
+        return getId.orElseThrow().getHobby().stream().map(Hobby::getTitle).collect(Collectors.toList());
+    }
+
+    public String getWhiteListHobby(Account account) throws JsonProcessingException {
+        List<String> whiteList = hobbyRepository.findAll().stream().map(Hobby::getTitle).collect(Collectors.toList());
+        return objectMapper.writeValueAsString(whiteList);
+    }
+
+    public void addHobby(Account account, String hobbyName){
+        Hobby hobby = hobbyService.findOrCreateHobby(hobbyName);
+        Optional<Account> user = accountRepository.findById(account.getId());
+        user.ifPresent(a -> a.getHobby().add(hobby));
+    }
+
+    public void removeHobby(Account account, String hobbyName) {
+        Hobby hobby = hobbyRepository.findByTitle(hobbyName).orElseThrow();
+        Optional<Account> removeId = accountRepository.findById(account.getId());
+        removeId.ifPresent(a -> a.getHobby().remove(hobby));
+    }
+
+    public List<String> getCity(Account account) {
+        Optional<Account> getId = accountRepository.findById(account.getId());
+        return getId.orElseThrow().getCity().stream().map(City::toString).collect(Collectors.toList());
+    }
+
+    public String getWhiteListCity(Account account) throws JsonProcessingException {
+        List<String> whiteList = cityRepository.findAll().stream().map(City::toString).collect(Collectors.toList());
+        return objectMapper.writeValueAsString(whiteList);
+    }
+
+    public City findCityByKrCity(String koCity){
+        return cityRepository.findByKrCity(koCity).orElseThrow();
+    }
+
+    public void addCity(Account account, String cityName) {
+        City city = this.findCityByKrCity(cityName);
+        Optional<Account> getId = accountRepository.findById(account.getId());
+        getId.ifPresent(a -> a.getCity().add(city));
+    }
+
+    public void removeCity(Account account, String cityName) {
+        City city = this.findCityByKrCity(cityName);
+        Optional<Account> byId = accountRepository.findById(account.getId());
+        byId.ifPresent(a -> a.getCity().remove(city));
     }
 
     public void updateProfile(Account account, Profile profile) {
@@ -101,78 +153,12 @@ public class AccountService{
     public void updateNickname(Account account, String nickname) {
         account.updateNickname(nickname);
         accountRepository.save(account);
-        accountDetailsService.login(account);
+        accountDetailsService.loginByAccount(account);
     }
 
-    public Hobby findHobbyByTitle(String title){
-        return hobbyRepository.findByTitle(title).orElseThrow();
-    }
-
-    public Set<Hobby> getHobby(Account account){
-        Optional<Account> getId = accountRepository.findById(account.getId());
-        return getId.orElseThrow().getHobby();
-    }
-
-    public List<String> getAllHobby(Account account){
-        return hobbyRepository.findAll().stream().map(Hobby::getTitle).collect(Collectors.toList());
-    }
-
-    public void addHobby(Account account, Hobby hobby){
-        Optional<Account> user = accountRepository.findById(account.getId());
-        user.ifPresent(a -> a.getHobby().add(hobby));
-    }
-
-    public void removeHobby(Account account, Hobby hobby) {
-        Optional<Account> removeId = accountRepository.findById(account.getId());
-        removeId.ifPresent(a -> a.getHobby().remove(hobby));
-    }
-
-    public City findCityByKrCity(String koCity){
-        return cityRepository.findByKrCity(koCity);
-    }
-
-    public Set<City> getCity(Account account) {
-        Optional<Account> getId = accountRepository.findById(account.getId());
-        return getId.orElseThrow().getCity();
-    }
-
-    public List<String> getAllCity(Account account){
-        return cityRepository.findAll().stream().map(City::toString).collect(Collectors.toList());
-    }
-
-    public void addCity(Account account, City city) {
-        Optional<Account> getId = accountRepository.findById(account.getId());
-        getId.ifPresent(a -> a.getCity().add(city));
-    }
-
-    public void removeCity(Account account, City city) {
-        Optional<Account> byId = accountRepository.findById(account.getId());
-        byId.ifPresent(a -> a.getCity().remove(city));
-    }
-
-    public void deleteAccount(Account account) {
+    public void deleteAccount(Account account, HttpServletRequest request) {
         accountRepository.removeAllHobbyAndCityByEmail(account.getEmail());
         accountRepository.delete(account);
+        accountDetailsService.logout(request);
     }
-
-    /* Method 분할 */
-
-    private EmailMessageForm writeEmailMessage(Account account, String link, String linkName){
-        Context context = new Context();
-        context.setVariable("link",link + account.getEmailCheckToken() +
-                "&email=" + account.getEmail());
-        context.setVariable("nickname",account.getNickname());
-        context.setVariable("message","뻔모임 서비스를 이용하시려면 링크를 클릭하세요.");
-        context.setVariable("linkName",linkName);
-        context.setVariable("host",appProperties.getHost());
-
-        String message = templateEngine.process("email/html-email-link",context);
-
-        return EmailMessageForm.builder()
-                .to(account.getEmail())
-                .subject("뻔(Fun)하면서 뻔하지 않은 모임. 뻔모임 로그인 링크")
-                .text(message)
-                .build();
-    }
-
 }

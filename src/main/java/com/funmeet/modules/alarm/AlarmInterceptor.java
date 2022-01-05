@@ -25,7 +25,8 @@ public class AlarmInterceptor implements HandlerInterceptor {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             /* modelAndView를 안쓰면서, Redirect 뷰타입이 아니면서 authentication이 null 아니며 AdaptAccountType만  */
-        if (modelAndView != null && !isRedirectView(modelAndView) && authentication != null && authentication.getPrincipal() instanceof AdaptAccount) {
+        if (modelAndView != null && !isRedirectView(modelAndView) && authentication != null
+                && authentication.getPrincipal() instanceof AdaptAccount) {
             Account account = ((AdaptAccount)authentication.getPrincipal()).getAccount();
             long count = alarmRepository.countByAccountAndChecked(account, false);
             modelAndView.addObject("alarmMessage", count > 0);

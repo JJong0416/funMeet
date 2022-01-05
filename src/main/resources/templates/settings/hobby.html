@@ -33,7 +33,8 @@
                                 관심있어 하는 취미를 선택해주세요. 해당 취미에 대한 메세지 혹은 취미 선정에 도움을 드립니다.
                             </div>
                             <div id="whitelist" th:text="${whitelist}" hidden></div>
-                            <input id="hobby" type="text" th:value="${#strings.listJoin(hobby,',')}" class="input-body"/>
+                            <input id="hobby" type="text" name="hobby" th:value="${#strings.listJoin(hobby,',')}"
+                                   class="input-body" aria-describedby="hobbyHelp"/>
                         </div>
                     </div>
 

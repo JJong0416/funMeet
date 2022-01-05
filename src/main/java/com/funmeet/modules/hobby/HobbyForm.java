@@ -10,6 +10,7 @@ import java.util.ArrayList;
 @Getter @Setter @NoArgsConstructor
 @AllArgsConstructor
 public class HobbyForm {
+
     private String hobbyTitle;
-    ArrayList ar = new ArrayList();
+
 }

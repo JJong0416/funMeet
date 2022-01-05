@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -22,6 +21,7 @@ public class AccountController {
     private final SignUpFormValidator signUpFormValidator;
     private final AccountService accountService;
     private final AccountDetailsService accountDetailsService;
+    private final AccountEmailService accountEmailService; // 순참
 
     @InitBinder("signUpForm")
     public void initBinder(WebDataBinder webDataBinder){
@@ -39,8 +39,8 @@ public class AccountController {
         if (errors.hasErrors()){
             return "account/sign-up";
         }
-        Account account = accountService.processSignUpAccount(signUpForm);
-        accountDetailsService.login(account);
+        accountService.processSignUpAccount(signUpForm);
+        accountEmailService.sendSignUpConfirmEmail(signUpForm.getEmail());
         return "redirect:/";
     }
 
@@ -52,34 +52,14 @@ public class AccountController {
 
     @GetMapping("/resend-email")
     public String resendConfirmEmail(@CurrentAccount Account account, Model model) {
+
         if (!account.canSendConfirmEmail()) {
             model.addAttribute("error", "인증 이메일은 30분에 한번만 전송할 수 있습니다.");
             model.addAttribute("email", account.getEmail());
             return "email/certification-email";
         }
-        accountService.sendSignUpConfirmEmail(account);
+        accountEmailService.sendSignUpConfirmEmail(account.getEmail());
         return "redirect:/";
-    }
-
-    @GetMapping("/check-email-token") // 이메일 토큰 눌렀을 때 뜨는
-    public String checkEmailToken(String token, String email, Model model){
-
-        Account account = accountService.findAccountByEmail(email);
-        String viewUrl = "email/check-email";
-
-        if (account == null){
-            model.addAttribute("error","wrong.email");
-            return viewUrl;
-        }
-
-        if(!account.isValidToken(token)){
-            model.addAttribute("error","wrong.token");
-            return viewUrl;
-        }
-
-        accountService.completeSignUp(account);
-        model.addAttribute("nickname",account.getNickname());
-        return viewUrl;
     }
 
     @GetMapping("/find-account")
@@ -87,49 +67,48 @@ public class AccountController {
         return "email/find-account";
     }
 
-    @PostMapping("/find-account")
+    @PostMapping("/find-account") // TODO: 2022-01-04 Entity -> Service
     public String sendEmailLoginLink(String email, Model model, RedirectAttributes attributes) {
 
-        Account account = accountService.findAccountByEmail(email);
-
-        if (account == null || !account.canSendConfirmEmail()) {
-            if (account == null) {
-                model.addAttribute("error", "유효");
-                return "email/find-account";
-            }
-
+        if (!accountService.canSendConfirmEmail(email)) {
             model.addAttribute("error", "시간");
             return "email/find-account";
         }
 
-        accountService.sendLoginLink(account);
+        accountEmailService.sendLoginLink(email);
         attributes.addFlashAttribute("message", "성공");
         return "redirect:/find-account";
+    }
+
+    @GetMapping("/check-email-token") // 이메일 토큰 눌렀을 때 뜨는
+    public String checkEmailToken(String token, String email, Model model){
+
+        if(!accountService.isValidToken(email, token)){
+            model.addAttribute("error","wrong.token");
+            return "email/check-email";
+        }
+
+        Account account = accountService.completeSignUp(email);
+        model.addAttribute("nickname",account.getNickname());
+        return "email/check-email";
     }
 
     @GetMapping("/auth-email")
     public String passByEmail(String token, String email, Model model) {
 
-        Account account = accountService.findAccountByEmail(email);
-        String view = "email/auth-email";
-
-        if (account == null || !account.isValidToken(token)) {
+        if (!accountService.isValidToken(email, token)) {
             model.addAttribute("error", "로그인할 수 없습니다.");
-            return view;
+            return "email/auth-email";
         }
 
-        accountDetailsService.login(account);
-        return view;
+        accountDetailsService.loginByEmail(email);
+        return "email/auth-email";
     }
 
     @GetMapping("/profile/{nickname}")
     public String viewProfile(@PathVariable String nickname, Model model, @CurrentAccount Account account){
+
         Account viewAccount = accountService.findAccountByNickname(nickname);
-
-        if (viewAccount == null){
-            throw new IllegalArgumentException(nickname + "에 해당하는 사용자가 없습니다");
-        }
-
         model.addAttribute("account",viewAccount);
         model.addAttribute("isOwner",viewAccount.equals(account));
         model.addAttribute("cityList",viewAccount.getCity());

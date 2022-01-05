@@ -2,7 +2,6 @@ package com.funmeet.modules.account;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.funmeet.modules.account.form.NicknameForm;
 import com.funmeet.modules.account.form.NotificationForm;
 import com.funmeet.modules.account.form.PasswordForm;
@@ -10,9 +9,7 @@ import com.funmeet.modules.account.form.Profile;
 import com.funmeet.modules.account.security.CurrentAccount;
 import com.funmeet.modules.account.validator.NicknameValidator;
 import com.funmeet.modules.account.validator.PasswordFormValidation;
-import com.funmeet.modules.city.City;
 import com.funmeet.modules.city.CityForm;
-import com.funmeet.modules.hobby.Hobby;
 import com.funmeet.modules.hobby.HobbyForm;
 import com.funmeet.modules.hobby.HobbyService;
 import com.funmeet.modules.mapper.AccountMapper;
@@ -26,18 +23,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
 public class AccountSettingsController {
 
     private final AccountService accountService;
-    private final ObjectMapper objectMapper;
     private final HobbyService hobbyService;
     private final NicknameValidator nicknameValidator;
 
@@ -55,7 +47,6 @@ public class AccountSettingsController {
     public String updateProfileForm(@CurrentAccount Account account, Model model){
         model.addAttribute(account);
         model.addAttribute("profile",new Profile(account));
-
         return "settings/profile";
     }
 
@@ -75,71 +66,42 @@ public class AccountSettingsController {
     @GetMapping("/settings/hobby")
     public String updateHobby(@CurrentAccount Account account, Model model) throws JsonProcessingException {
         model.addAttribute(account);
-
-        Set<Hobby> hobby = accountService.getHobby(account);
-        model.addAttribute("hobby",hobby.stream().map(Hobby::getTitle).collect(Collectors.toList()));
-
-        List<String> allHobby = accountService.getAllHobby(account);
-        model.addAttribute("whitelist",objectMapper.writeValueAsString(allHobby));
-
+        model.addAttribute("hobby",accountService.getHobby(account));
+        model.addAttribute("whitelist",accountService.getWhiteListHobby(account));
         return "settings/hobby";
     }
-
 
     @PostMapping("/settings/hobby/add")
     @ResponseBody
     public ResponseEntity addHobby(@CurrentAccount Account account, @RequestBody HobbyForm hobbyForm){
-        String title = hobbyForm.getHobbyTitle();
-        Hobby hobby = hobbyService.findOrCreateHobby(hobbyForm.getHobbyTitle());
-        accountService.addHobby(account, hobby);
+        accountService.addHobby(account, hobbyForm.getHobbyTitle());
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/settings/hobby/remove")
     @ResponseBody
     public ResponseEntity removeHobby(@CurrentAccount Account account, @RequestBody HobbyForm hobbyForm) {
-        String title = hobbyForm.getHobbyTitle();
-        Hobby hobby = accountService.findHobbyByTitle(title);
-
-        if (hobby == null){
-            return ResponseEntity.badRequest().build();
-        }
-        accountService.removeHobby(account,hobby);
+        accountService.removeHobby(account,hobbyForm.getHobbyTitle());
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/settings/location")
     public String updateHobbyForm(@CurrentAccount Account account, Model model) throws JsonProcessingException {
         model.addAttribute(account);
-
-        Set<City> city = accountService.getCity(account);
-        model.addAttribute("city", city.stream().map(City::toString).collect(Collectors.toList()));
-
-        List<String> allCity = accountService.getAllCity(account);
-        model.addAttribute("whitelist", objectMapper.writeValueAsString(allCity));
-
+        model.addAttribute("city", accountService.getCity(account));
+        model.addAttribute("whitelist", accountService.getWhiteListCity(account));
         return "settings/location";
     }
 
     @PostMapping("/settings/location/add")
     public ResponseEntity addCity(@CurrentAccount Account account, @RequestBody CityForm cityForm){
-        City city = accountService.findCityByKrCity(cityForm.getKrCity());
-
-        if (city == null){
-            return ResponseEntity.badRequest().build();
-        }
-        accountService.addCity(account,city);
+        accountService.addCity(account,cityForm.getKrCity());
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/settings/location/remove")
     public ResponseEntity removeCity(@CurrentAccount Account account, @RequestBody CityForm cityForm){
-        City city = accountService.findCityByKrCity(cityForm.getKrCity());
-
-        if (city == null){
-            return ResponseEntity.badRequest().build();
-        }
-        accountService.removeCity(account,city);
+        accountService.removeCity(account,cityForm.getKrCity());
         return ResponseEntity.ok().build();
     }
 
@@ -193,7 +155,6 @@ public class AccountSettingsController {
     @PostMapping("/settings/security")
     public String updateSecurity(@CurrentAccount Account account, @Valid PasswordForm passwordForm,
                                  Errors errors, Model model, RedirectAttributes attributes) {
-
         if (errors.hasErrors()) {
             model.addAttribute(account);
             return "settings/account";
@@ -206,9 +167,7 @@ public class AccountSettingsController {
 
     @PostMapping("/settings/delete")
     public String deleteAccount(@CurrentAccount Account account, HttpServletRequest request){
-        accountService.deleteAccount(account);
-        HttpSession session = request.getSession();
-        session.invalidate();
+        accountService.deleteAccount(account,request);
         return "redirect:/";
     }
 }

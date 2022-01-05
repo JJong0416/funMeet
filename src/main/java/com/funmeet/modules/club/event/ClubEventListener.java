@@ -43,7 +43,7 @@ public class ClubEventListener {
                 saveClubAlarmByWeb(club,account,club.getShortDescription(),AlarmType.CREATED);
             }
 
-            if ( account.isMeetCreatedByEmail()){
+            if (account.isMeetCreatedByEmail()){
                 noticeClubAlarmByEmail(club,account,"새로운 모임이 생겼습니다","뻔모임, '" + club.getTitle() + "' 모임이 생겼습니다.");
             }
         });

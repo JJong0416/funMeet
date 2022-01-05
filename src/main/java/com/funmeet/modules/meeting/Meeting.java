@@ -3,9 +3,9 @@ package com.funmeet.modules.meeting;
 import com.funmeet.modules.account.Account;
 import com.funmeet.modules.account.security.AdaptAccount;
 import com.funmeet.modules.club.Club;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import com.funmeet.modules.enrollment.Enrollment;
+import com.funmeet.modules.meeting.form.MeetingForm;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -14,7 +14,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Entity
-@Getter @Setter @EqualsAndHashCode(of = "id")
+@Getter @EqualsAndHashCode(of = "id")
+@NoArgsConstructor @AllArgsConstructor @Builder
 public class Meeting {
 
     @Id
@@ -95,16 +96,6 @@ public class Meeting {
         return this.enrollments.stream().filter(Enrollment::isAccepted).count();
     }
 
-    public void addEnrollment(Enrollment enrollment) {
-        this.enrollments.add(enrollment);
-        enrollment.setMeeting(this);
-    }
-
-    public void removeEnrollment(Enrollment enrollment) {
-        this.enrollments.remove(enrollment);
-        enrollment.setMeeting(null);
-    }
-
     public boolean isAbleToWaitingEnrollment() {
         return this.limitOfEnrollments > this.getNumberOfAcceptedEnrollments() && this.meetingType == MeetingType.FCFSB;
     }
@@ -128,23 +119,6 @@ public class Meeting {
         return this.enrollments.stream().filter(enrollment -> !enrollment.isAccepted()).collect(Collectors.toList());
     }
 
-    public void acceptWaitingList() {
-        if (this.isAbleToWaitingEnrollment()) {
-            var waitingList = getWaitingList();
-            int numberToAccept = (int) Math.min(this.limitOfEnrollments - this.getNumberOfAcceptedEnrollments(), waitingList.size());
-            waitingList.subList(0, numberToAccept).forEach(e -> e.setAccepted(true));
-        }
-    }
-
-    public void acceptNextWaitingEnrollment() {
-        if (this.isAbleToWaitingEnrollment()) {
-            Enrollment enrollmentToAccept = this.getConsecutiveWaitingEnrollment();
-            if (enrollmentToAccept != null) {
-                enrollmentToAccept.setAccepted(true);
-            }
-        }
-    }
-
     private Enrollment getConsecutiveWaitingEnrollment() {
         for (Enrollment e : this.enrollments) {
             if (!e.isAccepted()) {
@@ -154,16 +128,59 @@ public class Meeting {
         return null;
     }
 
+    public void acceptWaitingList() {
+        if (this.isAbleToWaitingEnrollment()) {
+            var waitingList = getWaitingList();
+            int numberToAccept = (int) Math.min(this.limitOfEnrollments - this.getNumberOfAcceptedEnrollments(), waitingList.size());
+            waitingList.subList(0, numberToAccept).forEach(e -> e.updateAccepted(true));
+        }
+    }
+
+    public void acceptNextWaitingEnrollment() {
+        if (this.isAbleToWaitingEnrollment()) {
+            Enrollment enrollmentToAccept = this.getConsecutiveWaitingEnrollment();
+            if (enrollmentToAccept != null) {
+                enrollmentToAccept.updateAccepted(true);
+            }
+        }
+    }
+
+    public void addEnrollment(Enrollment enrollment) {
+        this.enrollments.add(enrollment);
+        enrollment.updateMeeting(this);
+    }
+
+    public void removeEnrollment(Enrollment enrollment) {
+        this.enrollments.remove(enrollment);
+        enrollment.updateMeeting(null);
+    }
+
     public void accept(Enrollment enrollment) {
         if (this.meetingType == MeetingType.CONFIRM
                 && this.limitOfEnrollments > this.getNumberOfAcceptedEnrollments()) {
-            enrollment.setAccepted(true);
+            enrollment.updateAccepted(true);
         }
     }
 
     public void reject(Enrollment enrollment) {
         if (this.meetingType == MeetingType.CONFIRM) {
-            enrollment.setAccepted(false);
+            enrollment.updateAccepted(false);
         }
+    }
+
+    public void updateMeeting(MeetingForm meetingForm){
+        this.title = meetingForm.getTitle();
+        this.description = meetingForm.getDescription();
+        this.limitOfEnrollments = meetingForm.getLimitOfEnrollments();
+        this.meetingPrice = meetingForm.getMeetingPrice();
+        this.startDateTime = meetingForm.getStartDateTime();
+        this.endDateTime = meetingForm.getEndDateTime();
+        this.meetingType = meetingForm.getMeetingType();
+    }
+
+    public void createMeeting(Account account, Club club){
+        this.createdDateTime = LocalDateTime.now();
+        this.createdAccount = account;
+        this.club = club;
     }
 }

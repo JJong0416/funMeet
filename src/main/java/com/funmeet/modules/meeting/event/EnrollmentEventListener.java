@@ -8,10 +8,9 @@ import com.funmeet.modules.alarm.Alarm;
 import com.funmeet.modules.alarm.AlarmRepository;
 import com.funmeet.modules.alarm.AlarmType;
 import com.funmeet.modules.club.Club;
-import com.funmeet.modules.meeting.Enrollment;
+import com.funmeet.modules.enrollment.Enrollment;
 import com.funmeet.modules.meeting.Meeting;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -46,7 +45,7 @@ public class EnrollmentEventListener {
         }
     }
 
-
+    // TODO: 2022-01-04 추상화하기
     private void sendEmail(EnrollmentEvent enrollmentEvent, Meeting meeting, Club club, Account account){
         Context context = new Context();
         context.setVariable("link","/club/" + club.getEncodedPath() + "/meeting/" + meeting.getId());
