@@ -47,12 +47,6 @@ public class AccountService{
         return account.isValidToken(token);
     }
 
-    private Account saveSignUp(SignUpForm signUpForm) {
-        signUpForm.setPassword(passwordEncoder.encode(signUpForm.getPassword()));
-        Account account = AccountMapper.INSTANCE.signUpFormToEntity(signUpForm);
-        account.generateEmailCheckToken();
-        return accountRepository.save(account);
-    }
 
     public Account saveOauthSignUp(OAuthForm oAuthForm, String kakaoEmail) {
         oAuthForm.setPassword(passwordEncoder.encode(oAuthForm.getPassword()));
@@ -160,5 +154,12 @@ public class AccountService{
         accountRepository.removeAllHobbyAndCityByEmail(account.getEmail());
         accountRepository.delete(account);
         accountDetailsService.logout(request);
+    }
+
+    public Account saveSignUp(SignUpForm signUpForm) {
+        signUpForm.setPassword(passwordEncoder.encode(signUpForm.getPassword()));
+        Account account = AccountMapper.INSTANCE.signUpFormToEntity(signUpForm);
+        account.generateEmailCheckToken();
+        return accountRepository.save(account);
     }
 }

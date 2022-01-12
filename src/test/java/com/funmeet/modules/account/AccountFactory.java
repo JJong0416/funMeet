@@ -1,20 +1,51 @@
 package com.funmeet.modules.account;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import com.funmeet.modules.account.form.SignUpForm;
+import com.funmeet.modules.mapper.AccountMapper;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-@Component
+@RequiredArgsConstructor
 public class AccountFactory {
 
-    @Autowired
-    AccountRepository accountRepository;
+    static final String CORRECT_ACCOUNT_NICKNAME = "테스트계정입니다";
+    static final String CORRECT_ACCOUNT_EMAIL = "test@test.com";
+    static final String CORRECT_ACCOUNT_PASSWORD = "password";
+    static final String CORRECT_ACCOUNT_SHORT_BIO = "간략한 자기소개를 추가하세요";
 
-    public Account createNewAccount(String nickname) {
-        Account jongchan = new Account();
-//        jongchan.setEmail(nickname + "@gmail.com");
-//        jongchan.setNickname(nickname);
-        accountRepository.save(jongchan);
-        return jongchan;
+    static final String WRONG_ACCOUNT_NICKNAME = "test";
+
+    static PasswordEncoder passwordEncoder;
+
+    public static Account createRequestAccount(final String accountNickname, final String accountEmail,
+                                               final String accountPassword ){
+        return Account.builder()
+                .nickname(accountNickname)
+                .email(accountEmail)
+                .password(passwordEncoder.encode(accountPassword))
+                .shortBio(CORRECT_ACCOUNT_SHORT_BIO)
+                .build();
     }
 
+    public static Account createSignUpFormAccount(final SignUpForm signUpForm){
+        return AccountMapper.INSTANCE.signUpFormToEntity(signUpForm);
+    }
+
+    public static Account createSuccessAccount(){
+        return Account.builder()
+                .nickname(CORRECT_ACCOUNT_NICKNAME)
+                .email(CORRECT_ACCOUNT_EMAIL)
+                .password(passwordEncoder.encode(CORRECT_ACCOUNT_PASSWORD))
+                .shortBio(CORRECT_ACCOUNT_SHORT_BIO)
+                .build();
+    }
+
+    public static Account createWrongAccount(){
+        return  Account.builder()
+                .nickname(WRONG_ACCOUNT_NICKNAME) // 틀린 닉네임
+                .email(CORRECT_ACCOUNT_EMAIL)
+                .password(passwordEncoder.encode(CORRECT_ACCOUNT_PASSWORD))
+                .shortBio(CORRECT_ACCOUNT_SHORT_BIO)
+                .build();
+    }
 }

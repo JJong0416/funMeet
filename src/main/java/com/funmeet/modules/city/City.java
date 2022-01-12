@@ -24,3 +24,4 @@ public class City {
         return String.format("%s(%s)",enCity,krCity);
     }
 }
+

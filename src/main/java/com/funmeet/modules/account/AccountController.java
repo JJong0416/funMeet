@@ -21,7 +21,7 @@ public class AccountController {
     private final SignUpFormValidator signUpFormValidator;
     private final AccountService accountService;
     private final AccountDetailsService accountDetailsService;
-    private final AccountEmailService accountEmailService; // 순참
+    private final AccountEmailService accountEmailService;
 
     @InitBinder("signUpForm")
     public void initBinder(WebDataBinder webDataBinder){
@@ -67,7 +67,7 @@ public class AccountController {
         return "email/find-account";
     }
 
-    @PostMapping("/find-account") // TODO: 2022-01-04 Entity -> Service
+    @PostMapping("/find-account")
     public String sendEmailLoginLink(String email, Model model, RedirectAttributes attributes) {
 
         if (!accountService.canSendConfirmEmail(email)) {
@@ -80,7 +80,7 @@ public class AccountController {
         return "redirect:/find-account";
     }
 
-    @GetMapping("/check-email-token") // 이메일 토큰 눌렀을 때 뜨는
+    @GetMapping("/check-email-token")
     public String checkEmailToken(String token, String email, Model model){
 
         if(!accountService.isValidToken(email, token)){

@@ -47,6 +47,8 @@ public class Account {
 
     private LocalDateTime joinedAt;
 
+    // 다대다 관계 -> 취미 개수 로직 => 실무에서 터질 수 있다 => OneToMany <-> ManyToOne으로 바꿔야 했는데,
+    // 리팩토링 하는 과정에서 의심해서
     @ManyToMany
     private Set<Hobby> hobby = new HashSet<>();
 

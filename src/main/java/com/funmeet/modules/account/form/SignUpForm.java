@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 @Getter @NoArgsConstructor
-@AllArgsConstructor @Setter
+@AllArgsConstructor @Setter @Builder
 public class SignUpForm {
 
     @NotBlank
@@ -24,5 +24,5 @@ public class SignUpForm {
     @NotBlank
     private String email;
 
-    private final String shortBio = "간략한 자기소개를 추가하세요";
+    private String shortBio = "간략한 자기소개를 추가하세요";
 }
