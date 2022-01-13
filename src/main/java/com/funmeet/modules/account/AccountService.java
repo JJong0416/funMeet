@@ -156,7 +156,7 @@ public class AccountService{
         accountDetailsService.logout(request);
     }
 
-    public Account saveSignUp(SignUpForm signUpForm) {
+    private Account saveSignUp(SignUpForm signUpForm) {
         signUpForm.setPassword(passwordEncoder.encode(signUpForm.getPassword()));
         Account account = AccountMapper.INSTANCE.signUpFormToEntity(signUpForm);
         account.generateEmailCheckToken();

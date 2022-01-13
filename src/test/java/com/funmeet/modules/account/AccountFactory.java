@@ -2,27 +2,22 @@ package com.funmeet.modules.account;
 
 import com.funmeet.modules.account.form.SignUpForm;
 import com.funmeet.modules.mapper.AccountMapper;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
-@RequiredArgsConstructor
 public class AccountFactory {
 
-    static final String CORRECT_ACCOUNT_NICKNAME = "테스트계정입니다";
-    static final String CORRECT_ACCOUNT_EMAIL = "test@test.com";
-    static final String CORRECT_ACCOUNT_PASSWORD = "password";
+    static final String CORRECT_ACCOUNT_NICKNAME = "account001";
+    static final  String CORRECT_ACCOUNT_EMAIL = "test@test.com";
+    static final String CORRECT_ACCOUNT_PASSWORD = "password001";
     static final String CORRECT_ACCOUNT_SHORT_BIO = "간략한 자기소개를 추가하세요";
 
     static final String WRONG_ACCOUNT_NICKNAME = "test";
 
-    static PasswordEncoder passwordEncoder;
-
-    public static Account createRequestAccount(final String accountNickname, final String accountEmail,
+    public Account createRequestAccount(final String accountNickname, final String accountEmail,
                                                final String accountPassword ){
         return Account.builder()
                 .nickname(accountNickname)
                 .email(accountEmail)
-                .password(passwordEncoder.encode(accountPassword))
+                .password(CORRECT_ACCOUNT_PASSWORD)
                 .shortBio(CORRECT_ACCOUNT_SHORT_BIO)
                 .build();
     }
@@ -35,7 +30,7 @@ public class AccountFactory {
         return Account.builder()
                 .nickname(CORRECT_ACCOUNT_NICKNAME)
                 .email(CORRECT_ACCOUNT_EMAIL)
-                .password(passwordEncoder.encode(CORRECT_ACCOUNT_PASSWORD))
+                .password(CORRECT_ACCOUNT_PASSWORD)
                 .shortBio(CORRECT_ACCOUNT_SHORT_BIO)
                 .build();
     }
@@ -44,7 +39,7 @@ public class AccountFactory {
         return  Account.builder()
                 .nickname(WRONG_ACCOUNT_NICKNAME) // 틀린 닉네임
                 .email(CORRECT_ACCOUNT_EMAIL)
-                .password(passwordEncoder.encode(CORRECT_ACCOUNT_PASSWORD))
+                .password(CORRECT_ACCOUNT_PASSWORD)
                 .shortBio(CORRECT_ACCOUNT_SHORT_BIO)
                 .build();
     }
