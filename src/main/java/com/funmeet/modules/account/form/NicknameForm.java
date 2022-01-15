@@ -11,6 +11,7 @@ import javax.validation.constraints.Pattern;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class NicknameForm {
+
     @NotBlank
     @Length(min = 6, max = 20)
     @Pattern(regexp = "^[ㄱ-ㅎ가-힣a-zA-Z0-9_-]{6,20}$")

@@ -81,8 +81,9 @@ public class AccountSettingsController {
     @PostMapping("/settings/hobby/remove")
     @ResponseBody
     public ResponseEntity removeHobby(@CurrentAccount Account account, @RequestBody HobbyForm hobbyForm) {
-        accountService.removeHobby(account,hobbyForm.getHobbyTitle());
-        return ResponseEntity.ok().build();
+
+        return accountService.removeHobby(account,hobbyForm.getHobbyTitle())?
+                ResponseEntity.ok().build(): ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/settings/location")
@@ -101,8 +102,8 @@ public class AccountSettingsController {
 
     @PostMapping("/settings/location/remove")
     public ResponseEntity removeCity(@CurrentAccount Account account, @RequestBody CityForm cityForm){
-        accountService.removeCity(account,cityForm.getKrCity());
-        return ResponseEntity.ok().build();
+        return accountService.removeCity(account,cityForm.getKrCity())?
+                ResponseEntity.ok().build(): ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/settings/notification")
@@ -113,24 +114,18 @@ public class AccountSettingsController {
     }
 
     @PostMapping("/settings/notification")
-    public String updateNotifications(@CurrentAccount Account account, @Valid NotificationForm notification, Errors errors,
+    public String updateNotifications(@CurrentAccount Account account, @Valid NotificationForm notificationForm, Errors errors,
                                       Model model, RedirectAttributes attributes) {
         if (errors.hasErrors()) {
             model.addAttribute(account);
             return "settings/notification";
         }
 
-        accountService.updateNotification(account, notification);
+        accountService.updateNotification(account, notificationForm);
         attributes.addFlashAttribute("message", "성공");
         return "redirect:" + "/settings/notification";
     }
 
-    @GetMapping("/settings/security")
-    public String updateSecurity(@CurrentAccount Account account, Model model) {
-        model.addAttribute(account);
-        model.addAttribute("passwordForm",new PasswordForm());
-        return "settings/account";
-    }
 
     @GetMapping("/settings/account")
     public String updateAccountForm(@CurrentAccount Account account, Model model) {

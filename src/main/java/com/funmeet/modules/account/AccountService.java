@@ -97,10 +97,11 @@ public class AccountService{
         user.ifPresent(a -> a.getHobby().add(hobby));
     }
 
-    public void removeHobby(Account account, String hobbyName) {
+    public boolean removeHobby(Account account, String hobbyName) {
         Hobby hobby = hobbyRepository.findByTitle(hobbyName).orElseThrow();
         Optional<Account> removeId = accountRepository.findById(account.getId());
         removeId.ifPresent(a -> a.getHobby().remove(hobby));
+        return removeId.isPresent();
     }
 
     public List<String> getCity(Account account) {
@@ -123,10 +124,11 @@ public class AccountService{
         getId.ifPresent(a -> a.getCity().add(city));
     }
 
-    public void removeCity(Account account, String cityName) {
+    public boolean removeCity(Account account, String cityName) {
         City city = this.findCityByKrCity(cityName);
         Optional<Account> byId = accountRepository.findById(account.getId());
         byId.ifPresent(a -> a.getCity().remove(city));
+        return byId.isPresent();
     }
 
     public void updateProfile(Account account, Profile profile) {
