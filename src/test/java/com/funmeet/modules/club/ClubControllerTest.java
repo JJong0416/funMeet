@@ -1,13 +1,10 @@
-/*
 package com.funmeet.modules.club;
 
-import com.funmeet.infra.AbstractContainerBaseTest;
 import com.funmeet.infra.MockMvcTest;
 import com.funmeet.modules.account.Account;
 import com.funmeet.modules.account.AccountRepository;
 import com.funmeet.modules.account.AccountService;
 import com.funmeet.modules.account.form.SignUpForm;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,46 +13,54 @@ import org.springframework.security.test.context.support.TestExecutionEvent;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.test.context.support.TestExecutionEvent;
+import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@MockMvcTest
-class ClubControllerTest extends AbstractContainerBaseTest {
-    @Autowired private MockMvc mockMvc;
-    @Autowired private ClubService clubService;
-    @Autowired private ClubRepository clubRepository;
-    @Autowired private AccountRepository accountRepository;
-    @Autowired private AccountService accountService;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
-    public Account jongchan = null;
+@MockMvcTest
+public class ClubControllerTest {
+
+    @Autowired MockMvc mockMvc;
+    @Autowired AccountService accountService;
+    @Autowired ClubRepository clubRepository;
+    @Autowired AccountRepository accountRepository;
 
     @BeforeEach
-    void beforeEach(){
-        */
-/* UserDetails Account 생성 *//*
-
-        SignUpForm signUpForm = new SignUpForm();
-        signUpForm.setNickname("jongchan");
-        signUpForm.setPassword("12345678");
-        signUpForm.setEmail("jjong@email.com");
+    void initEach(){
+        final SignUpForm signUpForm = SignUpForm.builder()
+                .nickname("account001")
+                .password("password001")
+                .email("test@test.com")
+                .build();
         accountService.processSignUpAccount(signUpForm);
     }
 
-    @AfterEach
-    void afterEach() {
-        accountRepository.deleteAll();
-    }
-
-
-
     @Test
-    @WithUserDetails(value="jongchan",setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @WithUserDetails(value="account001",setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @DisplayName("모임 등록 폼")
-    void createClubForm() throws Exception {
-        mockMvc.perform(get("/create-club"))
+    void 정상적인_회원이_모임을_만들기위해_모임폼을_연다() throws Exception {
+        // given
+        final ResultActions resultActions;
+
+        // when
+        resultActions = mockMvc.perform(get("/create-club"));
+
+        // then
+        resultActions
                 .andExpect(status().isOk())
                 .andExpect(view().name("club/form"))
                 .andExpect(model().attributeExists("account"))
@@ -63,114 +68,64 @@ class ClubControllerTest extends AbstractContainerBaseTest {
     }
 
     @Test
-    @WithUserDetails(value="jongchan",setupBefore = TestExecutionEvent.TEST_EXECUTION)
-    @DisplayName("모임 등록 - 완료")
-    void createClub_right() throws Exception {
-        mockMvc.perform(post("/create-club")
-                .param("title", "FunMeet title")
-                .param("clubPath", "url1")
+    @WithUserDetails(value="account001",setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @DisplayName("모임 생성 - 성공")
+    void 모임을_만들기위해_폼에_맞는_양식을_작성한후_모임을_생성한다() throws Exception {
+        // given
+        Account account = accountRepository.findByNickname("account001").orElseThrow();
+        final ResultActions resultActions;
+        final String url = "url001";
+
+        // when
+        resultActions = mockMvc.perform(post("/create-club")
+                .param("title", "테스트모임")
+                .param("clubPath",url)
                 .param("shortDescription", "짧게 보기 체크")
                 .param("fullDescription", "상세 보기 체크")
-                .with(csrf()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/club/url1"));
+                .with(csrf()));
 
-        Club club = clubRepository.findByClubPath("url1");
+        // then
+        resultActions
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/club/url001"));
+
+        Club club = clubRepository.findByClubPath("url001");
         assertNotNull(club);
-        Account account = accountRepository.findByNickname("jongchan");
         assertTrue(club.getManagers().contains(account));
     }
 
     @Test
-    @WithUserDetails(value="jongchan",setupBefore = TestExecutionEvent.TEST_EXECUTION)
-    @DisplayName("모임 등록 - 실패")
-    void createClub_wrong() throws Exception {
-        mockMvc.perform(post("/create-club")
-                .param("title", "FunMeet title")
-                .param("clubPath", "Wrong Path")
+    @WithUserDetails(value="account001",setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @DisplayName("모임 생성 - 실패")
+    void 모임을_만들기위해_폼에_틀린_양식을_작성한후_모임을_생성후_실패한다() throws Exception {
+        // given
+        Account account = accountRepository.findByNickname("account001").orElseThrow();
+        final ResultActions resultActions;
+        final String url = "^뀆@룯";
+
+        // when
+        resultActions = mockMvc.perform(post("/create-club")
+                .param("title", "테스트모임")
+                .param("clubPath",url)
                 .param("shortDescription", "짧게 보기 체크")
                 .param("fullDescription", "상세 보기 체크")
-                .with(csrf()))
+                .with(csrf()));
 
+        // then
+        resultActions
                 .andExpect(status().isOk())
                 .andExpect(view().name("club/form"))
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeExists("clubForm"))
                 .andExpect(model().attributeExists("account"));
-
-
-        Club club = clubRepository.findByClubPath("Wrong Path");
+        Club club = clubRepository.findByClubPath(url);
         assertNull(club);
     }
 
     @Test
-    @WithUserDetails(value="jongchan",setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @WithUserDetails(value="account001",setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @DisplayName("모임 조회")
-    void pageClub() throws Exception {
-        Club club = new Club();
-        club.setClubPath("test");
-        club.setTitle("테스트 제목");
-        club.setShortDescription("짧게 보기 체크");
-        club.setFullDescription("<p>길게 보기 체크</p>");
-
-        Account account = accountRepository.findByNickname("jongchan");
-        clubService.createNewClub(club,account);
-
-        mockMvc.perform(get("/club/test"))
-                .andExpect(view().name("club/page"))
-                .andExpect(model().attributeExists("account"))
-                .andExpect(model().attributeExists("club"));
+    void 모임을_만든후_모임장만_모임을_조회를_할수있다() throws Exception {
 
     }
-
-    @Test
-    @WithUserDetails(value="jongchan",setupBefore = TestExecutionEvent.TEST_EXECUTION)
-    @DisplayName("모임 가입 가입")
-    void joinNewClub() throws Exception {
-        Account managerAccount = createNewAccount("account");
-        Account jongchan = accountRepository.findByNickname("jongchan");
-
-        Club club = createNewClub("url",managerAccount);
-        clubService.addMember(jongchan,"url");
-
-        mockMvc.perform(get("/club/" + club.getClubPath() + "/join"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/club/" + club.getClubPath() + "/members"));
-
-        assertTrue(club.getMembers().contains(jongchan));
-        assertTrue(club.getManagers().contains(managerAccount));
-    }
-
-    @Test
-    @WithUserDetails(value="jongchan",setupBefore = TestExecutionEvent.TEST_EXECUTION)
-    @DisplayName("스터디 탈퇴")
-    void leaveClub() throws Exception {
-        Account managerAccount = createNewAccount("account");
-        Account jongchan = accountRepository.findByNickname("jongchan");
-
-        Club club = createNewClub("url",managerAccount);
-        clubService.addMember(jongchan,"url");
-
-        mockMvc.perform(get("/club/" + club.getClubPath() + "/leave"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/club/" + club.getClubPath() + "/members"));
-
-        assertFalse(club.getMembers().contains(jongchan));
-    }
-
-    protected Account createNewAccount(String nickname){
-        Account account = new Account();
-        account.setNickname(nickname);
-        account.setEmail( nickname + "@gmail.com");
-        account.setPassword("123456");
-        accountRepository.save(account);
-        return account;
-    }
-
-    protected Club createNewClub(String clubPath, Account Manager){
-        Club club = new Club();
-        club.setClubPath(clubPath);
-        clubService.createNewClub(club,Manager);
-        return club;
-    }
-}*/
+}
