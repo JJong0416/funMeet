@@ -1,8 +1,10 @@
 package com.funmeet.modules.meeting.event;
 
 import com.funmeet.infra.config.AppProperties;
-import com.funmeet.infra.mail.EmailMessageForm;
-import com.funmeet.infra.mail.EmailService;
+import com.funmeet.infra.mail.ForwardNoticeService;
+import com.funmeet.infra.mail.FunMeetSendStrategy;
+import com.funmeet.infra.mail.form.EmailMessageForm;
+import com.funmeet.infra.mail.SendStrategy;
 import com.funmeet.modules.account.Account;
 import com.funmeet.modules.alarm.Alarm;
 import com.funmeet.modules.alarm.AlarmRepository;
@@ -27,7 +29,8 @@ public class EnrollmentEventListener {
     private final AlarmRepository alarmRepository;
     private final AppProperties appProperties;
     private final TemplateEngine templateEngine;
-    private final EmailService emailService;
+    private final SendStrategy sendStrategy;
+    private final ForwardNoticeService forwardNoticeService;
 
     @EventListener
     public void handleEnrollmentMeeting(EnrollmentEvent enrollmentEvent){
@@ -63,7 +66,8 @@ public class EnrollmentEventListener {
                 .text(message)
                 .build();
 
-        emailService.send(emailMessageForm);
+//        forwardNoticeService.sendNoticeWithStrategy(new FunMeetSendStrategy(), emailMessageForm);
+        sendStrategy.sendNotice(emailMessageForm);
     }
 
     private void sendAlarm(EnrollmentEvent enrollmentEvent, Meeting meeting, Club club, Account account){

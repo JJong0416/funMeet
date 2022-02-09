@@ -12,14 +12,4 @@ public class Appconfig {
     public PasswordEncoder passwordEncoder(){
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
-
-    /* 성능 향상을 위한 리팩토링*/
-/*    @Bean
-    public ModelMapper modelMapper(){
-        ModelMapper modelMapper = new ModelMapper();
-        modelMapper.getConfiguration()
-                .setDestinationNameTokenizer(NameTokenizers.UNDERSCORE)
-                .setSourceNameTokenizer(NameTokenizers.UNDERSCORE);
-        return modelMapper;
-    }*/
 }

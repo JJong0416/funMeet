@@ -21,11 +21,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception{
+    protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .mvcMatchers("/","/login","/sign-up","/check-email","/check-email-token",
-                        "/login-by-email","/find-account","/auth-email","/search/club","/oauth2/**","/oauth-sign-up").permitAll()
-                .mvcMatchers(HttpMethod.GET,"/profile/*").permitAll()
+                .mvcMatchers("/", "/login", "/sign-up", "/check-email", "/check-email-token",
+                        "/login-by-email", "/find-account", "/auth-email", "/search/club", "/oauth2/**", "/oauth-sign-up").permitAll()
+                .mvcMatchers(HttpMethod.GET, "/profile/*").permitAll()
                 .anyRequest().authenticated();
 
         http.formLogin()
@@ -36,9 +36,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception{
+    public void configure(WebSecurity web) throws Exception {
         web.ignoring()
-                .mvcMatchers("/node_modules/**","/img/**")
+                .mvcMatchers("/node_modules/**", "/img/**")
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 }

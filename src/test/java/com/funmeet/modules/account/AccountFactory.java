@@ -12,8 +12,7 @@ public class AccountFactory {
 
     static final String WRONG_ACCOUNT_NICKNAME = "test";
 
-    public Account createRequestAccount(final String accountNickname, final String accountEmail,
-                                               final String accountPassword ){
+    public static Account createRequestAccount(final String accountNickname, final String accountEmail){
         return Account.builder()
                 .nickname(accountNickname)
                 .email(accountEmail)

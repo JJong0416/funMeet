@@ -25,7 +25,7 @@ public class Alarm {
 
     private boolean checked;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Account account;
 
     @Enumerated(EnumType.STRING)

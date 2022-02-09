@@ -1,8 +1,10 @@
 package com.funmeet.modules.club.event;
 
 import com.funmeet.infra.config.AppProperties;
-import com.funmeet.infra.mail.EmailMessageForm;
-import com.funmeet.infra.mail.EmailService;
+import com.funmeet.infra.mail.ForwardNoticeService;
+import com.funmeet.infra.mail.FunMeetSendStrategy;
+import com.funmeet.infra.mail.form.EmailMessageForm;
+import com.funmeet.infra.mail.SendStrategy;
 import com.funmeet.modules.account.Account;
 import com.funmeet.modules.account.AccountPredicates;
 import com.funmeet.modules.account.AccountRepository;
@@ -32,7 +34,7 @@ public class ClubEventListener {
     private final AppProperties appProperties;
     private final TemplateEngine templateEngine;
     private final AlarmRepository alarmRepository;
-    private final EmailService emailService;
+    private final ForwardNoticeService forwardNoticeService;
 
     @EventListener
     public void handleClubCreateEvent(ClubCreatedEvent clubCreatedEvent){
@@ -101,7 +103,7 @@ public class ClubEventListener {
                 .text(message)
                 .build();
 
-        emailService.send(emailMessageForm);
+//        forwardNoticeService.sendNoticeWithStrategy(new FunMeetSendStrategy(), emailMessageForm);
     }
 
 }

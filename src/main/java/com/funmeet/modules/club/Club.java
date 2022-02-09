@@ -10,7 +10,6 @@ import javax.persistence.*;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity @Builder
@@ -154,6 +153,16 @@ public class Club {
     }
 
     public void updateClubIntroduce(String shortDescription, String fullDescription){
+        this.shortDescription = shortDescription;
+        this.fullDescription = fullDescription;
+    }
+
+    @Builder
+    public Club(Account account, String title, String clubPath,
+                String shortDescription, String fullDescription){
+        this.title = title;
+        this.clubPath = clubPath;
+        this.addManager(account);
         this.shortDescription = shortDescription;
         this.fullDescription = fullDescription;
     }

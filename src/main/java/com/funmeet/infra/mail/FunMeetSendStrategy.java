@@ -1,5 +1,6 @@
 package com.funmeet.infra.mail;
 
+import com.funmeet.infra.mail.form.EmailMessageForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
@@ -12,16 +13,16 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 @Profile("db")
-@RequiredArgsConstructor
 @Component
 @Slf4j
-public class FunMeetEmailService implements EmailService{
+@RequiredArgsConstructor
+public class FunMeetSendStrategy implements SendStrategy {
 
     private final JavaMailSender javaMailSender;
 
     @Async
     @Override
-    public void send(EmailMessageForm emailMessageForm) {
+    public void sendNotice(EmailMessageForm emailMessageForm) {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 
         MimeMessageHelper mimeMessageHelper;

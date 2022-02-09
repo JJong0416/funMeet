@@ -47,6 +47,8 @@ public class AccountSettingsControllerTest {
 
     @BeforeEach
     void initEach(){
+        accountRepository.deleteAll();
+        cityRepository.deleteAll();
         final SignUpForm signUpForm = SignUpForm.builder()
                 .nickname("account001")
                 .password("password001")
@@ -60,9 +62,12 @@ public class AccountSettingsControllerTest {
 
     @AfterEach
     void afterEach(){
+        accountRepository.deleteAll();
         cityRepository.deleteAll();
     }
 
+    /* WithUserDetails은 지정한 사용자 이름으로 계정을 조회한 후,
+    *  UserDetails 객체를 조회하여 보안 컨텍스트를 로드하게 됩니다.*/
     @WithUserDetails(value="account001",setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @DisplayName("프로필 수정 - 초기 폼")
     @Test
@@ -345,7 +350,6 @@ public class AccountSettingsControllerTest {
         // given
         final Account account = accountRepository.findByNickname("account001").orElseThrow();
         final ResultActions resultActions;
-        accountDetailsService.loginByAccount(account);
 
         // when
         resultActions = mockMvc.perform(post("/settings/delete")

@@ -24,19 +24,19 @@ public class AccountController {
     private final AccountEmailService accountEmailService;
 
     @InitBinder("signUpForm")
-    public void initBinder(WebDataBinder webDataBinder){
+    public void initBinder(WebDataBinder webDataBinder) {
         webDataBinder.addValidators(signUpFormValidator);
     }
 
     @GetMapping("/sign-up")
-    public String signUpForm(Model model){
-        model.addAttribute("signUpForm",new SignUpForm());
+    public String signUpForm(Model model) {
+        model.addAttribute("signUpForm", new SignUpForm());
         return "account/sign-up";
     }
 
     @PostMapping("/sign-up")
-    public String signUpSubmit(@Valid @ModelAttribute SignUpForm signUpForm, Errors errors){
-        if (errors.hasErrors()){
+    public String signUpSubmit(@Valid @ModelAttribute SignUpForm signUpForm, Errors errors) {
+        if (errors.hasErrors()) {
             return "account/sign-up";
         }
         accountService.processSignUpAccount(signUpForm);
@@ -81,15 +81,15 @@ public class AccountController {
     }
 
     @GetMapping("/check-email-token")
-    public String checkEmailToken(String token, String email, Model model){
+    public String checkEmailToken(String token, String email, Model model) {
 
-        if(!accountService.isValidToken(email, token)){
-            model.addAttribute("error","wrong.token");
+        if (!accountService.isValidToken(email, token)) {
+            model.addAttribute("error", "wrong.token");
             return "email/check-email";
         }
 
         Account account = accountService.completeSignUp(email);
-        model.addAttribute("nickname",account.getNickname());
+        model.addAttribute("nickname", account.getNickname());
         return "email/check-email";
     }
 
@@ -106,12 +106,12 @@ public class AccountController {
     }
 
     @GetMapping("/profile/{nickname}")
-    public String viewProfile(@PathVariable String nickname, Model model, @CurrentAccount Account account){
+    public String viewProfile(@PathVariable String nickname, Model model, @CurrentAccount Account account) {
 
         Account viewAccount = accountService.findAccountByNickname(nickname);
-        model.addAttribute("account",viewAccount);
-        model.addAttribute("isOwner",viewAccount.equals(account));
-        model.addAttribute("cityList",viewAccount.getCity());
+        model.addAttribute("account", viewAccount);
+        model.addAttribute("isOwner", viewAccount.equals(account));
+        model.addAttribute("cityList", viewAccount.getCity());
 
         return "account/profile";
     }

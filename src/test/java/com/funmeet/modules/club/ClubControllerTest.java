@@ -5,14 +5,6 @@ import com.funmeet.modules.account.Account;
 import com.funmeet.modules.account.AccountRepository;
 import com.funmeet.modules.account.AccountService;
 import com.funmeet.modules.account.form.SignUpForm;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.test.context.support.TestExecutionEvent;
-import org.springframework.security.test.context.support.WithUserDetails;
-import org.springframework.test.web.servlet.MockMvc;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -29,8 +21,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-
 @MockMvcTest
 public class ClubControllerTest {
 
@@ -38,15 +28,31 @@ public class ClubControllerTest {
     @Autowired AccountService accountService;
     @Autowired ClubRepository clubRepository;
     @Autowired AccountRepository accountRepository;
+    @Autowired ClubService clubService;
 
     @BeforeEach
     void initEach(){
-        final SignUpForm signUpForm = SignUpForm.builder()
+        /**
+         * Account 2개 , Club 1개 생성 후 해당 모임을 Repository에 저장
+         */
+
+        SignUpForm signUpForm = SignUpForm.builder()
                 .nickname("account001")
                 .password("password001")
                 .email("test@test.com")
                 .build();
         accountService.processSignUpAccount(signUpForm);
+
+        signUpForm.setNickname("account002");
+        signUpForm.setEmail("test2@test2.com");
+        accountService.processSignUpAccount(signUpForm);
+
+    }
+
+    @AfterEach
+    void afterEach(){
+        accountRepository.deleteAll();
+        clubRepository.deleteAll();
     }
 
     @Test
@@ -123,9 +129,49 @@ public class ClubControllerTest {
     }
 
     @Test
-    @WithUserDetails(value="account001",setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @WithUserDetails(value="account001",setupBefore = TestExecutionEvent.TEST_EXECUTION) // Account002
     @DisplayName("모임 조회")
     void 모임을_만든후_모임장만_모임을_조회를_할수있다() throws Exception {
+
+//        // given
+//        final ResultActions resultActions;
+//        Account account1 = accountRepository.findByNickname("account001").orElseThrow(); // 클럽장
+//        Account account2 = accountRepository.findByNickname("account002").orElseThrow(); // 외부인
+//        Club club = clubRepository.findByClubPath("test-url001");
+//
+//        // when
+//        resultActions = mockMvc.perform(get("/club/test-url001"));
+//
+//        // then
+//        resultActions
+//                .andExpect(status().isOk())
+//                .andExpect(view().name("club/page"))
+//                .andExpect(model().attributeExists("account"))
+//                .andExpect(model().attributeExists("club"));
+    }
+
+    private void print(String message){
+        System.out.println(message);
+    }
+
+    @Test
+    @WithUserDetails(value="account001",setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @DisplayName("모임 조회")
+    void 모임의_회원이_아닌_다른회원이_모임에_가입한다() throws Exception {
+
+    }
+
+    @Test
+    @WithUserDetails(value="account001",setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @DisplayName("모임 조회")
+    void 모임의_회원이_악의적으로_모임에_추가가입하면_실패한다() throws Exception {
+
+    }
+
+    @Test
+    @WithUserDetails(value="account001",setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @DisplayName("모임 조회")
+    void 모임의_회원이_모임을_탈퇴한다() throws Exception {
 
     }
 }

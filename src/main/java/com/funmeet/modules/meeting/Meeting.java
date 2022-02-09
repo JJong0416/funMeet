@@ -22,10 +22,10 @@ public class Meeting {
     @GeneratedValue
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Account createdAccount;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Club club;
 
     @Column(nullable = false)
