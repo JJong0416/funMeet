@@ -1,7 +1,7 @@
 package com.funmeet.infra.mail;
 
 
-import com.funmeet.infra.mail.form.EmailMessageForm;
+import com.funmeet.modules.notice.form.MessageForm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
 public class ConsoleSendStrategy implements SendStrategy {
 
     @Override
-    public void sendNotice(EmailMessageForm emailMessageForm) {
-        log.info("send message to : {}, Text : {}", emailMessageForm.getTo(), emailMessageForm.getText());
+    public void sendNotice(MessageForm messageForm) {
+        log.info("send message to : {}, Text : {}", messageForm.getTo(), messageForm.getText());
     }
 }
 

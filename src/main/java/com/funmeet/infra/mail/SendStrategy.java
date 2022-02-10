@@ -1,7 +1,7 @@
 package com.funmeet.infra.mail;
 
-import com.funmeet.infra.mail.form.EmailMessageForm;
+import com.funmeet.modules.notice.form.MessageForm;
 
 public interface SendStrategy {
-    void sendNotice(EmailMessageForm emailMessageForm);
+    void sendNotice(MessageForm messageForm);
 }

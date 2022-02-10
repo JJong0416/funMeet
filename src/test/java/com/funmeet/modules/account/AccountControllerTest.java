@@ -1,7 +1,7 @@
 //package com.funmeet.modules.account;
 //
 //import com.funmeet.infra.MockMvcTest;
-//import com.funmeet.infra.mail.form.EmailMessageForm;
+//import com.funmeet.modules.mail.form.EmailMessageForm;
 //import com.funmeet.infra.mail.SendStrategy;
 //import com.funmeet.modules.account.form.SignUpForm;
 //import org.junit.jupiter.api.DisplayName;

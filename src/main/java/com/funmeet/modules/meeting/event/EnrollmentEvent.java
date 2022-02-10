@@ -7,8 +7,6 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class EnrollmentEvent {
-
     public final Enrollment enrollment;
-
     public final String message;
 }

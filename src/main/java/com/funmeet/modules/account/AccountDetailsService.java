@@ -19,39 +19,41 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AccountDetailsService implements UserDetailsService {
 
+    private final static String ROLE_USER = "ROLE_USER";
+
     private final AccountRepository accountRepository;
 
     public void loginByAccount(Account account) {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                 new AdaptAccount(account),
                 account.getPassword(),
-                List.of(new SimpleGrantedAuthority("ROLE_USER")));
+                List.of(new SimpleGrantedAuthority(ROLE_USER)));
         SecurityContextHolder.getContext().setAuthentication(token);
     }
 
-    public void loginByEmail(String email){
-        Account account = accountRepository.findByEmail(email).orElseThrow( () -> {
+    public void loginByEmail(String email) {
+        Account account = accountRepository.findByEmail(email).orElseThrow(() -> {
             throw new UsernameNotFoundException(email);
         });
 
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                 new AdaptAccount(account),
                 account.getPassword(),
-                List.of(new SimpleGrantedAuthority("ROLE_USER")));
+                List.of(new SimpleGrantedAuthority(ROLE_USER)));
         SecurityContextHolder.getContext().setAuthentication(token);
     }
 
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String findAccount) throws UsernameNotFoundException {
-        Account account = accountRepository.findByEmail(findAccount).orElseGet( () ->
-                accountRepository.findByNickname(findAccount).orElseThrow( () -> {
+        Account account = accountRepository.findByEmail(findAccount).orElseGet(() ->
+                accountRepository.findByNickname(findAccount).orElseThrow(() -> {
                     throw new UsernameNotFoundException(findAccount);
                 }));
         return new AdaptAccount(account);
     }
 
-    public void logout(HttpServletRequest request){
+    public void logout(HttpServletRequest request) {
         HttpSession session = request.getSession();
         session.invalidate();
     }

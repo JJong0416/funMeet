@@ -1,6 +1,6 @@
 package com.funmeet.infra.mail;
 
-import com.funmeet.infra.mail.form.EmailMessageForm;
+import com.funmeet.modules.notice.form.MessageForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
@@ -22,20 +22,20 @@ public class FunMeetSendStrategy implements SendStrategy {
 
     @Async
     @Override
-    public void sendNotice(EmailMessageForm emailMessageForm) {
+    public void sendNotice(MessageForm messageForm) {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 
         MimeMessageHelper mimeMessageHelper;
         try {
-            mimeMessageHelper = new MimeMessageHelper(mimeMessage,false,"UTF-8");
-            mimeMessageHelper.setTo(emailMessageForm.getTo());
-            mimeMessageHelper.setSubject(emailMessageForm.getSubject());
-            mimeMessageHelper.setText(emailMessageForm.getText(),true);
+            mimeMessageHelper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
+            mimeMessageHelper.setTo(messageForm.getTo());
+            mimeMessageHelper.setSubject(messageForm.getSubject());
+            mimeMessageHelper.setText(messageForm.getText(), true);
             javaMailSender.send(mimeMessage);
 
-            log.info("success send to email : {}",emailMessageForm.getTo());
+            log.info("success send to email : {}", messageForm.getTo());
         } catch (MessagingException e) {
-            log.info("fail send to email : {}", emailMessageForm.getTo());
+            log.info("fail send to email : {}", messageForm.getTo());
             throw new RuntimeException(e);
         }
     }
