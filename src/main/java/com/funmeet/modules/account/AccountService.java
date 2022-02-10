@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class AccountService{
+public class AccountService {
 
     private final AccountRepository accountRepository;
     private final CityRepository cityRepository;
@@ -42,7 +42,7 @@ public class AccountService{
         accountDetailsService.loginByAccount(newAccount);
     }
 
-    public boolean isValidToken(String email, String token){
+    public boolean isValidToken(String email, String token) {
         Account account = this.findAccountByEmail(email);
         return account.isValidToken(token);
     }
@@ -64,24 +64,24 @@ public class AccountService{
         return account;
     }
 
-    public Account findAccountByEmail(String email){
+    public Account findAccountByEmail(String email) {
         return accountRepository.findByEmail(email).orElseThrow(() -> {
             throw new UsernameNotFoundException(email);
         });
     }
 
-    public boolean canSendConfirmEmail(String email){
+    public boolean canSendConfirmEmail(String email) {
         Account account = this.findAccountByEmail(email);
         return account.canSendConfirmEmail();
     }
 
-    public Account findAccountByNickname(String nickname){
-        return accountRepository.findByNickname(nickname).orElseThrow( () -> {
+    public Account findAccountByNickname(String nickname) {
+        return accountRepository.findByNickname(nickname).orElseThrow(() -> {
             throw new UsernameNotFoundException(nickname);
         });
     }
 
-    public List<String> getHobby(Account account){
+    public List<String> getHobby(Account account) {
         Optional<Account> getId = accountRepository.findById(account.getId());
         return getId.orElseThrow().getHobby().stream().map(Hobby::getTitle).collect(Collectors.toList());
     }
@@ -91,7 +91,7 @@ public class AccountService{
         return objectMapper.writeValueAsString(whiteList);
     }
 
-    public void addHobby(Account account, String hobbyName){
+    public void addHobby(Account account, String hobbyName) {
         Hobby hobby = hobbyService.findOrCreateHobby(hobbyName);
         Optional<Account> user = accountRepository.findById(account.getId());
         user.ifPresent(a -> a.getHobby().add(hobby));
@@ -114,7 +114,7 @@ public class AccountService{
         return objectMapper.writeValueAsString(whiteList);
     }
 
-    public City findCityByKrCity(String koCity){
+    public City findCityByKrCity(String koCity) {
         return cityRepository.findByKrCity(koCity).orElseThrow();
     }
 
@@ -141,7 +141,7 @@ public class AccountService{
         accountRepository.save(account);
     }
 
-    public void updateNotification(Account account, NotificationForm notificationForm){
+    public void updateNotification(Account account, NotificationForm notificationForm) {
         account.updateNotification(notificationForm);
         accountRepository.save(account);
     }

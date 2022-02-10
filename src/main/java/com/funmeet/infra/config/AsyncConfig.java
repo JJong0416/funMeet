@@ -9,7 +9,7 @@ import java.util.concurrent.Executor;
 
 @Configuration(proxyBeanMethods = false)
 @EnableAsync
-public class AsyncConfig implements AsyncConfigurer{
+public class AsyncConfig implements AsyncConfigurer {
     @Override
     public Executor getAsyncExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor(); // 자바의 ThreadPoolTaskExecuter

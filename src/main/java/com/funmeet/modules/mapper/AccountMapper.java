@@ -5,7 +5,6 @@ import com.funmeet.modules.account.form.NotificationForm;
 import com.funmeet.modules.account.form.SignUpForm;
 import com.funmeet.modules.account.oauth.OAuthForm;
 import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
 @Mapper

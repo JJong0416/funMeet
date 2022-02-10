@@ -25,12 +25,12 @@ public class OAuthController {
     private final OAuthFormValidator oAuthFormValidator;
 
     @InitBinder("oAuthForm")
-    public void initBinder(WebDataBinder webDataBinder){
+    public void initBinder(WebDataBinder webDataBinder) {
         webDataBinder.addValidators(oAuthFormValidator);
     }
 
     @GetMapping("/oauth2/authorization/kakao")
-    public String kakaoCallback(@RequestParam String code, Model model, HttpServletRequest request){
+    public String kakaoCallback(@RequestParam String code, Model model, HttpServletRequest request) {
 
 
         OAuthToken oAuthToken = oAuthService.getAccessToken(code);
@@ -39,9 +39,9 @@ public class OAuthController {
         String kakaoEmail = kakaoProfile.kakao_account.email;
         Account account = oAuthService.findAccountByKakaoEmail(kakaoEmail);
 
-        if (account == null){
-            model.addAttribute("oauthForm",new OAuthForm());
-            model.addAttribute("kakaoEmail",kakaoEmail);
+        if (account == null) {
+            model.addAttribute("oauthForm", new OAuthForm());
+            model.addAttribute("kakaoEmail", kakaoEmail);
             return "account/oauth-sign-up";
         }
 
@@ -50,11 +50,11 @@ public class OAuthController {
     }
 
     @PostMapping("/oauth-sign-up")
-    public String signUpSubmit(@Valid @ModelAttribute OAuthForm oAuthForm, Errors errors,String kakaoEmail){
-        if (errors.hasErrors()){
+    public String signUpSubmit(@Valid @ModelAttribute OAuthForm oAuthForm, Errors errors, String kakaoEmail) {
+        if (errors.hasErrors()) {
             return "account/oauth-sign-up";
         }
-        Account account = accountService.saveOauthSignUp(oAuthForm,kakaoEmail);
+        Account account = accountService.saveOauthSignUp(oAuthForm, kakaoEmail);
         accountDetailsService.loginByAccount(account);
         return "redirect:/";
     }

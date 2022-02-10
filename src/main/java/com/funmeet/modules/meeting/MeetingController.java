@@ -4,8 +4,6 @@ import com.funmeet.modules.account.Account;
 import com.funmeet.modules.account.security.CurrentAccount;
 import com.funmeet.modules.club.Club;
 import com.funmeet.modules.club.ClubService;
-import com.funmeet.modules.enrollment.Enrollment;
-import com.funmeet.modules.mapper.MeetingMapper;
 import com.funmeet.modules.meeting.form.MeetingForm;
 import com.funmeet.modules.meeting.validator.MeetingFormValidator;
 import lombok.RequiredArgsConstructor;
@@ -16,9 +14,6 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -39,13 +34,13 @@ public class MeetingController {
         Club club = clubService.getClubUpdateStatus(account, path);
         model.addAttribute(club);
         model.addAttribute(account);
-        model.addAttribute("meetingForm",new MeetingForm());
+        model.addAttribute("meetingForm", new MeetingForm());
         return "meeting/form";
     }
 
     @PostMapping("/create-meeting")
     public String newMeetSubmit(@CurrentAccount Account account, @PathVariable String path,
-                                 @Valid MeetingForm meetingForm, Errors errors, Model model) {
+                                @Valid MeetingForm meetingForm, Errors errors, Model model) {
 
         Club club = clubService.getClubUpdateStatus(account, path);
 
@@ -83,7 +78,7 @@ public class MeetingController {
 
     @GetMapping("/meeting/{id}/edit")
     public String updateMeetingForm(@CurrentAccount Account account,
-                                  @PathVariable String path, @PathVariable Long id, Model model) {
+                                    @PathVariable String path, @PathVariable Long id, Model model) {
         Meeting meeting = meetingService.getMeetingById(id);
 
         model.addAttribute(meetingService.meetingToMeetingForm(meeting));
@@ -96,10 +91,10 @@ public class MeetingController {
 
     @PostMapping("/meeting/{id}/edit")
     public String updateMeetingSubmit(@CurrentAccount Account account, @PathVariable String path,
-                                    @PathVariable Long id, @Valid MeetingForm meetingForm, Errors errors,
-                                    Model model) {
+                                      @PathVariable Long id, @Valid MeetingForm meetingForm, Errors errors,
+                                      Model model) {
         Club club = clubService.getClubUpdate(account, path);
-        Meeting meeting = meetingService.getMeetingWithValidation(id,meetingForm,errors);
+        Meeting meeting = meetingService.getMeetingWithValidation(id, meetingForm, errors);
 
         if (errors.hasErrors()) {
             model.addAttribute(account);
@@ -109,7 +104,7 @@ public class MeetingController {
         }
 
         meetingService.updateMeeting(meeting, meetingForm);
-        return "redirect:/club/" + club.getEncodedPath() +  "/meeting/" + meeting.getId();
+        return "redirect:/club/" + club.getEncodedPath() + "/meeting/" + meeting.getId();
     }
 
     @PostMapping("/meeting/{id}/enroll")
@@ -127,7 +122,7 @@ public class MeetingController {
 
         Club club = clubService.getClubToEnroll(path);
         meetingService.cancelEnrollment(account, id);
-        return "redirect:/club/" + club.getEncodedPath() +  "/meeting/" + id;
+        return "redirect:/club/" + club.getEncodedPath() + "/meeting/" + id;
     }
 
     @PostMapping("/meeting/{id}/delete")
@@ -141,9 +136,9 @@ public class MeetingController {
 
     @GetMapping("/meeting/{meetingId}/enrollments/{enrollmentId}/accept")
     public String acceptEnrollmentAccount(@CurrentAccount Account account, @PathVariable String path,
-                                   @PathVariable Long meetingId, @PathVariable Long enrollmentId) {
+                                          @PathVariable Long meetingId, @PathVariable Long enrollmentId) {
 
-        Club club = clubService.getClubUpdateStatus(account,path);
+        Club club = clubService.getClubUpdateStatus(account, path);
         Meeting meeting = meetingService.acceptEnrollment(meetingId, enrollmentId);
 
         return "redirect:/club/" + club.getEncodedPath() + "/meeting/" + meeting.getId();
@@ -151,9 +146,9 @@ public class MeetingController {
 
     @GetMapping("/meeting/{meetingId}/enrollments/{enrollmentId}/reject")
     public String rejectEnrollmentAccount(@CurrentAccount Account account, @PathVariable String path,
-                                   @PathVariable Long meetingId, @PathVariable Long enrollmentId) {
+                                          @PathVariable Long meetingId, @PathVariable Long enrollmentId) {
 
-        Club club = clubService.getClubUpdateStatus(account,path);
+        Club club = clubService.getClubUpdateStatus(account, path);
         Meeting meeting = meetingService.rejectEnrollment(meetingId, enrollmentId);
 
         return "redirect:/club/" + club.getEncodedPath() + "/meeting/" + meeting.getId();

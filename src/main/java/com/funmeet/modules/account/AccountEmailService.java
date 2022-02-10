@@ -1,6 +1,5 @@
 package com.funmeet.modules.account;
 
-import com.funmeet.infra.mail.ConveyStrategyService;
 import com.funmeet.infra.mail.SendStrategy;
 import com.funmeet.modules.notice.NoticeFactory;
 import com.funmeet.modules.notice.form.MessageForm;

@@ -19,7 +19,8 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Account {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     private Long id;
 
     @Column(unique = true)
@@ -72,7 +73,7 @@ public class Account {
     private boolean meetUpdatedByWeb = true;
 
     @Builder
-    public Account(String nickname, String password, String email, String shortBio){
+    public Account(String nickname, String password, String email, String shortBio) {
         this.nickname = nickname;
         this.password = password;
         this.email = email;
@@ -97,20 +98,20 @@ public class Account {
         return this.emailCheckTokenGeneratedAt.isBefore(LocalDateTime.now().minusMinutes(30));
     }
 
-    public void completeProfile(String bio, String image){
+    public void completeProfile(String bio, String image) {
         this.shortBio = bio;
         this.profileImage = image;
     }
 
-    public void updatePassword(String encodePassword){
+    public void updatePassword(String encodePassword) {
         this.password = encodePassword;
     }
 
-    public void updateNickname(String nickname){
+    public void updateNickname(String nickname) {
         this.nickname = nickname;
     }
 
-    public void updateNotification (NotificationForm notificationForm){
+    public void updateNotification(NotificationForm notificationForm) {
         this.meetCreatedByEmail = notificationForm.isMeetCreatedByEmail();
         this.meetCreatedByWeb = notificationForm.isMeetCreatedByWeb();
         this.meetEnrollmentResultByEmail = notificationForm.isMeetEnrollmentResultByEmail();

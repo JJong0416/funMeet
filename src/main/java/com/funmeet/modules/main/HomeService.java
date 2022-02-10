@@ -29,7 +29,7 @@ public class HomeService {
     private final AccountRepository accountRepository;
     private final AppProperties appProperties;
 
-    public StringBuilder getOAuthLink(){
+    public StringBuilder getOAuthLink() {
         StringBuilder oauth_link = new StringBuilder();
         oauth_link.append("https://kauth.kakao.com/oauth/authorize?");
         oauth_link.append("client_id=").append(clientId);
@@ -39,23 +39,23 @@ public class HomeService {
         return oauth_link;
     }
 
-    public Page<Club> getClubPageByKeyword(String keyword, Pageable pageable){
+    public Page<Club> getClubPageByKeyword(String keyword, Pageable pageable) {
         return clubRepository.findByKeyword(keyword, pageable);
     }
 
-    public Account findAccountWithHobbyAndCityById(Long id){
+    public Account findAccountWithHobbyAndCityById(Long id) {
         return accountRepository.findAccountWithHobbyAndCityById(id);
     }
 
-    public List<Club> findIndexManagers(Account account, boolean close){
+    public List<Club> findIndexManagers(Account account, boolean close) {
         return clubRepository.findList5ByManagersContainingAndClosedOrderByPublishDateTimeDesc(account, close);
     }
 
-    public List<Club> findIndexMembers(Account account, boolean close){
+    public List<Club> findIndexMembers(Account account, boolean close) {
         return clubRepository.findList5ByMembersContainingAndClosedOrderByPublishDateTimeDesc(account, close);
     }
 
-    public List<Club> findListContainAccount(boolean publish, boolean close){
+    public List<Club> findListContainAccount(boolean publish, boolean close) {
         return clubRepository.findFirst9ByPublishedAndClosedOrderByPublishDateTimeDesc(publish, close);
     }
 }

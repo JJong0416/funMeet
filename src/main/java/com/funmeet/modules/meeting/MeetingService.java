@@ -3,7 +3,6 @@ package com.funmeet.modules.meeting;
 
 import com.funmeet.modules.account.Account;
 import com.funmeet.modules.club.Club;
-import com.funmeet.modules.club.ClubService;
 import com.funmeet.modules.club.event.ClubUpdateEvent;
 import com.funmeet.modules.enrollment.Enrollment;
 import com.funmeet.modules.enrollment.EnrollmentRepository;
@@ -32,7 +31,7 @@ public class MeetingService {
     private final ApplicationEventPublisher applicationEventPublisher;
     private final MeetingFormValidator meetingFormValidator;
 
-    public Meeting createMeeting(Account account, Club club , MeetingForm meetingForm){
+    public Meeting createMeeting(Account account, Club club, MeetingForm meetingForm) {
         Meeting meeting = MeetingMapper.INSTANCE.MeetingFormToEntity(meetingForm); // Mapping
         meeting.createMeeting(account, club);
 
@@ -59,11 +58,11 @@ public class MeetingService {
                 "'" + meeting.getTitle() + "' 모임 정보가 취소되었습니다.."));
     }
 
-    public void newEnrollment(Account account, Long id){
+    public void newEnrollment(Account account, Long id) {
 
         Meeting meeting = meetingRepository.findById(id).orElseThrow();
 
-        if (!enrollmentRepository.existsByMeetingAndAccount(meeting,account)){
+        if (!enrollmentRepository.existsByMeetingAndAccount(meeting, account)) {
             Enrollment enrollment = Enrollment.builder()
                     .enrolledAt(LocalDateTime.now())
                     .meeting(meeting)
@@ -76,9 +75,9 @@ public class MeetingService {
         }
     }
 
-    public void cancelEnrollment(Account account, Long id){
+    public void cancelEnrollment(Account account, Long id) {
         Meeting meeting = this.getMeetingById(id);
-        Enrollment enrollment = enrollmentRepository.findByMeetingAndAccount(meeting,account);
+        Enrollment enrollment = enrollmentRepository.findByMeetingAndAccount(meeting, account);
 
         meeting.removeEnrollment(enrollment); // 위임
         enrollmentRepository.delete(enrollment); // 삭제
@@ -105,35 +104,37 @@ public class MeetingService {
         return meeting;
     }
 
-    public List<Meeting> getNewMeeting(Club club){
+    public List<Meeting> getNewMeeting(Club club) {
         List<Meeting> meetings = meetingRepository.findByClubOrderByStartDateTime(club);
         List<Meeting> newMeetings = new ArrayList<>();
 
         meetings.forEach(e -> {
             if (!e.getEndDateTime().isBefore(LocalDateTime.now())) {
                 newMeetings.add(e);
-            }});
+            }
+        });
 
         return newMeetings;
     }
 
-    public List<Meeting> getOldMeeting(Club club){
+    public List<Meeting> getOldMeeting(Club club) {
         List<Meeting> meetings = meetingRepository.findByClubOrderByStartDateTime(club);
         List<Meeting> oldMeetings = new ArrayList<>();
 
         meetings.forEach(e -> {
             if (e.getEndDateTime().isBefore(LocalDateTime.now())) {
                 oldMeetings.add(e);
-            }});
+            }
+        });
 
         return oldMeetings;
     }
 
-    public Meeting getMeetingById(Long id){
+    public Meeting getMeetingById(Long id) {
         return meetingRepository.findById(id).orElseThrow();
     }
 
-    public MeetingForm meetingToMeetingForm(Meeting meeting){
+    public MeetingForm meetingToMeetingForm(Meeting meeting) {
         return MeetingMapper.INSTANCE.MeetingToMeetingForm(meeting);
     }
 

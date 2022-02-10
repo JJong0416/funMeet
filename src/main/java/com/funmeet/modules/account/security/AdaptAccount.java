@@ -12,8 +12,8 @@ public class AdaptAccount extends User {
 
     private final Account account;
 
-    public AdaptAccount(Account account){
-        super(account.getNickname(),account.getPassword(), List.of(new SimpleGrantedAuthority("ROLE_USER")));
+    public AdaptAccount(Account account) {
+        super(account.getNickname(), account.getPassword(), List.of(new SimpleGrantedAuthority("ROLE_USER")));
         this.account = account;
     }
 }

@@ -21,8 +21,8 @@ public class OAuthFormValidator implements Validator {
     public void validate(Object target, Errors errors) {
         OAuthForm oAuthForm = (OAuthForm) target;
 
-        if(accountRepository.existsByNickname(oAuthForm.getNickname())){
-            errors.rejectValue("nickname","invalid nickname",new Object[]{oAuthForm.getNickname()},"이미 사용중인 아이디입니다.");
+        if (accountRepository.existsByNickname(oAuthForm.getNickname())) {
+            errors.rejectValue("nickname", "invalid nickname", new Object[]{oAuthForm.getNickname()}, "이미 사용중인 아이디입니다.");
         }
     }
 }

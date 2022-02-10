@@ -1,18 +1,13 @@
 package com.funmeet.modules.club;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.funmeet.modules.account.Account;
 import com.funmeet.modules.account.security.CurrentAccount;
-import com.funmeet.modules.city.City;
 import com.funmeet.modules.city.CityForm;
 import com.funmeet.modules.city.CityService;
 import com.funmeet.modules.club.form.ClubDescriptionForm;
-import com.funmeet.modules.hobby.Hobby;
 import com.funmeet.modules.hobby.HobbyForm;
 import com.funmeet.modules.hobby.HobbyService;
-import com.funmeet.modules.mapper.ClubMapper;
-import com.funmeet.modules.meeting.Meeting;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -22,8 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/club/{path}/settings")
@@ -48,7 +41,7 @@ public class ClubSettingsController {
                                  @Valid ClubDescriptionForm clubDescriptionForm, Errors errors,
                                  Model model, RedirectAttributes attributes) {
 
-        Club club = clubService.getClubUpdate(account,path);
+        Club club = clubService.getClubUpdate(account, path);
 
         if (errors.hasErrors()) {
             model.addAttribute(account);
@@ -62,9 +55,9 @@ public class ClubSettingsController {
     }
 
     @GetMapping("/banner")
-    public String clubBannerForm(@CurrentAccount Account account, @PathVariable String path, Model model){
+    public String clubBannerForm(@CurrentAccount Account account, @PathVariable String path, Model model) {
 
-        Club club = clubService.getClubUpdate(account,path);
+        Club club = clubService.getClubUpdate(account, path);
         model.addAttribute(account);
         model.addAttribute(club);
         return "club/settings/banner";
@@ -88,9 +81,9 @@ public class ClubSettingsController {
     }
 
     @PostMapping("/banner/disable")
-    public String disableClubBanner(@CurrentAccount Account account, @PathVariable String path){
+    public String disableClubBanner(@CurrentAccount Account account, @PathVariable String path) {
         Club club = clubService.checkUseClubBanner(account, path, false);
-        return "redirect:/club/" + club.getEncodedPath()+ "/settings/banner";
+        return "redirect:/club/" + club.getEncodedPath() + "/settings/banner";
     }
 
     @GetMapping("/hobby")
@@ -108,7 +101,7 @@ public class ClubSettingsController {
     @ResponseBody
     public ResponseEntity addHobby(@CurrentAccount Account account, @PathVariable String path,
                                    @RequestBody HobbyForm hobbyForm) {
-        clubService.addHobby(account, path,hobbyForm.getHobbyTitle());
+        clubService.addHobby(account, path, hobbyForm.getHobbyTitle());
         Club club = clubService.getClub(path);
         return ResponseEntity.ok().build();
     }
@@ -162,16 +155,16 @@ public class ClubSettingsController {
 
         Club club = clubService.getClubUpdateStatus(account, path);
 
-        if (!clubService.isPublish(account, club)){
-            model.addAttribute("message","fail_clubPublish");
+        if (!clubService.isPublish(account, club)) {
+            model.addAttribute("message", "fail_clubPublish");
             model.addAttribute(account);
             model.addAttribute(club);
             return "club/settings/club";
         }
 
         clubService.publish(club);
-        model.addAttribute("message","success_clubPublish");
-        return "redirect:/club/" + club.getEncodedPath()+ "/settings/club";
+        model.addAttribute("message", "success_clubPublish");
+        return "redirect:/club/" + club.getEncodedPath() + "/settings/club";
     }
 
     @PostMapping("/club/path")
@@ -195,7 +188,7 @@ public class ClubSettingsController {
     public String updateClubTitle(@CurrentAccount Account account, @PathVariable String path, String newTitle,
                                   Model model, RedirectAttributes attributes) {
         Club club = clubService.getClubUpdateStatus(account, path);
-        
+
         if (!clubService.isValidTitle(newTitle)) {
             model.addAttribute(account);
             model.addAttribute(club);
@@ -209,11 +202,11 @@ public class ClubSettingsController {
     }
 
     @PostMapping("/club/remove")
-    public String checkMeetingWithClubRemove(@CurrentAccount Account account, @PathVariable String path, Model model){
+    public String checkMeetingWithClubRemove(@CurrentAccount Account account, @PathVariable String path, Model model) {
 
-        Club club = clubService.getClubUpdateStatus(account,path);
+        Club club = clubService.getClubUpdateStatus(account, path);
 
-        if (clubService.isNotZeroMeetings(club)){
+        if (clubService.isNotZeroMeetings(club)) {
             model.addAttribute(account);
             model.addAttribute(club);
             model.addAttribute("message", "fail_clubRemove");

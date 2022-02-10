@@ -20,34 +20,34 @@ public class HomeController {
     private final ClubRepository clubRepository;
     private final HomeService homeService;
 
-    @GetMapping({"","/"})
-    public String home(@CurrentAccount Account account, Model model){
-        if (account != null){
+    @GetMapping({"", "/"})
+    public String home(@CurrentAccount Account account, Model model) {
+        if (account != null) {
             Account accountLoaded = homeService.findAccountWithHobbyAndCityById(account.getId());
             model.addAttribute(accountLoaded);
             model.addAttribute("interestedClubList", clubRepository.findClubByAccount(accountLoaded.getHobby(), accountLoaded.getCity()));
-            model.addAttribute("clubManagerOf", homeService.findIndexManagers(account,false));
-            model.addAttribute("clubMemberOf", homeService.findIndexMembers(account,false));
+            model.addAttribute("clubManagerOf", homeService.findIndexManagers(account, false));
+            model.addAttribute("clubMemberOf", homeService.findIndexMembers(account, false));
             return "index-with-login";
         }
-        
-        model.addAttribute("clubList", homeService.findListContainAccount(true,false));
+
+        model.addAttribute("clubList", homeService.findListContainAccount(true, false));
         return "index";
     }
 
     @GetMapping("/login")
-    public String login(Model model){
+    public String login(Model model) {
         StringBuilder oauth_link = homeService.getOAuthLink();
-        model.addAttribute("link",oauth_link);
+        model.addAttribute("link", oauth_link);
         return "login";
     }
 
     @GetMapping("/search")
     public String searchClub(String keyword, Model model,
                              @PageableDefault(size = 6, sort = "publishDateTime", direction = Sort.Direction.DESC)
-                                     Pageable pageable)  {
-        Page<Club> clubList = homeService.getClubPageByKeyword(keyword,pageable);
-        model.addAttribute("clubList",clubList);
+                                     Pageable pageable) {
+        Page<Club> clubList = homeService.getClubPageByKeyword(keyword, pageable);
+        model.addAttribute("clubList", clubList);
         model.addAttribute("keyword", keyword);
         model.addAttribute("sortProperty",
                 pageable.getSort().toString().contains("publishDateTime") ? "publishDateTime" : "memberCount");

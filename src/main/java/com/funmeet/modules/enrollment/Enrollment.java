@@ -31,11 +31,11 @@ public class Enrollment {
 
     private boolean attended;
 
-    public void updateAccepted(boolean check){
+    public void updateAccepted(boolean check) {
         this.accepted = check;
     }
 
-    public void updateMeeting(Meeting meeting){
+    public void updateMeeting(Meeting meeting) {
         this.meeting = meeting;
     }
 }

@@ -8,16 +8,16 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Transactional(readOnly = true)
-public interface ClubRepository extends JpaRepository<Club,Long>, ClubRepositoryAnnexation {
+public interface ClubRepository extends JpaRepository<Club, Long>, ClubRepositoryAnnexation {
 
     boolean existsByClubPath(String clubPath);
 
     Club findByClubPath(String path);
 
-    @EntityGraph(attributePaths = {"hobby","managers"})
+    @EntityGraph(attributePaths = {"hobby", "managers"})
     Club findClubWithHobbyByClubPath(String path);
 
-    @EntityGraph(attributePaths = {"managers","members"})
+    @EntityGraph(attributePaths = {"managers", "members"})
     Club findClubWithManagersAndMembersById(Long id);
 
     @EntityGraph(attributePaths = "members")

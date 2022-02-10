@@ -11,15 +11,15 @@ public class Profile {
 
     private String nickname;
 
-    @Length(min=1,max=25)
+    @Length(min = 1, max = 25)
     private String shortBio;
 
-    @Length(max=10)
+    @Length(max = 10)
     private String occupation;
 
     private String profileImage;
 
-    public Profile(Account account){
+    public Profile(Account account) {
         this.nickname = account.getNickname();
         this.shortBio = account.getShortBio();
         this.occupation = account.getOccupation();

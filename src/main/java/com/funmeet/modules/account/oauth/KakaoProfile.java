@@ -6,8 +6,8 @@ import lombok.Data;
 public class KakaoProfile {
 
     /* Field명을 REST API 형식으로 주고 싶은데, OAuth2 형식은 _로 주기
-    *  이렇게 작성하는것이 최대이다.
-    *  */
+     *  이렇게 작성하는것이 최대이다.
+     *  */
 
     public Integer id;
     public String connected_at;

@@ -7,8 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-@Transactional(readOnly=true)
-public interface AccountRepository extends JpaRepository<Account, Long> , QuerydslPredicateExecutor<Account> {
+@Transactional(readOnly = true)
+public interface AccountRepository extends JpaRepository<Account, Long>, QuerydslPredicateExecutor<Account> {
 
     boolean existsByEmail(String email);
 
@@ -23,6 +23,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> , Queryd
 
     Optional<Account> findByKakaoEmailAndKakaoTokenVerifiedTrue(String kakaoEmail);
 
-    @EntityGraph(attributePaths = {"hobby","city"})
+    @EntityGraph(attributePaths = {"hobby", "city"})
     Account findAccountWithHobbyAndCityById(Long id);
 }

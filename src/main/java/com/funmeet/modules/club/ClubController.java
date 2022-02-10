@@ -31,21 +31,21 @@ public class ClubController {
     }
 
     @GetMapping("/create-club")
-    public String createClub(@CurrentAccount Account account, Model model){
+    public String createClub(@CurrentAccount Account account, Model model) {
         model.addAttribute(account);
-        model.addAttribute("clubForm",new ClubForm());
+        model.addAttribute("clubForm", new ClubForm());
         return "club/form";
     }
 
     @PostMapping("/create-club")
-    public String createClubForm(@CurrentAccount Account account, @Valid ClubForm clubForm, Errors errors,Model model){
-        if (errors.hasErrors()){
+    public String createClubForm(@CurrentAccount Account account, @Valid ClubForm clubForm, Errors errors, Model model) {
+        if (errors.hasErrors()) {
             model.addAttribute(account);
             return "club/form";
         }
 
-        Club newClub = clubService.createNewClub(account,clubForm);
-        return "redirect:/club/" + URLEncoder.encode(newClub.getClubPath(),StandardCharsets.UTF_8);
+        Club newClub = clubService.createNewClub(account, clubForm);
+        return "redirect:/club/" + URLEncoder.encode(newClub.getClubPath(), StandardCharsets.UTF_8);
     }
 
     @GetMapping("/club/{path}")
@@ -66,13 +66,13 @@ public class ClubController {
 
     @GetMapping("/club/{path}/join")
     public String joinClub(@CurrentAccount Account account, @PathVariable String path) {
-        Club club = clubService.addMember(account,path);
+        Club club = clubService.addMember(account, path);
         return "redirect:/club/" + club.getEncodedPath() + "/members";
     }
 
     @GetMapping("/club/{path}/leave")
     public String leaveClub(@CurrentAccount Account account, @PathVariable String path) {
-        Club club = clubService.removeMember(account,path);
+        Club club = clubService.removeMember(account, path);
         return "redirect:/club/" + club.getEncodedPath() + "/members";
     }
 }

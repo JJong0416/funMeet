@@ -18,7 +18,7 @@ import java.util.Set;
 
 public class ClubRepositoryAnnexationImpl extends QuerydslRepositorySupport implements ClubRepositoryAnnexation {
 
-    public ClubRepositoryAnnexationImpl(){
+    public ClubRepositoryAnnexationImpl() {
         super(Club.class);
     }
 

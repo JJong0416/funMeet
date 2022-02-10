@@ -6,6 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Transactional(readOnly = true)
-public interface HobbyRepository extends JpaRepository<Hobby,Long> {
+public interface HobbyRepository extends JpaRepository<Hobby, Long> {
     Optional<Hobby> findByTitle(String title);
 }

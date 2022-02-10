@@ -13,7 +13,7 @@ public interface ClubMapper {
 
     ClubMapper INSTANCE = Mappers.getMapper(ClubMapper.class);
 
-    default Club clubFormToEntity(ClubForm clubForm){
+    default Club clubFormToEntity(ClubForm clubForm) {
         return Club.builder()
                 .managers(new HashSet<>())
                 .members(new HashSet<>())
@@ -25,5 +25,6 @@ public interface ClubMapper {
                 .fullDescription(clubForm.getFullDescription())
                 .build();
     }
-     ClubDescriptionForm ClubToDescriptionForm(Club club);
+
+    ClubDescriptionForm ClubToDescriptionForm(Club club);
 }

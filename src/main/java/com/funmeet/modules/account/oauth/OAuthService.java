@@ -16,8 +16,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Stack;
-
 @Service
 @RequiredArgsConstructor
 public class OAuthService {
@@ -38,9 +36,9 @@ public class OAuthService {
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("grant_type","authorization_code");
-        params.add("client_id",client_id);
-        params.add("redirect_uri",redirect_uri);
+        params.add("grant_type", "authorization_code");
+        params.add("client_id", client_id);
+        params.add("redirect_uri", redirect_uri);
         params.add("code", code);
 
         HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest =
@@ -65,7 +63,7 @@ public class OAuthService {
     }
 
     public KakaoProfile getProfile(OAuthToken oAuthToken) {
-        headers.add("Authorization", "Bearer "+ oAuthToken.getAccess_token());
+        headers.add("Authorization", "Bearer " + oAuthToken.getAccess_token());
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
         HttpEntity<MultiValueMap<String, String>> kakaoProfileRequest =
@@ -88,9 +86,11 @@ public class OAuthService {
         return kakaoProfile;
     }
 
-    public Account findAccountByKakaoEmail(String kakaoEmail){
+    public Account findAccountByKakaoEmail(String kakaoEmail) {
         return accountRepository.findByKakaoEmailAndKakaoTokenVerifiedTrue(kakaoEmail)
-                .orElseThrow(() -> { throw new UsernameNotFoundException(kakaoEmail);});
+                .orElseThrow(() -> {
+                    throw new UsernameNotFoundException(kakaoEmail);
+                });
 
     }
 }

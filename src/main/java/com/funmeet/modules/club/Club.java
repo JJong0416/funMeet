@@ -104,7 +104,7 @@ public class Club {
     }
 
     public boolean isPublish() {
-        return (this.getHobby().size() != 0  && this.getCity().size() != 0);
+        return (this.getHobby().size() != 0 && this.getCity().size() != 0);
     }
 
     public void removeMember(Account account) {
@@ -120,19 +120,19 @@ public class Club {
         return this.getManagers().contains(account);
     }
 
-    public void addHobby(Hobby hobby){
+    public void addHobby(Hobby hobby) {
         this.hobby.add(hobby);
     }
 
-    public void removeHobby(Hobby hobby){
+    public void removeHobby(Hobby hobby) {
         this.hobby.remove(hobby);
     }
 
-    public void addCity(City city){
+    public void addCity(City city) {
         this.city.add(city);
     }
 
-    public void removeCity(City city){
+    public void removeCity(City city) {
         this.city.remove(city);
     }
 
@@ -140,26 +140,26 @@ public class Club {
         this.useBanner = check;
     }
 
-    public void updateBannerImage(String banner){
+    public void updateBannerImage(String banner) {
         this.banner = banner;
     }
 
-    public void updateClubPath(String clubPath){
+    public void updateClubPath(String clubPath) {
         this.clubPath = clubPath;
     }
 
-    public void updateClubTitle(String title){
+    public void updateClubTitle(String title) {
         this.title = title;
     }
 
-    public void updateClubIntroduce(String shortDescription, String fullDescription){
+    public void updateClubIntroduce(String shortDescription, String fullDescription) {
         this.shortDescription = shortDescription;
         this.fullDescription = fullDescription;
     }
 
     @Builder
     public Club(Account account, String title, String clubPath,
-                String shortDescription, String fullDescription){
+                String shortDescription, String fullDescription) {
         this.title = title;
         this.clubPath = clubPath;
         this.addManager(account);

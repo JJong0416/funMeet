@@ -88,7 +88,7 @@ public class Meeting {
         return false;
     }
 
-    public int numberOfRemain(){
+    public int numberOfRemain() {
         return this.limitOfEnrollments - (int) this.enrollments.stream().filter(Enrollment::isAccepted).count();
     }
 
@@ -168,7 +168,7 @@ public class Meeting {
         }
     }
 
-    public void updateMeeting(MeetingForm meetingForm){
+    public void updateMeeting(MeetingForm meetingForm) {
         this.title = meetingForm.getTitle();
         this.description = meetingForm.getDescription();
         this.limitOfEnrollments = meetingForm.getLimitOfEnrollments();
@@ -178,7 +178,7 @@ public class Meeting {
         this.meetingType = meetingForm.getMeetingType();
     }
 
-    public void createMeeting(Account account, Club club){
+    public void createMeeting(Account account, Club club) {
         this.createdDateTime = LocalDateTime.now();
         this.createdAccount = account;
         this.club = club;

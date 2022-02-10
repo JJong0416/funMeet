@@ -1,7 +1,10 @@
 package com.funmeet.modules.alarm;
 
 import com.funmeet.modules.account.Account;
-import lombok.*;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -10,7 +13,8 @@ import java.time.LocalDateTime;
 @Getter @EqualsAndHashCode(of = "id")
 public class Alarm {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     private Long id;
 
     @Column(nullable = false)
@@ -31,13 +35,13 @@ public class Alarm {
     @Enumerated(EnumType.STRING)
     private AlarmType AlarmType;
 
-    public void updateCheck(boolean checked){
+    public void updateCheck(boolean checked) {
         this.checked = checked;
     }
 
     @Builder
     public Alarm(String title, String message, String link, LocalDateTime createdDateTime,
-                 boolean checked, Account account, AlarmType AlarmType){
+                 boolean checked, Account account, AlarmType AlarmType) {
         this.title = title;
         this.message = message;
         this.link = link;

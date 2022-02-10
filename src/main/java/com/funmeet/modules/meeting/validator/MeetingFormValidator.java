@@ -28,11 +28,11 @@ public class MeetingFormValidator implements Validator {
         }
     }
 
-    private boolean isNotValidStartDateTime(MeetingForm meetingForm){
+    private boolean isNotValidStartDateTime(MeetingForm meetingForm) {
         return meetingForm.getStartDateTime().isBefore(meetingForm.getEndDateTime());
     }
 
-    private boolean isNotValidEndDateTime(MeetingForm meetingForm){
+    private boolean isNotValidEndDateTime(MeetingForm meetingForm) {
         LocalDateTime endDateTime = meetingForm.getEndDateTime();
         return endDateTime.isAfter(meetingForm.getStartDateTime());
     }

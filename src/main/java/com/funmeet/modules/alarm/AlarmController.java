@@ -21,8 +21,8 @@ public class AlarmController {
     @GetMapping("/alarm")
     public String getAlarm(@CurrentAccount Account account, Model model) {
 
-        List<Alarm> alarmList = alarmService.findByAccountAndChecked(account,false);
-        long numberOfChecked = alarmService.CountCheckedAndNotChecked(account,true);
+        List<Alarm> alarmList = alarmService.findByAccountAndChecked(account, false);
+        long numberOfChecked = alarmService.CountCheckedAndNotChecked(account, true);
 
         showDividedAlarm(model, alarmList, numberOfChecked, alarmList.size());
         model.addAttribute("isNew", true);
@@ -32,8 +32,8 @@ public class AlarmController {
 
     @GetMapping("/alarm/old")
     public String getOldAlarm(@CurrentAccount Account account, Model model) {
-        List<Alarm> alarmList = alarmService.findByAccountAndChecked(account,true);
-        long numberOfNotChecked = alarmService.CountCheckedAndNotChecked(account,false);
+        List<Alarm> alarmList = alarmService.findByAccountAndChecked(account, true);
+        long numberOfNotChecked = alarmService.CountCheckedAndNotChecked(account, false);
 
         showDividedAlarm(model, alarmList, alarmList.size(), numberOfNotChecked);
         model.addAttribute("isNew", false);
@@ -42,7 +42,7 @@ public class AlarmController {
 
     @PostMapping("/alarm/delete")
     public String deleteAlarm(@CurrentAccount Account account) {
-        alarmService.deleteAlarm(account,true);
+        alarmService.deleteAlarm(account, true);
         return "redirect:/alarm";
     }
 
@@ -54,9 +54,12 @@ public class AlarmController {
 
         for (var alarm : alarmList) {
             switch (alarm.getAlarmType()) {
-                case CREATED: newClubAlarm.add(alarm);
-                case UPDATED: alreadyJoinClubAlarm.add(alarm);
-                case ENROLLMENT: meetingEnrollmentAlarm.add(alarm);
+                case CREATED:
+                    newClubAlarm.add(alarm);
+                case UPDATED:
+                    alreadyJoinClubAlarm.add(alarm);
+                case ENROLLMENT:
+                    meetingEnrollmentAlarm.add(alarm);
             }
         }
 

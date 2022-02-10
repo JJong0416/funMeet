@@ -11,8 +11,8 @@ public class HobbyService {
 
     private final HobbyRepository hobbyRepository;
 
-    public Hobby findOrCreateHobby(String hobbyTitle){
-        return hobbyRepository.findByTitle(hobbyTitle).orElseGet( () -> hobbyRepository.save(Hobby.builder()
+    public Hobby findOrCreateHobby(String hobbyTitle) {
+        return hobbyRepository.findByTitle(hobbyTitle).orElseGet(() -> hobbyRepository.save(Hobby.builder()
                 .title(hobbyTitle)
                 .build()));
     }

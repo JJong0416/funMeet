@@ -44,9 +44,9 @@ public class AccountSettingsController {
     }
 
     @GetMapping("/settings/profile")
-    public String updateProfileForm(@CurrentAccount Account account, Model model){
+    public String updateProfileForm(@CurrentAccount Account account, Model model) {
         model.addAttribute(account);
-        model.addAttribute("profile",new Profile(account));
+        model.addAttribute("profile", new Profile(account));
         return "settings/profile";
     }
 
@@ -59,21 +59,21 @@ public class AccountSettingsController {
         }
 
         accountService.updateProfile(account, profile);
-        attributes.addFlashAttribute("message","성공");
+        attributes.addFlashAttribute("message", "성공");
         return "redirect:" + "/settings/profile";
     }
 
     @GetMapping("/settings/hobby")
     public String updateHobby(@CurrentAccount Account account, Model model) throws JsonProcessingException {
         model.addAttribute(account);
-        model.addAttribute("hobby",accountService.getHobby(account));
-        model.addAttribute("whitelist",accountService.getWhiteListHobby(account));
+        model.addAttribute("hobby", accountService.getHobby(account));
+        model.addAttribute("whitelist", accountService.getWhiteListHobby(account));
         return "settings/hobby";
     }
 
     @PostMapping("/settings/hobby/add")
     @ResponseBody
-    public ResponseEntity addHobby(@CurrentAccount Account account, @RequestBody HobbyForm hobbyForm){
+    public ResponseEntity addHobby(@CurrentAccount Account account, @RequestBody HobbyForm hobbyForm) {
         accountService.addHobby(account, hobbyForm.getHobbyTitle());
         return ResponseEntity.ok().build();
     }
@@ -82,8 +82,8 @@ public class AccountSettingsController {
     @ResponseBody
     public ResponseEntity removeHobby(@CurrentAccount Account account, @RequestBody HobbyForm hobbyForm) {
 
-        return accountService.removeHobby(account,hobbyForm.getHobbyTitle())?
-                ResponseEntity.ok().build(): ResponseEntity.badRequest().build();
+        return accountService.removeHobby(account, hobbyForm.getHobbyTitle()) ?
+                ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/settings/location")
@@ -95,21 +95,21 @@ public class AccountSettingsController {
     }
 
     @PostMapping("/settings/location/add")
-    public ResponseEntity addCity(@CurrentAccount Account account, @RequestBody CityForm cityForm){
-        accountService.addCity(account,cityForm.getKrCity());
+    public ResponseEntity addCity(@CurrentAccount Account account, @RequestBody CityForm cityForm) {
+        accountService.addCity(account, cityForm.getKrCity());
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/settings/location/remove")
-    public ResponseEntity removeCity(@CurrentAccount Account account, @RequestBody CityForm cityForm){
-        return accountService.removeCity(account,cityForm.getKrCity())?
-                ResponseEntity.ok().build(): ResponseEntity.badRequest().build();
+    public ResponseEntity removeCity(@CurrentAccount Account account, @RequestBody CityForm cityForm) {
+        return accountService.removeCity(account, cityForm.getKrCity()) ?
+                ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/settings/notification")
     public String updateNotificationsForm(@CurrentAccount Account account, Model model) {
         model.addAttribute(account);
-        model.addAttribute("notification",AccountMapper.INSTANCE.AccountToNotificationForm(account));
+        model.addAttribute("notification", AccountMapper.INSTANCE.AccountToNotificationForm(account));
         return "settings/notification";
     }
 
@@ -130,8 +130,8 @@ public class AccountSettingsController {
     @GetMapping("/settings/account")
     public String updateAccountForm(@CurrentAccount Account account, Model model) {
         model.addAttribute(account);
-        model.addAttribute("nicknameForm",new NicknameForm());
-        model.addAttribute("passwordForm",new PasswordForm());
+        model.addAttribute("nicknameForm", new NicknameForm());
+        model.addAttribute("passwordForm", new PasswordForm());
         return "settings/account";
     }
 
@@ -161,8 +161,8 @@ public class AccountSettingsController {
     }
 
     @PostMapping("/settings/delete")
-    public String deleteAccount(@CurrentAccount Account account, HttpServletRequest request){
-        accountService.deleteAccount(account,request);
+    public String deleteAccount(@CurrentAccount Account account, HttpServletRequest request) {
+        accountService.deleteAccount(account, request);
         return "redirect:/";
     }
 }

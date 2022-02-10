@@ -37,46 +37,46 @@ public class ClubService {
     private final CityService cityService;
     private final ObjectMapper objectMapper;
 
-    public Club createNewClub(Account account, ClubForm clubForm){
+    public Club createNewClub(Account account, ClubForm clubForm) {
         Club club = clubRepository.save(ClubMapper.INSTANCE.clubFormToEntity(clubForm));
         club.addManager(account);
         return club;
     }
 
-    public ClubDescriptionForm mappingClubDescription(Club club){
+    public ClubDescriptionForm mappingClubDescription(Club club) {
         return ClubMapper.INSTANCE.ClubToDescriptionForm(club);
     }
 
     public Club getClub(String path) {
         Club club = clubRepository.findByClubPath(path);
-        checkIfExistingClub(path,club);
+        checkIfExistingClub(path, club);
         return club;
     }
 
     public Club getClubUpdate(Account account, String path) {
         Club club = this.getClub(path);
-        checkIfManager(account,club);
+        checkIfManager(account, club);
         return club;
     }
 
-    public ClubDescriptionForm mappingDescriptionForm(Club club){
+    public ClubDescriptionForm mappingDescriptionForm(Club club) {
         return ClubMapper.INSTANCE.ClubToDescriptionForm(club);
     }
 
-    public Club getClubOnlyByPath(String path){
+    public Club getClubOnlyByPath(String path) {
         return clubRepository.findByClubPath(path);
     }
 
     public void updateClubDescription(Club club, ClubDescriptionForm clubDescriptionForm) {
         club.updateClubIntroduce(clubDescriptionForm.getShortDescription(), clubDescriptionForm.getFullDescription());
-        applicationEventPublisher.publishEvent(new ClubUpdateEvent(club,"모임 소개를 수정했습니다."));
+        applicationEventPublisher.publishEvent(new ClubUpdateEvent(club, "모임 소개를 수정했습니다."));
     }
 
-    public Hobby findHobbyByTitle(String title){
+    public Hobby findHobbyByTitle(String title) {
         return hobbyRepository.findByTitle(title).orElseThrow();
     }
 
-    public List<String> getAllHobbyTitles(){
+    public List<String> getAllHobbyTitles() {
         return hobbyRepository.findAll().stream()
                 .map(Hobby::getTitle).collect(Collectors.toList());
     }
@@ -121,15 +121,15 @@ public class ClubService {
         return club;
     }
 
-    public Club removeMember(Account account,String path) {
+    public Club removeMember(Account account, String path) {
         Club club = clubRepository.findClubWithMembersByClubPath(path);
         club.removeMember(account);
         return club;
     }
 
-    public Club getClubToEnroll(String path){
+    public Club getClubToEnroll(String path) {
         Club club = clubRepository.findClubOnlyByClubPath(path);
-        checkIfExistingClub(path,club);
+        checkIfExistingClub(path, club);
         return club;
     }
 
@@ -165,7 +165,7 @@ public class ClubService {
         return club;
     }
 
-    public Club checkUseClubBanner(Account account, String path, boolean check){
+    public Club checkUseClubBanner(Account account, String path, boolean check) {
         Club club = this.getClubUpdate(account, path);
         club.updateClubBanner(true);
         return club;
@@ -195,42 +195,42 @@ public class ClubService {
         club.removeHobby(hobby);
     }
 
-    public void addCity(Account account, String path, String krCity){
+    public void addCity(Account account, String path, String krCity) {
         Club club = this.getClubUpdateCity(account, path);
         City city = cityService.getCityByKrCity(krCity);
         club.addCity(city);
     }
 
-    public void removeCity(Account account, String path, String krCity){
+    public void removeCity(Account account, String path, String krCity) {
         Club club = this.getClubUpdateCity(account, path);
         City city = cityService.getCityByKrCity(krCity);
         club.removeCity(city);
     }
 
-    public List<String> getClubCity(Account account, String path){
+    public List<String> getClubCity(Account account, String path) {
         Club club = this.getClubUpdate(account, path);
         return club.getCity().stream()
                 .map(City::toString).collect(Collectors.toList());
     }
 
-    public List<String> getClubHobby(Account account, String path){
+    public List<String> getClubHobby(Account account, String path) {
         Club club = this.getClubUpdate(account, path);
         return club.getHobby().stream()
                 .map(Hobby::getTitle).collect(Collectors.toList());
     }
 
-    public boolean isPublish(Account account, Club club){
+    public boolean isPublish(Account account, Club club) {
         return club.isPublish();
     }
 
-    public boolean isNotZeroMeetings(Club club){
+    public boolean isNotZeroMeetings(Club club) {
         List<Meeting> meetings = meetingRepository.findByClub(club);
         return meetings.size() != 0;
     }
 
     public void removeClub(Club club) {
         club.close();
-        applicationEventPublisher.publishEvent(new ClubUpdateEvent(club,"모임을 종료합니다."));
+        applicationEventPublisher.publishEvent(new ClubUpdateEvent(club, "모임을 종료합니다."));
         clubRepository.delete(club);
     }
 }
