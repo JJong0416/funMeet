@@ -1,7 +1,10 @@
 package com.funmeet.modules.notice;
 
 import com.funmeet.infra.config.AppProperties;
+import com.funmeet.infra.mail.FunMeetSendStrategy;
+import com.funmeet.infra.mail.StrategyFactory;
 import com.funmeet.infra.mail.SendStrategy;
+import com.funmeet.infra.mail.StrategyName;
 import com.funmeet.modules.account.Account;
 import com.funmeet.modules.club.Club;
 import com.funmeet.modules.meeting.Meeting;
@@ -18,7 +21,7 @@ public class NoticeFactory extends NoticeConstant {
 
     private final TemplateEngine templateEngine;
     private final AppProperties appProperties;
-    private final SendStrategy sendStrategy;
+    private final StrategyFactory strategyFactory;
 
     public MessageForm makeAccountNoticeForm(Account account, String link, String linkName) {
         final String fullLink = link + account.getEmailCheckToken() + EMAIL + account.getEmail();
@@ -34,7 +37,7 @@ public class NoticeFactory extends NoticeConstant {
         String message = makeTemplateEngineMessage(fullLink, account.getNickname(), contextMessage, club.getTitle());
 
         MessageForm messageForm = makeMessageForm(emailSubject, account.getEmail(), message);
-        sendStrategy.sendNotice(messageForm);
+        sendEmail(messageForm);
     }
 
     public void noticeEnrollmentByEmail(EnrollmentEvent enrollmentEvent, Meeting meeting, Club club, Account account) {
@@ -44,9 +47,13 @@ public class NoticeFactory extends NoticeConstant {
 
         MessageForm messageForm = makeMessageForm(
                 "뻔모임 '" + meeting.getTitle() + " 미팅 참가 신청 결과입니다.", account.getEmail(), message);
-        sendStrategy.sendNotice(messageForm);
+        sendEmail(messageForm);
     }
 
+    public void sendEmail(MessageForm messageForm){
+        SendStrategy sendStrategy = strategyFactory.findStrategy(StrategyName.EMAIL);
+        sendStrategy.sendNotice(messageForm);
+    }
 
     private String makeTemplateEngineMessage(String link, String nickName, String message, String linkName) {
         Context context = new Context();

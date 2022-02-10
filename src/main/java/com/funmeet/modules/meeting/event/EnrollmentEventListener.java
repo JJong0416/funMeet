@@ -1,6 +1,6 @@
 package com.funmeet.modules.meeting.event;
 
-import com.funmeet.infra.mail.ConveyStrategyService;
+import com.funmeet.infra.mail.StrategyFactory;
 import com.funmeet.modules.account.Account;
 import com.funmeet.modules.alarm.Alarm;
 import com.funmeet.modules.alarm.AlarmRepository;
@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 @Transactional
 public class EnrollmentEventListener {
     private final AlarmRepository alarmRepository;
-    private final ConveyStrategyService conveyStrategyService;
+    private final StrategyFactory strategyFactory;
     private final NoticeFactory noticeFactory;
 
     @EventListener

@@ -15,6 +15,11 @@ public class ConsoleSendStrategy implements SendStrategy {
     public void sendNotice(MessageForm messageForm) {
         log.info("send message to : {}, Text : {}", messageForm.getTo(), messageForm.getText());
     }
+
+    @Override
+    public StrategyName getStrategyName() {
+        return StrategyName.CONSOLE;
+    }
 }
 
 

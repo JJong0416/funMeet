@@ -39,4 +39,9 @@ public class FunMeetSendStrategy implements SendStrategy {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public StrategyName getStrategyName() {
+        return StrategyName.EMAIL;
+    }
 }
