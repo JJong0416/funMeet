@@ -20,7 +20,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @MockMvcTest
-class HomeControllerTest extends AbstractContainerBaseTest{
+class HomeControllerTest{
+
+    private final static String CORRECT_NICKNAME = "jjong1234";
+    private final static String CORRECT_PASSWORD = "12345678";
+    private final static String CORRECT_EMAIL = "jjong@gmail.com";
+
+    private final static String FAIL_EMAIL = "wrong@gmail.com";
 
     @Autowired MockMvc mockMvc;
     @Autowired
@@ -32,9 +38,9 @@ class HomeControllerTest extends AbstractContainerBaseTest{
     @BeforeEach
     void beforeEach(){
         SignUpForm signUpForm = new SignUpForm();
-        signUpForm.setNickname("jjong1234");
-        signUpForm.setPassword("12345678");
-        signUpForm.setEmail("jjong@gmail.com");
+        signUpForm.setNickname(CORRECT_NICKNAME);
+        signUpForm.setPassword(CORRECT_PASSWORD);
+        signUpForm.setEmail(CORRECT_EMAIL);
 
         accountService.processSignUpAccount(signUpForm);
     }
@@ -49,32 +55,32 @@ class HomeControllerTest extends AbstractContainerBaseTest{
     @Test
     void login_with_email() throws Exception{
         mockMvc.perform(post("/login")
-                .param("username","jjong@gmail.com")
-                .param("password","12345678")
+                .param("username", CORRECT_EMAIL)
+                .param("password", CORRECT_PASSWORD)
                 .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/"))
-                .andExpect(authenticated().withUsername("jjong1234"));
+                .andExpect(authenticated().withUsername(CORRECT_NICKNAME));
     }
 
     @DisplayName("닉네임으로 로그인")
     @Test
     void login_with_nickname() throws Exception{
         mockMvc.perform(post("/login")
-                .param("username","jjong1234")
-                .param("password","12345678")
+                .param("username", CORRECT_NICKNAME)
+                .param("password", CORRECT_PASSWORD)
                 .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/"))
-                .andExpect(authenticated().withUsername("jjong1234"));
+                .andExpect(authenticated().withUsername(CORRECT_NICKNAME));
     }
 
     @DisplayName("로그인 실패")
     @Test
     void login_fail() throws Exception{
         mockMvc.perform(post("/login")
-                .param("username","jjong0416@gmail.com")
-                .param("password","12345678")
+                .param("username",FAIL_EMAIL)
+                .param("password",CORRECT_PASSWORD)
                 .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/login?error"));

@@ -1,9 +1,8 @@
 package com.funmeet.modules.notice;
 
 import com.funmeet.infra.config.AppProperties;
-import com.funmeet.infra.mail.FunMeetSendStrategy;
-import com.funmeet.infra.mail.StrategyFactory;
 import com.funmeet.infra.mail.SendStrategy;
+import com.funmeet.infra.mail.StrategyFactory;
 import com.funmeet.infra.mail.StrategyName;
 import com.funmeet.modules.account.Account;
 import com.funmeet.modules.club.Club;
@@ -50,7 +49,7 @@ public class NoticeFactory extends NoticeConstant {
         sendEmail(messageForm);
     }
 
-    public void sendEmail(MessageForm messageForm){
+    public void sendEmail(MessageForm messageForm) {
         SendStrategy sendStrategy = strategyFactory.findStrategy(StrategyName.EMAIL);
         sendStrategy.sendNotice(messageForm);
     }

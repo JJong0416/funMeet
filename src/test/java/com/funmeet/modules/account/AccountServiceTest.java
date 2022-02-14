@@ -8,47 +8,70 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.willDoNothing;
-import static org.mockito.BDDMockito.willReturn;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class AccountServiceTest {
 
-    @Mock AccountRepository accountRepository;
+    @InjectMocks
+    AccountService accountService;
 
-    @Mock AccountDetailsService accountDetailsService;
+    @Mock
+    AccountRepository accountRepository;
 
-    @Mock PasswordEncoder passwordEncoder;
+    @Mock
+    AccountDetailsService accountDetailsService;
 
-    @InjectMocks AccountService accountService;
+    @Mock
+    PasswordEncoder passwordEncoder;
+
 
     @Test
-    void 정상적인_사용자_데이터가_들어왔을때_성공적으로_회원_가입을_한다(){
-        //given
-        final SignUpForm signUpForm = new SignUpForm();
-        signUpForm.setNickname("testAccount");
-        signUpForm.setPassword("testPassword");
-        signUpForm.setEmail("test@test.com");
-        signUpForm.setShortBio("간략한 자기소개를 추가하세요");
+    void 정상적인_사용자_데이터가_들어왔을때_성공적으로_회원_가입을_한다() {
 
-        final Account account = Account.builder()
+        final SignUpForm signUpForm = SignUpForm.builder()
                 .nickname("testAccount")
-                .password("encodedPassword")
+                .password("testPassword")
                 .email("test@test.com")
                 .shortBio("간략한 자기소개를 추가하세요")
                 .build();
 
-        willReturn("encodedPassword").given(passwordEncoder).encode(any());
-        willReturn(account).given(accountRepository).save(any());
-        willDoNothing().given(accountDetailsService).loginByAccount(any());
+        final Account account = Account.builder()
+                .nickname("testAccount")
+                .password("testPassword")
+                .email("test@test.com")
+                .shortBio("간략한 자기소개를 추가하세요")
+                .build();
 
-        //when
-        accountService.processSignUpAccount(signUpForm);
-
-        //then
-
+        when(accountRepository.save(account)).thenReturn(account);
+        assertThat(accountService.saveSignUp(signUpForm)).isEqualTo(account);
     }
-
-
 }
+
+//given
+//        final SignUpForm signUpForm = SignUpForm.builder()
+//                .nickname("testAccount")
+//                .password("testPassword")
+//                .email("test@test.com")
+//                .shortBio("간략한 자기소개를 추가하세요")
+//                .build();
+//
+//        final Account account = Account.builder()
+//                .nickname("testAccount")
+//                .password("testPassword")
+//                .email("test@test.com")
+//                .shortBio("간략한 자기소개를 추가하세요")
+//                .build();
+//
+//
+//        when(accountRepository.save(any())).thenReturn(account);
+//        willDoNothing().given(accountDetailsService).loginByAccount(any());
+//
+//        //when
+//        Account test_account = accountService.saveSignUp(signUpForm);
+//
+//        //then
+//        assertThat(test_account).isEqualTo(account);

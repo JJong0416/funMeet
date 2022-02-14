@@ -1,6 +1,5 @@
 package com.funmeet.modules.account;
 
-import com.funmeet.infra.mail.SendStrategy;
 import com.funmeet.infra.mail.StrategyFactory;
 import com.funmeet.modules.notice.NoticeFactory;
 import com.funmeet.modules.notice.form.MessageForm;
@@ -13,7 +12,6 @@ public class AccountEmailService {
 
     private final AccountService accountService;
     private final NoticeFactory noticeFactory;
-    private final StrategyFactory strategyFactory;
 
     public void sendSignUpConfirmEmail(String email) {
         Account account = accountService.findAccountByEmail(email);

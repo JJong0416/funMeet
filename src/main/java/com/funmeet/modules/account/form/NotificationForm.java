@@ -2,8 +2,8 @@ package com.funmeet.modules.account.form;
 
 import lombok.*;
 
-@Getter @Setter @NoArgsConstructor
-@AllArgsConstructor @ToString
+@Getter @NoArgsConstructor
+@AllArgsConstructor @Setter
 public class NotificationForm {
     private boolean meetCreatedByEmail;
 

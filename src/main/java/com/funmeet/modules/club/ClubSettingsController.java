@@ -24,8 +24,6 @@ import javax.validation.Valid;
 public class ClubSettingsController {
 
     private final ClubService clubService;
-    private final HobbyService hobbyService;
-    private final CityService cityService;
 
     @GetMapping("/description")
     public String viewClubSetting(@CurrentAccount Account account, @PathVariable String path, Model model) {

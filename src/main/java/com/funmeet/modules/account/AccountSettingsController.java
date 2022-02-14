@@ -30,7 +30,6 @@ import javax.validation.Valid;
 public class AccountSettingsController {
 
     private final AccountService accountService;
-    private final HobbyService hobbyService;
     private final NicknameValidator nicknameValidator;
 
     @InitBinder("passwordForm")

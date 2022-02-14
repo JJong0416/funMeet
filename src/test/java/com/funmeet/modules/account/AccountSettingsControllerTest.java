@@ -35,18 +35,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @MockMvcTest
 public class AccountSettingsControllerTest {
 
-    @Autowired MockMvc mockMvc;
-    @Autowired AccountService accountService;
-    @Autowired AccountRepository accountRepository;
-    @Autowired CityRepository cityRepository;
-    @Autowired HobbyRepository hobbyRepository;
-    @Autowired ObjectMapper objectMapper;
-    @Autowired AccountDetailsService accountDetailsService;
-
-    // TODO: Layer에 맞는 테스트코드만 작성. Mockito 제대로 배우고 리팩토링 하기.
+    @Autowired
+    MockMvc mockMvc;
+    @Autowired
+    AccountService accountService;
+    @Autowired
+    AccountRepository accountRepository;
+    @Autowired
+    CityRepository cityRepository;
+    @Autowired
+    HobbyRepository hobbyRepository;
+    @Autowired
+    ObjectMapper objectMapper;
+    @Autowired
+    AccountDetailsService accountDetailsService;
 
     @BeforeEach
-    void initEach(){
+    void initEach() {
         accountRepository.deleteAll();
         cityRepository.deleteAll();
         final SignUpForm signUpForm = SignUpForm.builder()
@@ -61,14 +66,14 @@ public class AccountSettingsControllerTest {
     }
 
     @AfterEach
-    void afterEach(){
+    void afterEach() {
         accountRepository.deleteAll();
         cityRepository.deleteAll();
     }
 
     /* WithUserDetails은 지정한 사용자 이름으로 계정을 조회한 후,
-    *  UserDetails 객체를 조회하여 보안 컨텍스트를 로드하게 됩니다.*/
-    @WithUserDetails(value="account001",setupBefore = TestExecutionEvent.TEST_EXECUTION)
+     *  UserDetails 객체를 조회하여 보안 컨텍스트를 로드하게 됩니다.*/
+    @WithUserDetails(value = "account001", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @DisplayName("프로필 수정 - 초기 폼")
     @Test
     void 정상적인_계정의_프로필을_수정하는_폼을_연다() throws Exception {
@@ -86,7 +91,7 @@ public class AccountSettingsControllerTest {
                 .andExpect(model().attributeExists("profile"));
     }
 
-    @WithUserDetails(value="account001",setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @WithUserDetails(value = "account001", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @DisplayName("프로필 수정 - 짧은 소개 수정")
     @Test
     void 정상적인_계정의_프로필을_열어서_올바른_짧은소개와_프로필이미지를_바꾼다() throws Exception {
@@ -104,12 +109,12 @@ public class AccountSettingsControllerTest {
         resultActions
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/settings/profile"))
-                .andExpect(flash().attribute("message","성공"));
+                .andExpect(flash().attribute("message", "성공"));
         Account compareAccount = accountRepository.findByNickname("account001").orElseThrow();
         assertEquals(compareAccount.getShortBio(), testShortBio);
     }
 
-    @WithUserDetails(value="account001",setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @WithUserDetails(value = "account001", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @DisplayName("프로필 수정 - 짧은 소개 수정")
     @Test
     void 정상적인_계정의_프로필을_열어서_틀린_짧은소개와_프로필이미지를_바꾼다() throws Exception {
@@ -129,7 +134,7 @@ public class AccountSettingsControllerTest {
                 .andExpect(model().hasErrors());
     }
 
-    @WithUserDetails(value="account001",setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @WithUserDetails(value = "account001", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @DisplayName("프로필 수정 - 취미폼")
     @Test
     void 정상적인_계정의_취미를_추가하는_폼을_연다() throws Exception {
@@ -148,7 +153,7 @@ public class AccountSettingsControllerTest {
                 .andExpect(model().attributeExists("hobby"));
     }
 
-    @WithUserDetails(value="account001",setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @WithUserDetails(value = "account001", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @DisplayName("프로필 수정 - 취미추가")
     @Test
     void 정상적인_계정의_올바른_취미를_추가한다() throws Exception {
@@ -172,14 +177,14 @@ public class AccountSettingsControllerTest {
         assertTrue(account.getHobby().contains(hobby));
     }
 
-    @WithUserDetails(value="account001",setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @WithUserDetails(value = "account001", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @DisplayName("프로필 수정 - 취미삭제 성공")
     @Test
     void 정상적인_계정의_취미를_삭제한다() throws Exception {
         // given
         Account account = accountRepository.findByNickname("account001").orElseThrow();
         Hobby hobby = hobbyRepository.save(Hobby.builder().title("취미1").build());
-        accountService.addHobby(account,"취미1"); // 삭제를 위한 기존 데이터
+        accountService.addHobby(account, "취미1"); // 삭제를 위한 기존 데이터
 
         HobbyForm hobbyForm = new HobbyForm("취미1"); // 클라 -> 서버
 
@@ -197,7 +202,7 @@ public class AccountSettingsControllerTest {
         assertFalse(account.getHobby().contains(hobby));
     }
 
-    @WithUserDetails(value="account001",setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @WithUserDetails(value = "account001", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @DisplayName("프로필 수정 - 관심도시 폼")
     @Test
     void 정상적인_계정에_관심도시를_추가하는_폼을_연다() throws Exception {
@@ -217,7 +222,7 @@ public class AccountSettingsControllerTest {
                 .andExpect(model().attributeExists("city"));
     }
 
-    @WithUserDetails(value="account001",setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @WithUserDetails(value = "account001", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @DisplayName("프로필 수정 - 도시추가")
     @Test
     void 정상적인_계정의_올바른_관심도시를_추가한다() throws Exception {
@@ -238,7 +243,7 @@ public class AccountSettingsControllerTest {
         assertTrue(account.getCity().contains(city));
     }
 
-    @WithUserDetails(value="account001",setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @WithUserDetails(value = "account001", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @DisplayName("프로필 수정 - 도시삭제")
     @Test
     void 정상적인_계정의_올바른_관심도시를_삭제한다() throws Exception {
@@ -246,7 +251,7 @@ public class AccountSettingsControllerTest {
         final City city = cityRepository.findByKrCity("테스트시").orElseThrow();
         CityForm cityForm = new CityForm(city.toString());
         Account account = accountRepository.findByNickname("account001").orElseThrow();
-        accountService.addCity(account,city.getKrCity());
+        accountService.addCity(account, city.getKrCity());
 
         // when
         final ResultActions resultActions =
@@ -259,10 +264,10 @@ public class AccountSettingsControllerTest {
         assertFalse(account.getCity().contains(city));
     }
 
-    @WithUserDetails(value="account001",setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @WithUserDetails(value = "account001", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @DisplayName("프로필 수정 - 알림폼")
     @Test
-    void 정상적인_계정이_알림폼을_연다() throws Exception{
+    void 정상적인_계정이_알림폼을_연다() throws Exception {
         // given
         final ResultActions resultActions;
 
@@ -276,7 +281,7 @@ public class AccountSettingsControllerTest {
                 .andExpect(model().attributeExists("notification"));
     }
 
-    @WithUserDetails(value="account001",setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @WithUserDetails(value = "account001", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @DisplayName("프로필 수정 - 알림 수정")
     @Test
     void 정상적인_계정이_알림설정을_해서_성공한다() throws Exception {
@@ -288,11 +293,11 @@ public class AccountSettingsControllerTest {
         final ResultActions resultActions =
                 mockMvc.perform(post("/settings/notification")
                         .param("meetCreatedByEmail", String.valueOf(true))
-                        .param("meetCreatedByWeb",String.valueOf(true))
-                        .param("meetEnrollmentResultByEmail",String.valueOf(true))
-                        .param("meetEnrollmentResultByWeb",String.valueOf(true))
-                        .param("meetUpdateByEmail",String.valueOf(true))
-                        .param("meetUpdatedByWeb",String.valueOf(true))
+                        .param("meetCreatedByWeb", String.valueOf(true))
+                        .param("meetEnrollmentResultByEmail", String.valueOf(true))
+                        .param("meetEnrollmentResultByWeb", String.valueOf(true))
+                        .param("meetUpdateByEmail", String.valueOf(true))
+                        .param("meetUpdatedByWeb", String.valueOf(true))
                         .with(csrf()));
 
         // then
@@ -303,10 +308,10 @@ public class AccountSettingsControllerTest {
         assertTrue(account.isMeetCreatedByEmail());
     }
 
-    @WithUserDetails(value="account001",setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @WithUserDetails(value = "account001", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @DisplayName("프로필 수정 - 계정 폼")
     @Test
-    void 정상적인_계정이_프로필수정의_계정폼을_연다() throws Exception{
+    void 정상적인_계정이_프로필수정의_계정폼을_연다() throws Exception {
         // given
         final ResultActions resultActions;
 
@@ -320,7 +325,8 @@ public class AccountSettingsControllerTest {
                 .andExpect(model().attributeExists("nicknameForm"))
                 .andExpect(model().attributeExists("passwordForm"));
     }
-    @WithUserDetails(value="account001",setupBefore = TestExecutionEvent.TEST_EXECUTION)
+
+    @WithUserDetails(value = "account001", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @DisplayName("프로필 수정 - 닉네임 변경 성공")
     @Test
     void 정상적인_계정이_닉네임을_수정하고_성공적으로_바꾼다() throws Exception {
@@ -330,7 +336,7 @@ public class AccountSettingsControllerTest {
 
         // when
         final ResultActions resultActions = mockMvc.perform(post("/settings/account")
-                .param("nickname",newNickname)
+                .param("nickname", newNickname)
                 .with(csrf()));
 
         // then
@@ -340,13 +346,13 @@ public class AccountSettingsControllerTest {
                 .andExpect(flash().attributeExists("message"));
 
         assertNotNull(accountRepository.findByNickname("올바른닉네임"));
-        assertEquals(Optional.empty(),accountRepository.findByNickname("account001"));
+        assertEquals(Optional.empty(), accountRepository.findByNickname("account001"));
     }
 
-    @WithUserDetails(value="account001",setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @WithUserDetails(value = "account001", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @DisplayName("프로필 수정 - 계정 삭제")
     @Test
-    void 정상적인_계정이_계정을_삭제한다() throws Exception{
+    void 정상적인_계정이_계정을_삭제한다() throws Exception {
         // given
         final Account account = accountRepository.findByNickname("account001").orElseThrow();
         final ResultActions resultActions;
@@ -360,6 +366,6 @@ public class AccountSettingsControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/"));
 
-        assertEquals(Optional.empty(),accountRepository.findByNickname("account001"));
+        assertEquals(Optional.empty(), accountRepository.findByNickname("account001"));
     }
 }
