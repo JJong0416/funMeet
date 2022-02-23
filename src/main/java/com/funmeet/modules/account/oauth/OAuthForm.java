@@ -10,7 +10,7 @@ import javax.validation.constraints.Pattern;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter
+@Setter @Builder
 public class OAuthForm {
 
     @NotBlank

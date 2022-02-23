@@ -3,6 +3,7 @@ package com.funmeet.modules.club;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.funmeet.modules.account.Account;
+import com.funmeet.modules.aop.LogExecutionTime;
 import com.funmeet.modules.city.City;
 import com.funmeet.modules.city.CityService;
 import com.funmeet.modules.club.event.ClubCreatedEvent;

@@ -21,8 +21,13 @@ public class AccountFactory {
                 .build();
     }
 
-    public static Account createSignUpFormAccount(final SignUpForm signUpForm){
-        return AccountMapper.INSTANCE.signUpFormToEntity(signUpForm);
+    public static SignUpForm createSignupForm(){
+        return SignUpForm.builder()
+                .nickname(CORRECT_ACCOUNT_NICKNAME)
+                .email(CORRECT_ACCOUNT_EMAIL)
+                .password(CORRECT_ACCOUNT_PASSWORD)
+                .shortBio(CORRECT_ACCOUNT_SHORT_BIO)
+                .build();
     }
 
     public static Account createSuccessAccount(){

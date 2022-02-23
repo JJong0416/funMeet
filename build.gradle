@@ -36,6 +36,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation' // spring boot 3버젼부터 빠져서 추가 삽입.
     implementation 'org.modelmapper:modelmapper:2.3.6'
 
+    /* LogExecutionTime AOP */
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+
     /* NPM 세팅*/
     implementation 'com.github.node-gradle:gradle-node-plugin:3.1.0'
     implementation 'org.jetbrains:annotations:20.1.0'

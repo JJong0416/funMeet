@@ -1,6 +1,7 @@
 package com.funmeet.modules.club;
 
 import com.funmeet.modules.account.Account;
+import com.funmeet.modules.aop.LogExecutionTime;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,15 +27,15 @@ public interface ClubRepository extends JpaRepository<Club, Long>, ClubRepositor
     @EntityGraph(attributePaths = "managers")
     Club findClubWithManagersByClubPath(String path);
 
-    Club findClubOnlyByClubPath(String path);
+    @EntityGraph(attributePaths = {"hobby", "city"})
+    List<Club> findFirst9ByPublishedAndClosedOrderByPublishDateTimeDesc(boolean published, boolean closed);
 
     @EntityGraph(attributePaths = "managers")
     Club findClubWithHobbyAndCityById(Long id);
 
-    Club findClubWithCityByClubPath(String path);
+    Club findClubOnlyByClubPath(String path);
 
-    @EntityGraph(attributePaths = {"hobby", "city"})
-    List<Club> findFirst9ByPublishedAndClosedOrderByPublishDateTimeDesc(boolean published, boolean closed);
+    Club findClubWithCityByClubPath(String path);
 
     List<Club> findList5ByManagersContainingAndClosedOrderByPublishDateTimeDesc(Account account, boolean closed);
 

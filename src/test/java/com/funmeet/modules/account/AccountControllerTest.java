@@ -55,6 +55,7 @@ public class AccountControllerTest {
         assertThat(mvcResult).isNotNull();
     }
 
+
     @DisplayName("회원가입폼 입력 성공")
     @Test
     void 정상적인_회원가입폼을_입력해서_회원가입을_성공한다() throws Exception {
@@ -102,7 +103,7 @@ public class AccountControllerTest {
                 .param("nickname", signUpForm.getNickname())
                 .param("email", signUpForm.getEmail())
                 .param("password", signUpForm.getPassword())
-                .with(csrf())); // 기본적으로 Thymeleaf를 사용하면 CSRF 토큰을 넘겨주기 때문에, 안넣으면 403 Forbidden Error
+                .with(csrf()));
 
         // then
         resultActions
@@ -178,7 +179,6 @@ public class AccountControllerTest {
         resultActions = mockMvc.perform(get("/findAccount"));
 
         // then
-        resultActions
-                .andExpect(status().is3xxRedirection()); // Handler 처리
+        resultActions.andExpect(status().is3xxRedirection()); // Handler 처리
     }
 }

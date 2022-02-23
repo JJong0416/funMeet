@@ -3,10 +3,7 @@ package com.funmeet.modules.account;
 import com.funmeet.modules.account.form.NotificationForm;
 import com.funmeet.modules.city.City;
 import com.funmeet.modules.hobby.Hobby;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -16,7 +13,7 @@ import java.util.UUID;
 
 @Entity
 @Getter @EqualsAndHashCode(of = "id")
-@NoArgsConstructor
+@NoArgsConstructor @ToString
 public class Account {
 
     @Id

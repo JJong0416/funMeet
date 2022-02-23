@@ -15,7 +15,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AlarmController {
 
-    // TODO: 2022-01-04 다 고치기.
     private final AlarmService alarmService;
 
     @GetMapping("/alarm")

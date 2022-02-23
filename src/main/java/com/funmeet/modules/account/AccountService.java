@@ -42,13 +42,6 @@ public class AccountService {
         accountDetailsService.loginByAccount(newAccount);
     }
 
-    public Account saveSignUp(SignUpForm signUpForm) {
-        signUpForm.setPassword(passwordEncoder.encode(signUpForm.getPassword()));
-        Account account = AccountMapper.INSTANCE.signUpFormToEntity(signUpForm);
-        account.generateEmailCheckToken();
-        return accountRepository.save(account);
-    }
-
     public boolean isValidToken(String email, String token) {
         Account account = this.findAccountByEmail(email);
         return account.isValidToken(token);
@@ -165,5 +158,10 @@ public class AccountService {
         accountDetailsService.logout(request);
     }
 
-
+    private Account saveSignUp(SignUpForm signUpForm) {
+        signUpForm.setPassword(passwordEncoder.encode(signUpForm.getPassword()));
+        Account account = AccountMapper.INSTANCE.signUpFormToEntity(signUpForm);
+        account.generateEmailCheckToken();
+        return accountRepository.save(account);
+    }
 }
