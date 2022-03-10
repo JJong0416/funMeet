@@ -1,21 +1,14 @@
 package com.funmeet.modules.account;
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.funmeet.infra.MockMvcTest;
-import com.funmeet.modules.account.form.SignUpForm;
 import com.funmeet.modules.city.City;
 import com.funmeet.modules.city.CityForm;
-import com.funmeet.modules.city.CityRepository;
 import com.funmeet.modules.hobby.Hobby;
 import com.funmeet.modules.hobby.HobbyForm;
-import com.funmeet.modules.hobby.HobbyRepository;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.TestExecutionEvent;
@@ -24,69 +17,43 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@ExtendWith(MockitoExtension.class)
 @MockMvcTest
 public class AccountSettingsControllerTest {
 
     @Autowired
     MockMvc mockMvc;
-    @Autowired
-    AccountService accountService;
+
     @Autowired
     AccountRepository accountRepository;
-    @Autowired
-    CityRepository cityRepository;
-    @Autowired
-    HobbyRepository hobbyRepository;
+
     @Autowired
     ObjectMapper objectMapper;
-    @Autowired
-    AccountDetailsService accountDetailsService;
 
     @BeforeEach
     void initEach() {
-        accountRepository.deleteAll();
-        cityRepository.deleteAll();
-        final SignUpForm signUpForm = SignUpForm.builder()
-                .nickname("account001")
-                .password("password001")
-                .email("test@test.com")
-                .build();
-        accountService.processSignUpAccount(signUpForm);
-
-        final City testCity = City.builder().enCity("test").krCity("테스트시").build();
-        cityRepository.save(testCity);
-    }
-
-    @AfterEach
-    void afterEach() {
-        accountRepository.deleteAll();
-        cityRepository.deleteAll();
+        final Account account = AccountFactory.createSuccessAccount();
+        accountRepository.save(account);
     }
 
     /* WithUserDetails은 지정한 사용자 이름으로 계정을 조회한 후,
      *  UserDetails 객체를 조회하여 보안 컨텍스트를 로드하게 됩니다.*/
-    @WithUserDetails(value = "account001", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @DisplayName("프로필 수정 - 초기 폼")
+    @WithUserDetails(value = "account001", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
     void 정상적인_계정의_프로필을_수정하는_폼을_연다() throws Exception {
-        // given
-        final ResultActions resultActions;
 
-        // when
-        resultActions = mockMvc.perform(get("/settings/profile"));
+        final ResultActions resultActions = mockMvc.perform(get("/settings/profile"));
 
-        // then
-        assertNotNull(resultActions);
-        resultActions
-                .andExpect(status().isOk())
+        resultActions.andExpect(status().isOk())
                 .andExpect(model().attributeExists("account"))
                 .andExpect(model().attributeExists("profile"));
     }
@@ -99,19 +66,14 @@ public class AccountSettingsControllerTest {
         final String testShortBio = "간단한 자기소개를 해보겠습니다";
 
         // when
-        final ResultActions resultActions =
-                mockMvc.perform(post("/settings/profile")
-                        .param("shortBio", testShortBio)
-                        .with(csrf()));
+        final ResultActions resultActions = mockMvc.perform(post("/settings/profile")
+                .param("shortBio", testShortBio)
+                .with(csrf()));
 
         // then
-        assertNotNull(resultActions);
-        resultActions
-                .andExpect(status().is3xxRedirection())
+        resultActions.andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/settings/profile"))
                 .andExpect(flash().attribute("message", "성공"));
-        Account compareAccount = accountRepository.findByNickname("account001").orElseThrow();
-        assertEquals(compareAccount.getShortBio(), testShortBio);
     }
 
     @WithUserDetails(value = "account001", setupBefore = TestExecutionEvent.TEST_EXECUTION)
@@ -160,21 +122,18 @@ public class AccountSettingsControllerTest {
         // given
         Account account = accountRepository.findByNickname("account001").orElseThrow();
         HobbyForm hobbyForm = new HobbyForm("취미1");
+        Hobby hobby = Hobby.builder().title("취미1").build();
 
         // when
-        final ResultActions resultActions =
-                mockMvc.perform(post("/settings/hobby/add")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(hobbyForm))
-                        .with(csrf()));
-
-        // then
-        resultActions
+        final ResultActions resultActions = mockMvc.perform(post("/settings/hobby/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(hobbyForm))
+                .with(csrf()))
                 .andExpect(status().isOk());
 
-        Hobby hobby = hobbyRepository.findByTitle("취미1").orElseThrow();
-        assertNotNull(hobby);
-        assertTrue(account.getHobby().contains(hobby));
+        // then
+        assertThat(account.getHobby().size()).isEqualTo(1);
+        assertThat(account.getHobby().stream().map(Hobby::getTitle).collect(Collectors.toList()).get(0)).isEqualTo("취미1");
     }
 
     @WithUserDetails(value = "account001", setupBefore = TestExecutionEvent.TEST_EXECUTION)
@@ -183,23 +142,19 @@ public class AccountSettingsControllerTest {
     void 정상적인_계정의_취미를_삭제한다() throws Exception {
         // given
         Account account = accountRepository.findByNickname("account001").orElseThrow();
-        Hobby hobby = hobbyRepository.save(Hobby.builder().title("취미1").build());
-        accountService.addHobby(account, "취미1"); // 삭제를 위한 기존 데이터
-
-        HobbyForm hobbyForm = new HobbyForm("취미1"); // 클라 -> 서버
+        HobbyForm hobbyForm = new HobbyForm("취미1");
+        Hobby hobby = Hobby.builder().title("취미1").build();
+        account.getHobby().stream().map(Hobby::getTitle).collect(Collectors.toList());
 
         // when
-        assertTrue(account.getHobby().contains(hobby));
+        final ResultActions resultActions = mockMvc.perform(post("/settings/hobby/remove")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(hobbyForm))
+                .with(csrf()));
 
-        final ResultActions resultActions =
-                mockMvc.perform(post("/settings/hobby/remove")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(hobbyForm))
-                        .with(csrf()));
         // then
-        resultActions
-                .andExpect(status().isOk());
-        assertFalse(account.getHobby().contains(hobby));
+        resultActions.andExpect(status().isOk());
+        assertThat(account.getHobby()).isEmpty();
     }
 
     @WithUserDetails(value = "account001", setupBefore = TestExecutionEvent.TEST_EXECUTION)
@@ -207,13 +162,8 @@ public class AccountSettingsControllerTest {
     @Test
     void 정상적인_계정에_관심도시를_추가하는_폼을_연다() throws Exception {
 
-        // given
-        final ResultActions resultActions;
+        final ResultActions resultActions = mockMvc.perform(get("/settings/location"));
 
-        // when
-        resultActions = mockMvc.perform(get("/settings/location"));
-
-        // then
         resultActions
                 .andExpect(status().isOk())
                 .andExpect(view().name("settings/location"))
@@ -226,21 +176,22 @@ public class AccountSettingsControllerTest {
     @DisplayName("프로필 수정 - 도시추가")
     @Test
     void 정상적인_계정의_올바른_관심도시를_추가한다() throws Exception {
+        // TODO: 2022-03-10
         // given
-        final City city = cityRepository.findByKrCity("테스트시").orElseThrow();
-        final CityForm cityForm = new CityForm(city.toString());
+        final Account account = accountRepository.findByNickname("account001").orElseThrow();
+        final City city = City.builder().enCity("Seoul").krCity("서울전체").build();
+        final CityForm cityForm = CityForm.builder().cityName("Seoul(서울전체)").build();
 
         // when
-        final ResultActions resultActions =
-                mockMvc.perform(post("/settings/location/add")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(cityForm))
-                        .with(csrf()));
+        final ResultActions resultActions = mockMvc.perform(post("/settings/location/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(cityForm))
+                .with(csrf()));
 
         // then
         resultActions.andExpect(status().isOk());
-        Account account = accountRepository.findByNickname("account001").orElseThrow();
-        assertTrue(account.getCity().contains(city));
+        assertThat(account.getCity().size()).isEqualTo(1);
+        assertThat(account.getCity().stream().map(City::getKrCity).collect(Collectors.toList()).get(0)).isEqualTo("서울전체");
     }
 
     @WithUserDetails(value = "account001", setupBefore = TestExecutionEvent.TEST_EXECUTION)
@@ -248,10 +199,10 @@ public class AccountSettingsControllerTest {
     @Test
     void 정상적인_계정의_올바른_관심도시를_삭제한다() throws Exception {
         // given
-        final City city = cityRepository.findByKrCity("테스트시").orElseThrow();
-        CityForm cityForm = new CityForm(city.toString());
-        Account account = accountRepository.findByNickname("account001").orElseThrow();
-        accountService.addCity(account, city.getKrCity());
+        final Account account = accountRepository.findByNickname("account001").orElseThrow();
+        final City city = City.builder().krCity("테스트시").enCity("testCity").build();
+        final CityForm cityForm = CityForm.builder().cityName("testCity(테스트시)").build();
+
 
         // when
         final ResultActions resultActions =
@@ -261,22 +212,16 @@ public class AccountSettingsControllerTest {
                         .with(csrf()));
 
         // then
-        assertFalse(account.getCity().contains(city));
+        assertThat(account.getCity().size()).isEqualTo(0);
     }
 
     @WithUserDetails(value = "account001", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @DisplayName("프로필 수정 - 알림폼")
     @Test
     void 정상적인_계정이_알림폼을_연다() throws Exception {
-        // given
-        final ResultActions resultActions;
+        final ResultActions resultActions = mockMvc.perform(get("/settings/notification"));
 
-        // when
-        resultActions = mockMvc.perform(get("/settings/notification"));
-
-        // then
-        resultActions
-                .andExpect(status().isOk())
+        resultActions.andExpect(status().isOk())
                 .andExpect(view().name("settings/notification"))
                 .andExpect(model().attributeExists("notification"));
     }
@@ -290,15 +235,14 @@ public class AccountSettingsControllerTest {
 
         // when
         assertFalse(account.isMeetCreatedByEmail());
-        final ResultActions resultActions =
-                mockMvc.perform(post("/settings/notification")
-                        .param("meetCreatedByEmail", String.valueOf(true))
-                        .param("meetCreatedByWeb", String.valueOf(true))
-                        .param("meetEnrollmentResultByEmail", String.valueOf(true))
-                        .param("meetEnrollmentResultByWeb", String.valueOf(true))
-                        .param("meetUpdateByEmail", String.valueOf(true))
-                        .param("meetUpdatedByWeb", String.valueOf(true))
-                        .with(csrf()));
+        final ResultActions resultActions = mockMvc.perform(post("/settings/notification")
+                .param("meetCreatedByEmail", String.valueOf(true))
+                .param("meetCreatedByWeb", String.valueOf(true))
+                .param("meetEnrollmentResultByEmail", String.valueOf(true))
+                .param("meetEnrollmentResultByWeb", String.valueOf(true))
+                .param("meetUpdateByEmail", String.valueOf(true))
+                .param("meetUpdatedByWeb", String.valueOf(true))
+                .with(csrf()));
 
         // then
         resultActions
@@ -312,15 +256,9 @@ public class AccountSettingsControllerTest {
     @DisplayName("프로필 수정 - 계정 폼")
     @Test
     void 정상적인_계정이_프로필수정의_계정폼을_연다() throws Exception {
-        // given
-        final ResultActions resultActions;
+        final ResultActions resultActions = mockMvc.perform(get("/settings/account"));
 
-        // when
-        resultActions = mockMvc.perform(get("/settings/account"));
-
-        // then
-        resultActions
-                .andExpect(status().isOk())
+        resultActions.andExpect(status().isOk())
                 .andExpect(view().name("settings/account"))
                 .andExpect(model().attributeExists("nicknameForm"))
                 .andExpect(model().attributeExists("passwordForm"));
@@ -340,13 +278,12 @@ public class AccountSettingsControllerTest {
                 .with(csrf()));
 
         // then
-        resultActions
-                .andExpect(status().is3xxRedirection())
+        resultActions.andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/settings/account"))
                 .andExpect(flash().attributeExists("message"));
 
-        assertNotNull(accountRepository.findByNickname("올바른닉네임"));
-        assertEquals(Optional.empty(), accountRepository.findByNickname("account001"));
+        Account changeNicknameAccount = accountRepository.findByNickname(newNickname).orElseThrow();
+        assertThat(changeNicknameAccount.getNickname()).isEqualTo(newNickname);
     }
 
     @WithUserDetails(value = "account001", setupBefore = TestExecutionEvent.TEST_EXECUTION)
@@ -355,10 +292,9 @@ public class AccountSettingsControllerTest {
     void 정상적인_계정이_계정을_삭제한다() throws Exception {
         // given
         final Account account = accountRepository.findByNickname("account001").orElseThrow();
-        final ResultActions resultActions;
 
         // when
-        resultActions = mockMvc.perform(post("/settings/delete")
+        final ResultActions resultActions = mockMvc.perform(post("/settings/delete")
                 .with(csrf()));
 
         // then

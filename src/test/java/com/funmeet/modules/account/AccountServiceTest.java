@@ -2,7 +2,6 @@ package com.funmeet.modules.account;
 
 import com.funmeet.modules.account.form.SignUpForm;
 import com.funmeet.modules.account.oauth.OAuthForm;
-import com.funmeet.modules.aop.LogExecutionTime;
 import com.funmeet.modules.hobby.Hobby;
 import com.funmeet.modules.hobby.HobbyService;
 import org.junit.jupiter.api.DisplayName;
@@ -13,7 +12,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
