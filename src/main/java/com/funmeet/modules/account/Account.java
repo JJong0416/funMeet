@@ -69,13 +69,6 @@ public class Account {
 
     private boolean meetUpdatedByWeb = true;
 
-    @Builder
-    public Account(String nickname, String password, String email, String shortBio) {
-        this.nickname = nickname;
-        this.password = password;
-        this.email = email;
-        this.shortBio = shortBio;
-    }
 
     public void generateEmailCheckToken() {
         this.emailCheckToken = UUID.randomUUID().toString();
@@ -115,5 +108,21 @@ public class Account {
         this.meetEnrollmentResultByWeb = notificationForm.isMeetEnrollmentResultByWeb();
         this.meetUpdateByEmail = notificationForm.isMeetUpdateByEmail();
         this.meetUpdatedByWeb = notificationForm.isMeetUpdatedByWeb();
+    }
+
+    @Builder
+    public Account(String nickname, String password, String email, String shortBio) {
+        this.nickname = nickname;
+        this.password = password;
+        this.email = email;
+        this.shortBio = shortBio;
+    }
+
+    public Account(Long id, String nickname, String password, String email, String shortBio) {
+        this.id = id;
+        this.nickname = nickname;
+        this.password = password;
+        this.email = email;
+        this.shortBio = shortBio;
     }
 }

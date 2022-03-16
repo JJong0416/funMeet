@@ -3,7 +3,6 @@ package com.funmeet.modules.club;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.funmeet.modules.account.Account;
-import com.funmeet.modules.aop.LogExecutionTime;
 import com.funmeet.modules.city.City;
 import com.funmeet.modules.city.CityService;
 import com.funmeet.modules.club.event.ClubCreatedEvent;
@@ -26,7 +25,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
+@Transactional // TODO: 2022-03-15 readonly.. 귀찬탕
 @RequiredArgsConstructor
 public class ClubService {
 
@@ -42,10 +41,6 @@ public class ClubService {
         Club club = clubRepository.save(ClubMapper.INSTANCE.clubFormToEntity(clubForm));
         club.addManager(account);
         return club;
-    }
-
-    public ClubDescriptionForm mappingClubDescription(Club club) {
-        return ClubMapper.INSTANCE.ClubToDescriptionForm(club);
     }
 
     public Club getClub(String path) {
@@ -64,17 +59,13 @@ public class ClubService {
         return ClubMapper.INSTANCE.ClubToDescriptionForm(club);
     }
 
-    public Club getClubOnlyByPath(String path) {
+    public Club getClubOnlyByPath(String path) { // Solve
         return clubRepository.findByClubPath(path);
     }
 
     public void updateClubDescription(Club club, ClubDescriptionForm clubDescriptionForm) {
         club.updateClubIntroduce(clubDescriptionForm.getShortDescription(), clubDescriptionForm.getFullDescription());
         applicationEventPublisher.publishEvent(new ClubUpdateEvent(club, "모임 소개를 수정했습니다."));
-    }
-
-    public Hobby findHobbyByTitle(String title) {
-        return hobbyRepository.findByTitle(title).orElseThrow();
     }
 
     public List<String> getAllHobbyTitles() {
@@ -148,18 +139,6 @@ public class ClubService {
         return newTitle.length() <= 30;
     }
 
-    private void checkIfManager(Account account, Club club) {
-        if (!club.isManagerOfBy(account)) {
-            throw new AccessDeniedException("해당 기능을 사용할 수 없습니다.");
-        }
-    }
-
-    private void checkIfExistingClub(String path, Club club) {
-        if (!clubRepository.existsByClubPath(path)) {
-            throw new IllegalArgumentException(path + "에 해당하는 모임이 존재하지 않습니다.");
-        }
-    }
-
     public Club updateClubImage(Account account, String path, String image) {
         Club club = this.getClubUpdate(account, path);
         club.updateBannerImage(image);
@@ -180,10 +159,6 @@ public class ClubService {
         club.updateClubTitle(newTitle);
     }
 
-    public void disableClubBanner(Club club) {
-        club.updateClubBanner(false);
-    }
-
     public void addHobby(Account account, String path, String hobbyTitle) {
         Club club = this.getClubUpdateHobby(account, path);
         Hobby hobby = hobbyService.findOrCreateHobby(hobbyTitle);
@@ -192,7 +167,7 @@ public class ClubService {
 
     public void removeHobby(Account account, String path, String hobbyTitle) {
         Club club = this.getClubUpdateHobby(account, path);
-        Hobby hobby = this.findHobbyByTitle(hobbyTitle);
+        Hobby hobby = hobbyRepository.findByTitle(hobbyTitle).orElseThrow();
         club.removeHobby(hobby);
     }
 
@@ -233,5 +208,17 @@ public class ClubService {
         club.close();
         applicationEventPublisher.publishEvent(new ClubUpdateEvent(club, "모임을 종료합니다."));
         clubRepository.delete(club);
+    }
+
+    private void checkIfManager(Account account, Club club) {
+        if (!club.isManagerOfBy(account)) {
+            throw new AccessDeniedException("해당 기능을 사용할 수 없습니다.");
+        }
+    }
+
+    private void checkIfExistingClub(String path, Club club) {
+        if (!clubRepository.existsByClubPath(path)) {
+            throw new IllegalArgumentException(path + "에 해당하는 모임이 존재하지 않습니다.");
+        }
     }
 }

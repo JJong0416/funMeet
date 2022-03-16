@@ -27,5 +27,4 @@ public class ClubForm {
 
     @NotBlank
     private String fullDescription;
-
 }
