@@ -60,12 +60,6 @@ public class ClubServiceTest {
     CityRepository cityRepository;
 
     @Test
-    @DisplayName("계정을 가지고 올바른 클럽 생성 폼을 만들고 생성한다 - 성공")
-    void 올바른_클럽_생성_폼을_가지고_모임을_생성한다() {
-
-    }
-
-    @Test
     @DisplayName("getClubTestCode")
     void getClubTestCode() throws Exception {
         final Club club = ClubFactory.createCorrectClub();
@@ -258,7 +252,7 @@ public class ClubServiceTest {
 
     @Test
     @DisplayName("addHobby")
-    void addHobby(){
+    void addHobby() {
         final String hobbyTitle = "취미1";
         final Account account = AccountFactory.createSuccessAccount();
         final Club club = ClubFactory.createMakeManagerClub(account);
@@ -267,7 +261,7 @@ public class ClubServiceTest {
         Mockito.when(clubRepository.existsByClubPath(any())).thenReturn(true);
         Mockito.when(hobbyService.findOrCreateHobby(any())).thenReturn(hobby);
 
-        clubService.addHobby(account,club.getClubPath(), hobbyTitle);
+        clubService.addHobby(account, club.getClubPath(), hobbyTitle);
 
         assertThat(club.getHobby()).contains(hobby);
         assertThat(club.getHobby().size()).isEqualTo(1);
@@ -275,7 +269,7 @@ public class ClubServiceTest {
 
     @Test
     @DisplayName("removeHobby")
-    void removeHobby(){
+    void removeHobby() {
         final String hobbyTitle = "취미1";
         final Account account = AccountFactory.createSuccessAccount();
         final Club club = ClubFactory.createMakeManagerClub(account);
@@ -285,7 +279,7 @@ public class ClubServiceTest {
         Mockito.when(hobbyRepository.findByTitle(any())).thenReturn(Optional.of(hobby));
 
         club.addHobby(hobby);
-        clubService.removeHobby(account,club.getClubPath(), hobbyTitle);
+        clubService.removeHobby(account, club.getClubPath(), hobbyTitle);
 
         assertThat(club.getHobby()).doesNotContain(hobby);
         assertThat(club.getHobby().size()).isEqualTo(0);
@@ -293,7 +287,7 @@ public class ClubServiceTest {
 
     @Test
     @DisplayName("addCity")
-    void addCity(){
+    void addCity() {
         final String enCityTitle = "testCity";
         final String krCityTitle = "테스트시";
         final Account account = AccountFactory.createSuccessAccount();
@@ -303,7 +297,7 @@ public class ClubServiceTest {
         Mockito.when(clubRepository.findClubWithCityByClubPath(any())).thenReturn(club);
         Mockito.when(cityService.getCityByKrCity(any())).thenReturn(city);
 
-        clubService.addCity(account,club.getClubPath(), city.getKrCity());
+        clubService.addCity(account, club.getClubPath(), city.getKrCity());
 
         assertThat(club.getCity()).contains(city);
         assertThat(club.getCity().size()).isEqualTo(1);
@@ -311,7 +305,7 @@ public class ClubServiceTest {
 
     @Test
     @DisplayName("removeCity")
-    void removeCity(){
+    void removeCity() {
         final String enCityTitle = "testCity";
         final String krCityTitle = "테스트시";
         final Account account = AccountFactory.createSuccessAccount();
@@ -322,7 +316,7 @@ public class ClubServiceTest {
         Mockito.when(cityService.getCityByKrCity(any())).thenReturn(city);
 
         club.addCity(city);
-        clubService.removeCity(account,club.getClubPath(), krCityTitle);
+        clubService.removeCity(account, club.getClubPath(), krCityTitle);
 
         assertThat(club.getCity()).doesNotContain(city);
         assertThat(club.getCity().size()).isEqualTo(0);
@@ -330,7 +324,7 @@ public class ClubServiceTest {
 
     @Test
     @DisplayName("getClubCity")
-    void getClubCity(){
+    void getClubCity() {
         final String enCityTitle = "testCity";
         final String krCityTitle = "테스트시";
         final Account account = AccountFactory.createSuccessAccount();
@@ -349,7 +343,7 @@ public class ClubServiceTest {
 
     @Test
     @DisplayName("getClubHobby")
-    void getClubHobby(){
+    void getClubHobby() {
         final String hobbyTitle = "취미1";
         final Account account = AccountFactory.createSuccessAccount();
         final Club club = ClubFactory.createMakeManagerClub(account);

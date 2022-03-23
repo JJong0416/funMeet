@@ -176,7 +176,6 @@ public class AccountSettingsControllerTest {
     @DisplayName("프로필 수정 - 도시추가")
     @Test
     void 정상적인_계정의_올바른_관심도시를_추가한다() throws Exception {
-        // TODO: 2022-03-10
         // given
         final Account account = accountRepository.findByNickname("account001").orElseThrow();
         final City city = City.builder().enCity("Seoul").krCity("서울전체").build();
@@ -202,7 +201,6 @@ public class AccountSettingsControllerTest {
         final Account account = accountRepository.findByNickname("account001").orElseThrow();
         final City city = City.builder().krCity("테스트시").enCity("testCity").build();
         final CityForm cityForm = CityForm.builder().cityName("testCity(테스트시)").build();
-
 
         // when
         final ResultActions resultActions =

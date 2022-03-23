@@ -5,13 +5,10 @@ import com.funmeet.modules.account.Account;
 import com.funmeet.modules.account.AccountFactory;
 import com.funmeet.modules.account.AccountRepository;
 import com.funmeet.modules.club.form.ClubForm;
-import com.funmeet.modules.mapper.ClubMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.test.context.support.TestExecutionEvent;
@@ -21,8 +18,6 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import static com.funmeet.modules.club.ClubFactory.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -34,7 +29,7 @@ public class ClubControllerTest {
 
     @Autowired
     MockMvc mockMvc;
-    @Autowired // WithUserDetails를 사용하려면 어쩔 수 없이 사용해야함
+    @Autowired // WithUserDetails를 사용하려면 어쩔 수 없이 사용해야함.
     AccountRepository accountRepository;
     @Autowired
     ClubRepository clubRepository; // form을 통해 MockMVC 테스트 Bean
@@ -78,7 +73,7 @@ public class ClubControllerTest {
 
         // then
         resultActions.andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/club/"+CORRECT_CLUB_PATH));
+                .andExpect(redirectedUrl("/club/" + CORRECT_CLUB_PATH));
 
         Club findClub = clubRepository.findByClubPath(CORRECT_CLUB_PATH);
         assertThat(findClub.getTitle()).isEqualTo(CORRECT_CLUB_TITLE);
@@ -86,7 +81,7 @@ public class ClubControllerTest {
     }
 
     @Test
-    @WithUserDetails(value="account001",setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @WithUserDetails(value = "account001", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @DisplayName("모임 생성 - 실패")
     void 모임을_만들기위해_폼에_틀린_양식을_작성한후_모임을_생성후_실패한다() throws Exception {
         // given
@@ -110,7 +105,7 @@ public class ClubControllerTest {
     }
 
     @Test
-    @WithUserDetails(value="account001",setupBefore = TestExecutionEvent.TEST_EXECUTION) // Account002
+    @WithUserDetails(value = "account001", setupBefore = TestExecutionEvent.TEST_EXECUTION) // Account002
     @DisplayName("모임 조회")
     void 모임을_만든후_모임을_조회를_할수있다() throws Exception {
         // given
@@ -129,30 +124,4 @@ public class ClubControllerTest {
                 .andExpect(model().attributeExists("account"))
                 .andExpect(model().attributeExists("club"));
     }
-
-    private void message(Club clubForm){
-        System.out.println("hello!!" +clubForm.getClubPath());
-    }
-
-
-//    @Test
-//    @WithUserDetails(value="account001",setupBefore = TestExecutionEvent.TEST_EXECUTION)
-//    @DisplayName("모임 조회")
-//    void 모임의_회원이_아닌_다른회원이_모임에_가입한다() throws Exception {
-//
-//    }
-//
-//    @Test
-//    @WithUserDetails(value="account001",setupBefore = TestExecutionEvent.TEST_EXECUTION)
-//    @DisplayName("모임 조회")
-//    void 모임의_회원이_악의적으로_모임에_추가가입하면_실패한다() throws Exception {
-//
-//    }
-//
-//    @Test
-//    @WithUserDetails(value="account001",setupBefore = TestExecutionEvent.TEST_EXECUTION)
-//    @DisplayName("모임 조회")
-//    void 모임의_회원이_모임을_탈퇴한다() throws Exception {
-//
-//    }
 }

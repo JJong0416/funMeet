@@ -3,8 +3,10 @@ package com.funmeet.modules.club;
 import com.funmeet.modules.account.Account;
 import com.funmeet.modules.club.form.ClubDescriptionForm;
 import com.funmeet.modules.club.form.ClubForm;
+import com.funmeet.modules.hobby.Hobby;
 
 import java.util.HashSet;
+import java.util.Set;
 
 public class ClubFactory {
 
@@ -40,6 +42,8 @@ public class ClubFactory {
         Club builderClub = Club.builder()
                 .title(CORRECT_CLUB_TITLE)
                 .clubPath(CORRECT_CLUB_PATH)
+                .closed(false)
+                .published(false)
                 .managers(new HashSet<>())
                 .members(new HashSet<>())
                 .hobby(new HashSet<>())
@@ -60,7 +64,7 @@ public class ClubFactory {
         return clubForm;
     }
 
-    public static ClubDescriptionForm createCorrectClubDescriptionForm(){
+    public static ClubDescriptionForm createCorrectClubDescriptionForm() {
         ClubDescriptionForm clubDescriptionForm = new ClubDescriptionForm();
         clubDescriptionForm.setShortDescription(CORRECT_UPDATE_CLUB_SHORT_DESCRIPTION);
         clubDescriptionForm.setFullDescription(CORRECT_UPDATE_CLUB_FULL_DESCRIPTION);

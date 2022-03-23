@@ -4,10 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.funmeet.modules.account.Account;
 import com.funmeet.modules.account.security.CurrentAccount;
 import com.funmeet.modules.city.CityForm;
-import com.funmeet.modules.city.CityService;
 import com.funmeet.modules.club.form.ClubDescriptionForm;
 import com.funmeet.modules.hobby.HobbyForm;
-import com.funmeet.modules.hobby.HobbyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -126,7 +124,7 @@ public class ClubSettingsController {
     @ResponseBody
     public ResponseEntity addCity(@CurrentAccount Account account, @PathVariable String path,
                                   @RequestBody CityForm cityForm) {
-
+        
         clubService.addCity(account, path, cityForm.getKrCity());
         return ResponseEntity.ok().build();
     }

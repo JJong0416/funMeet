@@ -157,7 +157,7 @@ public class Club {
         this.fullDescription = fullDescription;
     }
 
-    @Builder
+
     public Club(Account account, String title, String clubPath,
                 String shortDescription, String fullDescription) {
         this.title = title;

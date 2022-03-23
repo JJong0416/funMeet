@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional // TODO: 2022-03-15 readonly.. 귀찬탕
+@Transactional
 @RequiredArgsConstructor
 public class ClubService {
 

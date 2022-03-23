@@ -32,6 +32,15 @@ public class AccountFactory {
                 .build();
     }
 
+    public static Account createGuestAccount() {
+        return Account.builder()
+                .nickname(CORRECT_GUEST_NICKNAME)
+                .email(CORRECT_GUEST_EMAIL)
+                .password(CORRECT_ACCOUNT_PASSWORD)
+                .shortBio(CORRECT_ACCOUNT_SHORT_BIO)
+                .build();
+    }
+
     public static Account createHaveIdAdminAccount(Long id) {
         return new Account(id,
                 CORRECT_ACCOUNT_NICKNAME,
@@ -42,7 +51,7 @@ public class AccountFactory {
 
     public static Account createHaveIdGuestAccount(Long id) {
         return new Account(id,
-                CORRECT_ACCOUNT_NICKNAME,
+                CORRECT_GUEST_NICKNAME,
                 CORRECT_ACCOUNT_PASSWORD,
                 CORRECT_GUEST_EMAIL,
                 CORRECT_ACCOUNT_SHORT_BIO);

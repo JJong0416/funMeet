@@ -25,6 +25,5 @@ public interface ClubMapper {
                 .fullDescription(clubForm.getFullDescription())
                 .build();
     }
-
     ClubDescriptionForm ClubToDescriptionForm(Club club);
 }
