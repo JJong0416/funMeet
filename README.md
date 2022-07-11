@@ -18,7 +18,7 @@
 
 ## 개발 환경
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/9698b174-3983-4ff2-b054-993881f61b3c/Untitled.png)
+![개발환경](https://user-images.githubusercontent.com/73544708/178172341-d677629e-753c-44e1-8fb4-fc358ba782c6.PNG)
 
 ## 프로젝트 구조
 
@@ -41,7 +41,7 @@
 
 ### 1. **Mockito를 이용한 테스트코드 리팩토링(기한: 22.02.15 ~ 22.03.15)**
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/a5a7f2fa-3cff-4d91-b3e3-2396065b03d0/Untitled.png)
+![리팩토링1](https://user-images.githubusercontent.com/73544708/178172212-d1c0e023-a3cf-4fe2-b5f9-75c251f2508f.PNG)
 
 - Mockito를 사용함으로써, DB를 사용할 필요없이, 스터빙(Stubbing) 된 데이터를 가져오
 기 때문에 **테스트코드의 시간을 줄여**주는 것 뿐만 아니라 **리소스를 절약**할 수 있다.
@@ -50,7 +50,7 @@
 
 ### 2. **이메일 서비스 전략패턴으로 [리팩토링](https://www.notion.so/7a09e87017364bc78c6b9b0a128917a0)(기한 : 22.02.08 ~ 22.02.10)**
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/239873af-d782-4955-a156-f8b210e7a57f/Untitled.png)
+![리팩토링2](https://user-images.githubusercontent.com/73544708/178172231-3f2bcd11-bfc9-421e-a105-981b34f4880e.PNG)
 
 - 전략패턴의 경우, **클라이언트가 전략을 생성해 전략을 실행할 컨텍스트에 주입**해주기 때
 문에 의존성을 반대로 가지게 할 수 있다.
@@ -59,7 +59,7 @@
 
 ### 3. **Spring Controller-Service 책임 다시 나누기(기한: 22.01.02 ~ 22.01.06)**
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/a64b74df-59dc-434b-95eb-3f278ebdfea9/Untitled.png)
+![리팩토링3](https://user-images.githubusercontent.com/73544708/178172237-0a1f3e08-b84b-4e70-959b-78f7cc2420f5.PNG)
 
 - 책임(Layer)을 분리함으로써, **컴포넌트들의 서로의 의존 계층 관계를 깔끔하게 유지**할 수 있
 다.
@@ -68,9 +68,9 @@
 
 ### 1. N+1 Selector 이슈와 Query 최적화
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/95ab7ece-2f56-424f-a906-89cf7311d50c/Untitled.png)
+![fet_1](https://user-images.githubusercontent.com/73544708/178172452-0a715982-39e9-4f00-8d7c-2649c13011f0.PNG)
+![fet_2](https://user-images.githubusercontent.com/73544708/178172455-53533a4f-e8e2-40b9-bad8-faac62003efa.PNG)
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/8955532f-0c0b-4617-ab70-e713f73aa2dc/Untitled.png)
 
 - AOP를 통해 각 쿼리들과 메소드의 시간을 체크해 가며, 어느 부분에 병목현상이 있었는 지
 확인할 수 있다.
@@ -123,13 +123,14 @@
 
 ### 3. 하이버네이트 MultipleBagFetchException
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/4b032f41-b4f5-4312-8ad5-9e2d5dd2a556/Untitled.png)
+![하이버_1](https://user-images.githubusercontent.com/73544708/178172474-c7936fee-e9ca-471f-86ae-f6c9bf62ae95.PNG)
+
 
 - Data JPA를 사용 중, **`org.hibernate.loader.MultipleBagFetchException: cannot simultaneously
 fetch multiple bags`** 이란 메세지가 발생했다.
 - OneToMany, ManyToMany에서 한 엔티티에서 두 개 이상을 EAGER로 fetch 했을 때 발생 하였다.
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/14513c20-03b6-4fb1-bc92-f7e140dc7942/Untitled.png)
+![하이버_2](https://user-images.githubusercontent.com/73544708/178172483-1598af9a-cb56-45ac-b60f-86071f371728.PNG)
 
 - LAZY로 해도 같은 문제가 발생했고, 직접 MultipleBagFetchException을 확인해보니,
 BagType을 동시에 fetch 해 올 때 발생하는 예외라고 한다.
