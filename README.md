@@ -1,157 +1,94 @@
 # 뻔(Fun)하지만, 뻔하지 않은 모음. FunMeet
 
-### *지역 발전을 위한 취미 장려 플랫폼 (21.08 ~ 22.03)*
 
-**Server** : [www.funmmet.shop](http://www.funmmet.shop/)
+### *지역 발전을 위한 취미 장려 플랫폼 (21.07 ~ 21.09)*
 
-**Docs** : [https://jjongdev.notion.site/FunMeet-Docs-c4cb032923504a0f8b07de84fbb94c4d](https://www.notion.so/FunMeet-Docs-c4cb032923504a0f8b07de84fbb94c4d)
+**Github** : [https://github.com/JJong0416/funMeet](https://github.com/JJong0416/funMeet)
 
-**FunMeet**은 지역과 취미를 수집해 관심 있는 사람들끼리 모임을 즐길 수 있도록 하는 **플랫폼**입니다.
+**Server** : [www.funmmet.shop](http://www.funmmet.shop)
 
-서비스를 이용하는 어떤 누구도 모임(Club)을 만들 수 있으며, 모임 안에서 만남(Meeting)을 주선할 수 있습니다. 또한, 설정된 지역 정보와 취미를 가진 모임을 홍보해주는 것뿐만 아니라, 서로 만남을 주선할 수 있도록 해주는 다양한 서비스를 제공해주는 웹 애플리케이션 서비스입니다.
+**Docs** : [https://jjongdev.notion.site/FunMeet-Docs-c4cb032923504a0f8b07de84fbb94c4d](https://www.notion.so/FunMeet-f3049227bc0140e899218016fae502f6)
 
-![https://user-images.githubusercontent.com/73544708/135741015-8c10ceef-6632-4327-9c4f-4dc5de54e28c.PNG](https://user-images.githubusercontent.com/73544708/135741015-8c10ceef-6632-4327-9c4f-4dc5de54e28c.PNG)
+**FunMeet**은 지역과 취미를 수집해 관심 있는 사람들끼리 모임을 즐길 수 있도록 하는 플랫폼입니다.
 
-![https://user-images.githubusercontent.com/73544708/135741018-20f91b92-d3dd-4d17-950d-9cd9a3ffd6e4.PNG](https://user-images.githubusercontent.com/73544708/135741018-20f91b92-d3dd-4d17-950d-9cd9a3ffd6e4.PNG)
+서비스를 이용하는 어떤 누구도 모임(Club)을 만들 수 있으며, 모임 안에서 만남(Meeting)을 주선할 수 있습니다. 또한, 설정된 지역 정보와 취미를 가진 모임을 홍보해주는 것뿐만 아니라, 서로 만남을 주선할 수 있도록 해주는 웹 애플리케이션 서비스입니다.
 
-## 개발 환경
+인프라에서부터 백엔드 서버까지 설계를 진행했으며, 전반적인 서버 개발과 인프라 설정을 집중적으로 진행했습니다.
 
-![개발환경](https://user-images.githubusercontent.com/73544708/178172341-d677629e-753c-44e1-8fb4-fc358ba782c6.PNG)
+## System A**rchitecture**
 
-## 프로젝트 구조
+![image](https://user-images.githubusercontent.com/73544708/195134069-0ecf3e05-564b-41cd-8cbd-6d29f47ea458.png)
 
-![https://user-images.githubusercontent.com/73544708/136200814-8787704c-d225-4306-a8f0-3dcb2e873e0e.PNG](https://user-images.githubusercontent.com/73544708/136200814-8787704c-d225-4306-a8f0-3dcb2e873e0e.PNG)
+## ERD(Entity Relationship Diagram)
 
-- 프로젝트 설계를 하며 패키지 전략을 **레이어** 우선으로 할 지, **모듈** 우선으로 할 지 고민을 했다.
-- **모듈** 우선 패키지 전략으로 개발했을 때 생기는 문제 ( **순환참조** 발생, **중복코드** 발생)을 **테스트 코드**로 잡아주고, 모듈 단위로 기능을 이식할 수 있도록 설계하고 만들었다.
+![image](https://user-images.githubusercontent.com/73544708/195134566-6fb9fc4e-42cb-4211-ab98-56f1fc113846.png)
 
-## DB ERD
+## Stack
 
-![https://user-images.githubusercontent.com/73544708/136201176-6b48577e-c2ec-43d0-b4ac-5ebf929bb1cd.png](https://user-images.githubusercontent.com/73544708/136201176-6b48577e-c2ec-43d0-b4ac-5ebf929bb1cd.png)
 
-## 부가 **기능 구현**
+![image](https://user-images.githubusercontent.com/73544708/195135485-b723f513-3168-4c8d-8fd5-1312b49381d9.png)
 
-- 카카오 로그인(OAuth 2.0)
-- 모임 홍보 알람 서비스(SMTP **asynchronous**)
-- 인증 이메일 서비스
+## Project Package **Strategy**
 
-## 📢프로젝트를 진행하며 리팩토링 한 부분
+![image](https://user-images.githubusercontent.com/73544708/195134859-2a01fab4-1d4b-40d0-aa40-61f7d316c413.png)
 
-### 1. **Mockito를 이용한 테스트코드 리팩토링(기한: 22.02.15 ~ 22.03.15)**
+- 프로젝트 설계를 하며 패키지 전략을 **레이어** 우선으로 할 지, **모듈** 우선으로 할 지 고민.
+- **모듈** 우선 패키지 전략으로 개발했을 때 순환참조 발생 및 중복코드 이슈 발생.
+    - 이슈를 **테스트 코드**로 잡아주고, 모듈 단위로 기능을 이식할 수 있도록 설계 후 제작.
 
-![리팩토링1](https://user-images.githubusercontent.com/73544708/178172212-d1c0e023-a3cf-4fe2-b5f9-75c251f2508f.PNG)
+## Project **Core Features**
 
-- Mockito를 사용함으로써, DB를 사용할 필요없이, 스터빙(Stubbing) 된 데이터를 가져오
-기 때문에 **테스트코드의 시간을 줄여**주는 것 뿐만 아니라 **리소스를 절약**할 수 있다.
-- 개발자가 **객체의 행동까지 조정**함으로써, 좀 **더 유연한 테스트코드를 작성**할 수 있게 됩
-니다.
+1. **세션방식**의 로그인 방식 & **Oauth2.0**을 이용한 소셜 로그인
+2. **인터셉터**를 통해 상태변화 후, 모임 홍보 및 알림 서비스 **비동기 처리**
+3. **동시성**을 고려한 모임 가입 및 선착순 방식
 
-### 2. **이메일 서비스 전략패턴으로 [리팩토링](https://www.notion.so/7a09e87017364bc78c6b9b0a128917a0)(기한 : 22.02.08 ~ 22.02.10)**
+# `프로젝트를 진행하며 개선에 노력한 부분😊`
 
-![리팩토링2](https://user-images.githubusercontent.com/73544708/178172231-3f2bcd11-bfc9-421e-a105-981b34f4880e.PNG)
 
-- 전략패턴의 경우, **클라이언트가 전략을 생성해 전략을 실행할 컨텍스트에 주입**해주기 때
-문에 의존성을 반대로 가지게 할 수 있다.
-- 이렇게 클라이언트가 직접 주입해주게 된다면, **유지보수의 이점**과 **유연한 테스트코드**를
-작성할 수 있게 되었다.
+### **1. Mockito를 이용한 테스트코드 리팩토링(기한: 22.02.15 ~ 22.03.15)**
 
-### 3. **Spring Controller-Service 책임 다시 나누기(기한: 22.01.02 ~ 22.01.06)**
+![image](https://user-images.githubusercontent.com/73544708/195135302-d30281f2-d4e4-4022-a9c0-f4c1587ab3b9.png)
 
-![리팩토링3](https://user-images.githubusercontent.com/73544708/178172237-0a1f3e08-b84b-4e70-959b-78f7cc2420f5.PNG)
+- 프로젝트를 진행하면서, 테스트코드가 증가하고, 빌드&실행 시간이 점점 늘어나게 됨.
+    - 그 중 하나가 **네트워크나 DB 연결 등 외부의 요인의 영향을 많이 받는 것**을 확인.
+- 먼저, TDD 강의와 [**코드리뷰**](https://github.com/JJong0416/BabyTDD/commits/JJong0416-step03)를 받으며 올바른 테스트코드 작성방법을 학습
+- 대부분의 테스트코드에 **Mockito**를 적용
+    - Mockito를 통해 개발자가 객체의 행동을 정해줄 수 있으며, 유연한 테스트코드를 작성
+    - Mockito를 적용하면서, **최소 25%, 최대 35%까지 성능을 향상**.
 
-- 책임(Layer)을 분리함으로써, **컴포넌트들의 서로의 의존 계층 관계를 깔끔하게 유지**할 수 있
-다.
+### **2. 이메일 서비스 전략패턴으로 리팩토링(기한 : 22.02.08 ~ 22.02.10)**
 
-## 🐳 프로젝트를 진행하며 겪은 이슈 처리방식과 생각
+![image](https://user-images.githubusercontent.com/73544708/195135892-ba1319c0-3db8-4928-9824-fc662e73f743.png)
+
+- 리팩토링과 확장을 진행하면서, **필요한 부분 이외에 많은 다른 부분에서 변경이 발생**
+- 이를 보완해주기 위해 올바른 설계 방식을 공부할 필요를 느꼈고, [디자인 패턴](https://www.notion.so/7a09e87017364bc78c6b9b0a128917a0)을 공부
+- 이메일 서비스에 클라이언트가 전략을 생성해 전략을 주입해주는 **전략패턴**을 적용
+    - 전략패턴의 경우, 의존성을 반대로 가질 수 있기 때문에 **카카오 이메일 서비스 등 생기게 되면 코드의 변화가 극적으로 줄어듬**.
+
+### 3. 올바른 Spring MVC Layer 책임 나누기 (기한: 22.01.02 ~ 22.01.06)
+
+![image](https://user-images.githubusercontent.com/73544708/195136672-c79c61aa-736e-44ee-bf1a-8e50dc91cf11.png)
+
+- 책임(Layer)을 분리함으로써, **컴포넌트들의 서로의 의존 계층 관계를 깔끔하게 유지**할 수 있다.
+
+# `프로젝트를 진행하며 이슈발생과 처리과정😊`
+
 
 ### 1. N+1 Selector 이슈와 Query 최적화
 
-![fet_1](https://user-images.githubusercontent.com/73544708/178172452-0a715982-39e9-4f00-8d7c-2649c13011f0.PNG)
-![fet_2](https://user-images.githubusercontent.com/73544708/178172455-53533a4f-e8e2-40b9-bad8-faac62003efa.PNG)
+![image](https://user-images.githubusercontent.com/73544708/195137361-c476dfe5-38da-4204-8025-574e5c2a715a.png)
 
+- **AOP를 통해 성능을 분석**하던 도중, 특정 메소드에 예상보다 많은 질의문이 발생하는 것을 포착
+- 문제를 확인해보니, 연관관계에 있어 예상치 못한 엔티티를 추가적으로 불러오는 부분 발견.
+    - 설계 당시, 발견하지 못했던 부분이며 **엔티티 설계방법에 있어서는 문제가 없다는 결론 도출**
+    - **Fetch Join**을 통해 최적화 쿼리를 작성하였고, **EntityGraph**를 통해 **최대 50%까지 성능 개선**
 
-- AOP를 통해 각 쿼리들과 메소드의 시간을 체크해 가며, 어느 부분에 병목현상이 있었는 지
-확인할 수 있다.
-- 그러던 중, 설계했던 부분의 쿼리와 다른 쿼리를 DB에 찌르는 부분을 발견
-- **fetch join을 통해 추가적인 쿼리 발생(N+1 Select)** 문제를 해결하였으며, 각 쿼리들의 최적
-쿼리를 작성함으로 성능 이슈에 대해 최소화 시켰다.
+### 2. 하이버네이트 **MultipleBagFetchException**
 
-```java
-@Override
-    public Page<Club> findByKeyword(String keyword, Pageable pageable) {
-        QClub club = QClub.club;
-        JPQLQuery<Club> query = from(club).where(club.published.isTrue()
-                .and(club.title.containsIgnoreCase(keyword))
-                .or(club.hobby.any().title.containsIgnoreCase(keyword))
-                .or(club.city.any().krCity.containsIgnoreCase(keyword)))
-                .leftJoin(club.hobby, QHobby.hobby).fetchJoin()
-                .leftJoin(club.city, QCity.city).fetchJoin()
-                .leftJoin(club.members, QAccount.account).fetchJoin()
-                .distinct();
+![image](https://user-images.githubusercontent.com/73544708/195137584-50a13fce-ce33-4a3b-9826-d09d49ddd3c1.png)
 
-        JPQLQuery<Club> pageableQuery = Objects.requireNonNull(getQuerydsl()).applyPagination(pageable, query);
-        QueryResults<Club> fetchResults = pageableQuery.fetchResults();
-        return new PageImpl<>(fetchResults.getResults(), pageable, fetchResults.getTotal());
-    }
-
-```
-
-### 2. SMPT Mail Delivery Speed
-
-![https://user-images.githubusercontent.com/73544708/136201667-3ade7a9d-5393-40d1-8387-4ce661848fa8.PNG](https://user-images.githubusercontent.com/73544708/136201667-3ade7a9d-5393-40d1-8387-4ce661848fa8.PNG)
-
-- 특정 이미지를 메일을 통해 발송하는 부분에서 많은 시간과 리소스를 잡아먹는 것을 확인
-- 홍보 메세지를 **웹 애플리케이션으로 보내주는 과정에서 기존 서비스 동작속도에 영향을 주는 것을 확인**하고, **기존 서비스 로직에서 시간을 소비하지 않고 전송할 수 있는 방법을 고민**했다.
-- 그 방법 중 하나는 ThreadPool을 이용한 **비동기**(asynchronous)를 사용하였다.
-
-```java
-@Override
-    public Executor getAsyncExecutor() {
-        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        int processors = Runtime.getRuntime().availableProcessors();//가용 프로세스 숫자
-        executor.setCorePoolSize(processors);
-        executor.setMaxPoolSize(processors * 2);
-        executor.setQueueCapacity(50);
-        executor.setKeepAliveSeconds(60);
-        executor.setThreadNamePrefix("AsyncExecutor:");
-        executor.initialize();
-        return executor;
-    }
-```
-
-### 3. 하이버네이트 MultipleBagFetchException
-
-![하이버_1](https://user-images.githubusercontent.com/73544708/178172474-c7936fee-e9ca-471f-86ae-f6c9bf62ae95.PNG)
-
-
-- Data JPA를 사용 중, **`org.hibernate.loader.MultipleBagFetchException: cannot simultaneously
-fetch multiple bags`** 이란 메세지가 발생했다.
-- OneToMany, ManyToMany에서 한 엔티티에서 두 개 이상을 EAGER로 fetch 했을 때 발생 하였다.
-
-![하이버_2](https://user-images.githubusercontent.com/73544708/178172483-1598af9a-cb56-45ac-b60f-86071f371728.PNG)
-
-- LAZY로 해도 같은 문제가 발생했고, 직접 MultipleBagFetchException을 확인해보니,
-BagType을 동시에 fetch 해 올 때 발생하는 예외라고 한다.
-- Bag(Multiset)은 Set과 같이 순서가 없고, List와 같이 중복을 허용하는 자료구조이고, 자바
-컬렉션 프레임워크에선 Bag가 없기 때문에 하이버네이트에선 List를 Bag로써 사용하고 있던
-것이다.
-- 문제가 발생하던 곳을 List가 아닌 Set을 통해 문제를 해결했다.
-
-## 프로젝트 개발 시 집중했던 부분
-
----
-
-### 1. 지속적인 Refactoring
-
-![https://user-images.githubusercontent.com/73544708/136201857-e0d7206e-93cb-43c8-ab39-5e90abf6fb02.PNG](https://user-images.githubusercontent.com/73544708/136201857-e0d7206e-93cb-43c8-ab39-5e90abf6fb02.PNG)
-
-- 개발을 진행하며, 완성된 기능은 그것으로 마무리 하는 것이 아닌, 프로젝트를 진행하며 변화하는 부분에 맞춰 리팩토링을 합니다.
-- 가독성뿐만 아니라, 프로젝트 기간 동안 Service 로직을 최적화시키려고 노력했습니다.
-
-### 2. 성능 향상
-
-- 기술을 단순하게 쓰는 것이 아닌, 기술에 대해 학습을 하고 해당 기술에서 성능을 향상시키며 프로젝트를 진행했습니다.
-
-### 3. 서비스 완성 및 배포
-
-- 프로젝트의 프론트부터 백엔드 그리고 인프라까지 Product의 한 사이클을 돌아보며, 개발에 대한 전반적인 개념과 구조에 대해 뚜렷하게 알게 되었다.
+- Spring Data JPA를 사용중, **`org.hibernate.loader.MultipleBagFetchException: cannot simultaneously fetch multiple bags`** 에러 발생
+- **`OneToMany`**, **`ManyToMany`** 관계에서 한 엔티티가 두 개 이상의 엔티티를  패치 조인을 했을 경우, 발생하는 에러라는 것을 파악
+    - 결론적으로 BagType을 동시에 패치 조인을 했을 때 발생하는 예외
+    - Bag(Multiset)은 Set과 같이 순서가 없고, List와 같이 중복을 허용하는 자료구조인 걸 확인.
+    - 순서와 상관이 없는 필드였기 때문에, List에서 Set으로 변경하면서 문제 해결
